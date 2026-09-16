@@ -518,7 +518,7 @@ export class OnboardingService {
       await tx.education.deleteMany({ where: { profileId } });
       if (validated.education && validated.education.length > 0) {
         await tx.education.createMany({
-          data: validated.education.map((e) => ({
+          data: validated.education.map((e: any) => ({
             profileId,
             institution: e.institution,
             degree: e.degree,
@@ -539,7 +539,7 @@ export class OnboardingService {
       await tx.experience.deleteMany({ where: { profileId } });
       if (validated.experience && validated.experience.length > 0) {
         await tx.experience.createMany({
-          data: validated.experience.map((exp) => ({
+          data: validated.experience.map((exp: any) => ({
             profileId,
             company: exp.company,
             roleTitle: exp.roleTitle,
@@ -574,7 +574,7 @@ export class OnboardingService {
       await tx.project.deleteMany({ where: { profileId } });
       if (validated.projects && validated.projects.length > 0) {
         await tx.project.createMany({
-          data: validated.projects.map((p) => ({
+          data: validated.projects.map((p: any) => ({
             profileId,
             title: p.title,
             description: p.description || null,
@@ -648,7 +648,7 @@ export class OnboardingService {
       await tx.certification.deleteMany({ where: { profileId } });
       if (validated.certifications && validated.certifications.length > 0) {
         await tx.certification.createMany({
-          data: validated.certifications.map((c) => ({
+          data: validated.certifications.map((c: any) => ({
             profileId,
             name: c.name,
             issuingOrganization: c.issuingOrganization,
@@ -665,7 +665,7 @@ export class OnboardingService {
       await tx.achievement.deleteMany({ where: { profileId } });
       if (validated.achievements && validated.achievements.length > 0) {
         await tx.achievement.createMany({
-          data: validated.achievements.map((a) => ({
+          data: validated.achievements.map((a: any) => ({
             profileId,
             title: a.title,
             description: a.description || null,
@@ -681,7 +681,7 @@ export class OnboardingService {
       await tx.professionalLink.deleteMany({ where: { profileId } });
       if (validated.professionalLinks && validated.professionalLinks.length > 0) {
         await tx.professionalLink.createMany({
-          data: validated.professionalLinks.map((l) => ({
+          data: validated.professionalLinks.map((l: any) => ({
             profileId,
             platform: l.platform,
             url: l.url,

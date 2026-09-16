@@ -121,7 +121,7 @@ export class ProfileService {
       await tx.education.deleteMany({ where: { profileId } });
       if (validated.step2.education && validated.step2.education.length > 0) {
         await tx.education.createMany({
-          data: validated.step2.education.map((edu) => ({
+          data: validated.step2.education.map((edu: any) => ({
             profileId,
             institution: edu.institution,
             degree: edu.degree,
@@ -137,7 +137,7 @@ export class ProfileService {
       await tx.experience.deleteMany({ where: { profileId } });
       if (validated.step2.experience && validated.step2.experience.length > 0) {
         await tx.experience.createMany({
-          data: validated.step2.experience.map((exp) => ({
+          data: validated.step2.experience.map((exp: any) => ({
             profileId,
             company: exp.company,
             roleTitle: exp.roleTitle,
@@ -176,7 +176,7 @@ export class ProfileService {
       await tx.careerInterest.deleteMany({ where: { profileId } });
       if (validated.step3.interests && validated.step3.interests.length > 0) {
         await tx.careerInterest.createMany({
-          data: validated.step3.interests.map((topic) => ({
+          data: validated.step3.interests.map((topic: string) => ({
             profileId,
             topic,
           })),
