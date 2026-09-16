@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@prisma/client": "5.22.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20.16.11",
     "bcryptjs": "^2.4.3",
     "clsx": "^2.1.1",
     "framer-motion": "^11.11.1",
@@ -24,8 +26,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.6",
-    "@types/node": "^20.16.11",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
     "autoprefixer": "^10.4.20",

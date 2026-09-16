@@ -192,7 +192,7 @@ async function runTests() {
     const zlib = await import('zlib');
 
     // Helper to generate a real, spec-compliant DOCX ZIP fixture buffer
-    function createRealDocxFixture(text: string): Buffer {
+    const createRealDocxFixture = (text: string): Buffer => {
       const docXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
   <w:body>
