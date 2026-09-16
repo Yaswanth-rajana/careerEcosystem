@@ -1,0 +1,21 @@
+{
+  "name": "career-ecosystem-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "build:backend": "npm --prefix backend run build",
+    "build:frontend": "npm --prefix frontend run build",
+    "build": "npm run db:push && npm run build:backend && npm run build:frontend",
+    "db:push": "npm --prefix backend run db:push",
+    "db:generate": "npm --prefix backend run db:generate",
+    "db:studio": "npm --prefix backend run db:studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0"
+  }
+}
