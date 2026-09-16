@@ -10,7 +10,7 @@
     "dev": "npm --prefix frontend run dev",
     "build:backend": "npm --prefix backend run build",
     "build:frontend": "npm --prefix frontend run build",
-    "build": "npm run db:push && npm run build:backend && npm run build:frontend",
+    "build": "npm run db:generate && npm run db:push && npm run build:backend && npm run build:frontend",
     "db:push": "npm --prefix backend run db:push",
     "db:generate": "npm --prefix backend run db:generate",
     "db:studio": "npm --prefix backend run db:studio"
