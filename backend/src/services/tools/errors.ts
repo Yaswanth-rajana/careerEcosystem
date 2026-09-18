@@ -28,6 +28,7 @@ export class ToolError extends Error {
     };
 
     super(customDetails || errorInfo.userMessage);
+    this.name = 'ToolError';
     this.code = code;
     this.statusCode = errorInfo.statusCode;
     this.userMessage = errorInfo.userMessage;
