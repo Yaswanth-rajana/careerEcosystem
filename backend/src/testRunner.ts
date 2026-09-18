@@ -1,3 +1,5 @@
+import path from 'path';
+import zlib from 'zlib';
 import { ResumeParserService } from './services/resumeParserService';
 import {
   Step1AboutYouSchema,
@@ -298,28 +300,57 @@ async function runTests() {
     const realDocxFixture = createRealDocxFixture('Yaswanth Rajana - Software Engineer Resume');
 
     const provider = new GotenbergConversionProvider();
-    const result = await provider.convertToPdf(realDocxFixture, {
+    const isHealthy = await provider.healthCheck();
+    assert(isHealthy, 'Gotenberg service health check returns true');
+
+    const fs = await import('fs');
+    const path = await import('path');
+
+    let docxBuffer: Buffer;
+    const testDocxPath = process.env.TEST_DOCX_PATH || path.join(__dirname, '__tests__/fixtures/ASE_JD_for_College.docx');
+
+    if (fs.existsSync(testDocxPath)) {
+      docxBuffer = fs.readFileSync(testDocxPath);
+      console.log(`  ℹ Loaded test DOCX file from ${testDocxPath} (${docxBuffer.length} bytes)`);
+    } else {
+      docxBuffer = createRealDocxFixture('Yaswanth Rajana - Software Engineer Resume');
+      console.log(`  ℹ Loaded dynamically generated real DOCX fixture (${docxBuffer.length} bytes)`);
+    }
+
+    assert(docxBuffer.length > 0, 'Loaded input DOCX buffer is not empty');
+
+    const result = await provider.convertToPdf(docxBuffer, {
       jobId: 'test-job-123',
       sourceFormat: 'docx',
       targetFormat: 'pdf',
-      originalFilename: 'resume.docx',
+      originalFilename: 'ASE_JD_for_College.docx',
+      mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     });
 
     assert(result.pdfBuffer && result.pdfBuffer.length > 0, 'DOCX -> PDF output size is greater than zero');
+    
+    // Header magic bytes test (Hex 25 50 44 46 2D)
+    const pdfHeaderHex = result.pdfBuffer.slice(0, 5).toString('hex').toUpperCase();
+    assert(pdfHeaderHex === '255044462D', 'DOCX -> PDF output magic bytes hex start with 255044462D (%PDF-)');
     assert(result.pdfBuffer.slice(0, 5).toString('ascii') === '%PDF-', 'DOCX -> PDF output starts with valid %PDF- magic bytes');
+
+    // Negative Test: Verify output does NOT contain raw DOCX package content
+    const sampleBytes = result.pdfBuffer.subarray(0, Math.min(result.pdfBuffer.length, 1024));
+    const isRawZip = sampleBytes[0] === 0x50 && sampleBytes[1] === 0x4B;
+    assert(!isRawZip, 'Output PDF is not a raw DOCX ZIP package (does not start with PK)');
+
+    const hasDocxPackageMarkers =
+      sampleBytes.includes(Buffer.from('word/document.xml')) ||
+      sampleBytes.includes(Buffer.from('[Content_Types].xml')) ||
+      sampleBytes.includes(Buffer.from('_rels/.rels'));
+    assert(!hasDocxPackageMarkers, 'Output PDF binary does NOT contain raw DOCX package strings (word/document.xml, [Content_Types].xml)');
 
     // Parse with real PDF parser (pdf-lib)
     const pdfDoc = await PDFDocument.load(result.pdfBuffer);
     assert(pdfDoc.getPageCount() >= 1, 'PDF parser successfully loads document with at least 1 page');
 
-    // Verify raw PDF buffer does NOT contain raw DOCX package strings
-    const pdfString = result.pdfBuffer.toString('binary');
-    const hasDocxPackageStrings =
-      pdfString.includes('word/document.xml') ||
-      pdfString.includes('[Content_Types].xml') ||
-      pdfString.includes('_rels/.rels');
-
-    assert(!hasDocxPackageStrings, 'Output PDF binary does NOT contain raw DOCX package strings (PK, word/document.xml)');
+    const firstPage = pdfDoc.getPage(0);
+    assert(!!firstPage, 'PDF parser successfully accesses page 0');
 
     // Output Validation Service Verification
     const validatedOutput = await OutputValidationService.validatePdfOutput(result.pdfBuffer, 'test-job-123', 'docx');

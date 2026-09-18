@@ -111,14 +111,14 @@ export class FileValidationService {
       }
 
       // Structural check: Ensure it is an Office/OpenDocument package by checking for core XML markers
-      const bufferString = buffer.toString('binary', 0, Math.min(buffer.length, 2048));
+      const sample = buffer.subarray(0, Math.min(buffer.length, 4096));
       const hasXmlMarkers =
-        bufferString.includes('[Content_Types].xml') ||
-        bufferString.includes('mimetype') ||
-        bufferString.includes('word/') ||
-        bufferString.includes('xl/') ||
-        bufferString.includes('ppt/') ||
-        bufferString.includes('META-INF/');
+        sample.includes(Buffer.from('[Content_Types].xml')) ||
+        sample.includes(Buffer.from('mimetype')) ||
+        sample.includes(Buffer.from('word/')) ||
+        sample.includes(Buffer.from('xl/')) ||
+        sample.includes(Buffer.from('ppt/')) ||
+        sample.includes(Buffer.from('META-INF/'));
 
       if (!hasXmlMarkers && buffer.length > 512) {
         throw new ToolError('INVALID_FILE_SIGNATURE', `File does not appear to be a valid .${ext} package`);

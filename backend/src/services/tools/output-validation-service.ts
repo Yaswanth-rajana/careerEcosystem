@@ -12,6 +12,8 @@ export interface OutputValidationDiagnostic {
   inputFormat: string;
   outputFormat: string;
   outputSize: number;
+  magicBytesHex: string;
+  detectedMime: string;
   pdfHeaderValid: boolean;
   pdfParseSuccessful: boolean;
   pageCount: number;
@@ -50,6 +52,8 @@ export class OutputValidationService {
       inputFormat,
       outputFormat,
       outputSize: buffer ? buffer.length : 0,
+      magicBytesHex: buffer && buffer.length >= 5 ? buffer.slice(0, 5).toString('hex').toUpperCase() : '',
+      detectedMime: expectedMimeType,
       pdfHeaderValid: false,
       pdfParseSuccessful: false,
       pageCount: 0,

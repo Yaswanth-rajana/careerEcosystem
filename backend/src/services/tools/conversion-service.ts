@@ -126,6 +126,7 @@ export class ConversionService {
         sourceFormat: validatedInfo.extension,
         targetFormat,
         originalFilename: validatedInfo.sanitizedFilename,
+        mimeType: validatedInfo.mimeType,
       });
 
       // 8. Output Validation

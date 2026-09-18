@@ -3,6 +3,7 @@ export interface ConversionOptions {
   sourceFormat: string;
   targetFormat: string;
   originalFilename: string;
+  mimeType?: string;
   timeoutMs?: number;
 }
 
