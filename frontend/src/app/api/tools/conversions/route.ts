@@ -52,16 +52,23 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error: any) {
-    if (error instanceof ToolError) {
+    console.error('[API_CONVERSIONS_POST_ERROR]', error);
+
+    const isToolErr =
+      error instanceof ToolError ||
+      error?.name === 'ToolError' ||
+      (typeof error?.code === 'string' && typeof error?.statusCode === 'number');
+
+    if (isToolErr) {
       return NextResponse.json(
         {
           success: false,
           error: {
-            code: error.code,
-            message: error.userMessage,
+            code: error.code || 'CONVERSION_FAILED',
+            message: error.userMessage || error.message || 'Conversion failed',
           },
         },
-        { status: error.statusCode }
+        { status: error.statusCode || 500 }
       );
     }
 
@@ -70,7 +77,7 @@ export async function POST(request: Request) {
         success: false,
         error: {
           code: 'CONVERSION_FAILED',
-          message: 'An unexpected error occurred while converting your document.',
+          message: error?.message || 'An unexpected error occurred while converting your document.',
         },
       },
       { status: 500 }

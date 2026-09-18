@@ -37,16 +37,23 @@ export async function GET(
       },
     });
   } catch (error: any) {
-    if (error instanceof ToolError) {
+    console.error('[API_DOWNLOAD_GET_ERROR]', error);
+
+    const isToolErr =
+      error instanceof ToolError ||
+      error?.name === 'ToolError' ||
+      (typeof error?.code === 'string' && typeof error?.statusCode === 'number');
+
+    if (isToolErr) {
       return NextResponse.json(
         {
           success: false,
           error: {
-            code: error.code,
-            message: error.userMessage,
+            code: error.code || 'UNAUTHORIZED_ACCESS',
+            message: error.userMessage || error.message || 'Download failed',
           },
         },
-        { status: error.statusCode }
+        { status: error.statusCode || 403 }
       );
     }
 
@@ -55,7 +62,7 @@ export async function GET(
         success: false,
         error: {
           code: 'UNAUTHORIZED_ACCESS',
-          message: 'Could not access converted document download.',
+          message: error?.message || 'Could not access converted document download.',
         },
       },
       { status: 403 }
