@@ -1,0 +1,282 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String              @id @default(auto()) @map("_id") @db.ObjectId
+  email                 String              @unique
+  passwordHash          String?
+  name                  String
+  role                  String              @default("CANDIDATE") // CANDIDATE, MENTOR, RECRUITER, ADMIN
+  googleId              String?
+  provider              String?             @default("local")
+  avatarUrl             String?
+  isOnboarded           Boolean             @default(false)
+  onboardingCompletedAt DateTime?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+
+  sessions           Session[]
+  profile            Profile?
+  onboardingProgress OnboardingProgress?
+}
+
+model Session {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model OnboardingProgress {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String    @unique @db.ObjectId
+  status         String    @default("NOT_STARTED") // NOT_STARTED, IN_PROGRESS, COMPLETED
+  currentStep    Int       @default(1)
+  completedSteps Int[]     @default([])
+  lastSavedAt    DateTime  @default(now())
+  completedAt    DateTime?
+  draftData      String?   // JSON string for transient input drafts
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Profile {
+  id                    String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId                String   @unique @db.ObjectId
+  phone                 String?
+  location              String?
+  headline              String?
+  candidateType         String   @default("STUDENT") // STUDENT, GRADUATE, PROFESSIONAL, EXPERIENCED
+  currentRole           String?
+  totalExperience       String?
+  bio                   String?
+  learningStyle         String[] @default([])
+  availableHoursPerWeek String?
+  mentorshipNeeds       String[] @default([])
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  education         Education[]
+  experience        Experience[]
+  userSkills        UserSkill[]
+  projects          Project[]
+  certifications    Certification[]
+  achievements      Achievement[]
+  interests         CareerInterest[]
+  careerGoal        CareerGoal?
+  jobPreference     JobPreference?
+  professionalLinks ProfessionalLink[]
+  resumes           Resume[]
+}
+
+model Education {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  profileId    String  @db.ObjectId
+  institution  String
+  degree       String
+  fieldOfStudy String
+  location     String?
+  startYear    Int
+  endYear      Int?
+  isCurrent    Boolean @default(false)
+  gpa          String?
+  coursework   String?
+  achievements String?
+  source       String  @default("USER") // USER, RESUME, IMPORTED
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+model Experience {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  profileId       String  @db.ObjectId
+  company         String
+  roleTitle       String
+  employmentType  String? // Full-time, Part-time, Internship, Contract, Freelance, Self-employed
+  location        String?
+  startDate       String
+  endDate         String?
+  isCurrent       Boolean @default(false)
+  description     String?
+  responsibilities String?
+  achievements    String?
+  source          String  @default("USER") // USER, RESUME, IMPORTED
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+model Skill {
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  name       String      @unique
+  category   String?
+  userSkills UserSkill[]
+}
+
+model UserSkill {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  profileId String  @db.ObjectId
+  skillId   String  @db.ObjectId
+  level     String  @default("INTERMEDIATE") // BEGINNER, INTERMEDIATE, ADVANCED, EXPERT
+  source    String  @default("USER") // USER, RESUME, ASSESSMENT, COURSE, MENTOR, IMPORTED
+  verified  Boolean @default(false)
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  skill   Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, skillId])
+}
+
+model Project {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  profileId    String   @db.ObjectId
+  title        String
+  description  String?
+  role         String?
+  technologies String[] @default([])
+  projectType  String?  // Academic, Personal, Freelance, Open Source, Professional, Research, Hackathon
+  startDate    String?
+  endDate      String?
+  projectUrl   String?
+  githubUrl    String?
+  demoUrl      String?
+  achievements String?
+  source       String   @default("USER")
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+model CareerInterest {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  profileId String @db.ObjectId
+  topic     String
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+model CareerGoal {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  profileId      String  @unique @db.ObjectId
+  targetRole     String
+  careerField    String?
+  targetIndustry String?
+  careerGoalType String? // Get first job, Get internship, Switch careers, etc.
+  timeframe      String?
+  notes          String?
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+model JobPreference {
+  id                   String   @id @default(auto()) @map("_id") @db.ObjectId
+  profileId            String   @unique @db.ObjectId
+  preferredJobType     String?  // Full-time, Internship, Contract, Freelance, Both
+  preferredLocation    String?
+  workEnvironment       String?  // Remote, Hybrid, Onsite, Any
+  willingToRelocate    Boolean  @default(false)
+  preferredIndustries  String[] @default([])
+  preferredCompanySize String?
+  minExpectedSalary    String?
+  preferredSalaryRange String?
+  noticePeriod         String?
+  availability         String?
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+model Certification {
+  id                  String  @id @default(auto()) @map("_id") @db.ObjectId
+  profileId           String  @db.ObjectId
+  name                String
+  issuingOrganization String
+  issueDate           String?
+  expiryDate          String?
+  credentialId        String?
+  credentialUrl       String?
+  source              String  @default("USER")
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+model Achievement {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  profileId    String  @db.ObjectId
+  title        String
+  description  String?
+  organization String?
+  date         String?
+  url          String?
+  source       String  @default("USER")
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+model ProfessionalLink {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  profileId String @db.ObjectId
+  platform  String // LinkedIn, GitHub, Portfolio, Personal Website, Behance, Kaggle, LeetCode, Other
+  url       String
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+model Resume {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  profileId     String   @db.ObjectId
+  filename      String
+  fileType      String
+  fileSize      Int
+  status        String   @default("UPLOADED") // UPLOADED, PROCESSING, READY, FAILED
+  extractedData String?  // JSON string of extracted suggestions
+  error         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+enum ConversionStatus {
+  QUEUED
+  PROCESSING
+  COMPLETED
+  FAILED
+  EXPIRED
+}
+
+model ConversionJob {
+  id                 String           @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String?          @db.ObjectId
+  guestTokenHash     String?
+  type               String           @default("DOCUMENT_CONVERSION")
+  sourceFormat       String
+  targetFormat       String
+  originalFilename   String
+  outputFilename     String?
+  inputSize          Int
+  outputSize         Int?
+  inputStorageKey    String
+  outputStorageKey   String?
+  status             ConversionStatus @default(QUEUED)
+  errorCode          String?
+  errorMessage       String?
+  createdAt          DateTime         @default(now())
+  startedAt          DateTime?
+  completedAt        DateTime?
+  expiresAt          DateTime?
+  processingTimeMs   Int?
+
+  @@index([expiresAt])
+  @@index([userId])
+  @@index([guestTokenHash])
+}
