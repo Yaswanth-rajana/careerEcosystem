@@ -26,7 +26,10 @@
       "bcryptjs": ["./node_modules/bcryptjs"],
       "jose": ["./node_modules/jose"],
       "pdf-lib": ["./node_modules/pdf-lib"],
-      "@prisma/client": ["./node_modules/@prisma/client"]
+      "@prisma/client": [
+        "./node_modules/@prisma/client",
+        "../node_modules/@prisma/client"
+      ]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "../backend/src/**/*.ts"],

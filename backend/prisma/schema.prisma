@@ -2,16 +2,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator clientFrontend {
-  provider = "prisma-client-js"
-  output   = "../../frontend/node_modules/@prisma/client"
-}
-
-generator clientBackend {
-  provider = "prisma-client-js"
-  output   = "../node_modules/@prisma/client"
-}
-
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
@@ -23,8 +13,8 @@ model User {
   passwordHash          String?
   name                  String
   role                  String              @default("CANDIDATE") // CANDIDATE, MENTOR, RECRUITER, ADMIN
-  googleId              String?
-  provider              String?             @default("local")
+  googleId              String?             @unique
+  provider              String              @default("local")
   avatarUrl             String?
   isOnboarded           Boolean             @default(false)
   onboardingCompletedAt DateTime?

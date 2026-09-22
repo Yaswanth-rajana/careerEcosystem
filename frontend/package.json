@@ -4,10 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "postinstall": "prisma generate",
-    "build": "prisma generate && next build",
+    "postinstall": "prisma generate --schema=../backend/prisma/schema.prisma || true",
+    "build": "prisma generate --schema=../backend/prisma/schema.prisma && next build",
     "start": "next start",
     "lint": "next lint"
+  },
+  "prisma": {
+    "schema": "../backend/prisma/schema.prisma"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
