@@ -18,14 +18,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300"
+            className="text-xs font-semibold uppercase tracking-wider text-slate-700"
           >
             {label}
           </label>
         )}
         <div className="relative flex items-center">
           {leftIcon && (
-            <span className="absolute left-3 text-slate-400 dark:text-slate-500 pointer-events-none">
+            <span className="absolute left-3 text-slate-400 pointer-events-none">
               {leftIcon}
             </span>
           )}
@@ -34,9 +34,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             className={cn(
               'w-full px-4 py-2.5 text-sm rounded-xl transition-colors duration-150',
-              'bg-white dark:bg-obsidian-800 text-slate-900 dark:text-slate-100',
-              'border border-slate-200 dark:border-obsidian-700',
-              'placeholder:text-slate-400 dark:placeholder:text-slate-500',
+              'bg-white text-slate-900',
+              'border border-slate-200',
+              'placeholder:text-slate-400',
               'focus:outline-none focus:ring-2 focus:ring-brand-indigo/50 focus:border-brand-indigo',
               leftIcon && 'pl-10',
               rightIcon && 'pr-10',
@@ -46,13 +46,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {rightIcon && (
-            <span className="absolute right-3 text-slate-400 dark:text-slate-500 pointer-events-none">
+            <span className="absolute right-3 text-slate-400 pointer-events-none">
               {rightIcon}
             </span>
           )}
         </div>
         {error && <p className="text-xs font-medium text-red-500 mt-0.5">{error}</p>}
-        {!error && hint && <p className="text-xs text-slate-500 dark:text-slate-400">{hint}</p>}
+        {!error && hint && <p className="text-xs text-slate-500">{hint}</p>}
       </div>
     );
   }
@@ -75,7 +75,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {label && (
           <label
             htmlFor={textareaId}
-            className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300"
+            className="text-xs font-semibold uppercase tracking-wider text-slate-700"
           >
             {label}
           </label>
@@ -85,9 +85,9 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           className={cn(
             'w-full px-4 py-2.5 text-sm rounded-xl transition-colors duration-150',
-            'bg-white dark:bg-obsidian-800 text-slate-900 dark:text-slate-100',
-            'border border-slate-200 dark:border-obsidian-700',
-            'placeholder:text-slate-400 dark:placeholder:text-slate-500',
+            'bg-white text-slate-900',
+            'border border-slate-200',
+            'placeholder:text-slate-400',
             'focus:outline-none focus:ring-2 focus:ring-brand-indigo/50 focus:border-brand-indigo',
             'min-h-[100px] resize-y',
             error && 'border-red-500 focus:ring-red-500/30 focus:border-red-500',
@@ -96,7 +96,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           {...props}
         />
         {error && <p className="text-xs font-medium text-red-500 mt-0.5">{error}</p>}
-        {!error && hint && <p className="text-xs text-slate-500 dark:text-slate-400">{hint}</p>}
+        {!error && hint && <p className="text-xs text-slate-500">{hint}</p>}
       </div>
     );
   }

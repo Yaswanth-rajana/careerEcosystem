@@ -24,10 +24,10 @@ export const Alert = ({
   };
 
   const borderStyles = {
-    info: 'border-sky-200 dark:border-sky-900/50 bg-sky-50/70 dark:bg-sky-950/20 text-sky-900 dark:text-sky-200',
-    success: 'border-emerald-200 dark:border-emerald-900/50 bg-emerald-50/70 dark:bg-emerald-950/20 text-emerald-900 dark:text-emerald-200',
-    warning: 'border-amber-200 dark:border-amber-900/50 bg-amber-50/70 dark:bg-amber-950/20 text-amber-900 dark:text-amber-200',
-    error: 'border-red-200 dark:border-red-900/50 bg-red-50/70 dark:bg-red-950/20 text-red-900 dark:text-red-200',
+    info: 'border-sky-200 bg-sky-50/70 text-sky-900',
+    success: 'border-emerald-200 bg-emerald-50/70 text-emerald-900',
+    warning: 'border-amber-200 bg-amber-50/70 text-amber-900',
+    error: 'border-red-200 bg-red-50/70 text-red-900',
   };
 
   return (
@@ -48,7 +48,7 @@ export const Alert = ({
       {onClose && (
         <button
           onClick={onClose}
-          className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1"
+          className="text-slate-400 hover:text-slate-600 transition-colors p-1"
           aria-label="Dismiss alert"
         >
           <X className="w-4 h-4" />

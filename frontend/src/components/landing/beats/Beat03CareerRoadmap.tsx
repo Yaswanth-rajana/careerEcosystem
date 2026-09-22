@@ -27,7 +27,7 @@ const DEFAULT_STEPS: RoadmapStep[] = [
     title: 'Target Career Outcome',
     desc: 'Define your desired destination.',
     icon: Target,
-    color: 'text-brand-indigo-light',
+    color: 'text-black',
     align: 'bottom',
   },
   {
@@ -36,7 +36,7 @@ const DEFAULT_STEPS: RoadmapStep[] = [
     title: 'Verified Baseline',
     desc: 'Map your existing strengths, education, and experience.',
     icon: CheckCircle2,
-    color: 'text-brand-indigo-light',
+    color: 'text-black',
     align: 'top',
   },
   {
@@ -45,7 +45,7 @@ const DEFAULT_STEPS: RoadmapStep[] = [
     title: 'Targeted Delta',
     desc: 'Identify what is missing between where you are and where you want to be.',
     icon: AlertCircle,
-    color: 'text-brand-indigo-light',
+    color: 'text-black',
     align: 'bottom',
   },
   {
@@ -54,7 +54,7 @@ const DEFAULT_STEPS: RoadmapStep[] = [
     title: 'Action Plan',
     desc: 'Build the skills that move you toward your goal.',
     icon: BookOpen,
-    color: 'text-brand-violet',
+    color: 'text-black',
     align: 'top',
     isDestination: true,
   },
@@ -81,17 +81,17 @@ export const Beat03CareerRoadmap: React.FC<Beat03CareerRoadmapProps> = ({
       {/* ================= DESKTOP HORIZONTAL STRAIGHT ROADMAP (md & lg >= 768px) ================= */}
       <div className="hidden md:block relative h-[420px] w-full mt-0 mb-2">
         
-        {/* 1. Muted Track Base Line - Terminates at 88% right after Node 04 (85%) with a subtle fade */}
-        <div className="absolute left-[8%] right-[12%] top-1/2 -translate-y-1/2 h-[3px] bg-gradient-to-r from-slate-200 via-slate-300 to-transparent dark:from-slate-800 dark:via-slate-800/90 rounded-full z-0 pointer-events-none" />
+        {/* 1. Muted Track Base Line - Starts at Node 01 (15%) and ends at Node 04 (85%) */}
+        <div className="absolute left-[15%] right-[15%] top-1/2 -translate-y-1/2 h-[3px] bg-slate-200 rounded-full z-0 pointer-events-none" />
 
-        {/* 2. Glowing Animated Progress Track Line - Terminates shortly after Node 04 with a subtle fading glow */}
-        <div className="absolute left-[8%] right-[12%] top-1/2 -translate-y-1/2 h-[3px] z-0 pointer-events-none overflow-hidden rounded-full">
+        {/* 2. Glowing Animated Progress Track Line - Starts at Node 01 (15%) and ends at Node 04 (85%) */}
+        <div className="absolute left-[15%] right-[15%] top-1/2 -translate-y-1/2 h-[3px] z-0 pointer-events-none overflow-hidden rounded-full">
           <motion.div
             initial={shouldReduceMotion ? { scaleX: 1 } : { scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 1.2, ease: "easeInOut" }}
-            className="w-full h-full bg-gradient-to-r from-brand-indigo via-indigo-400 to-brand-violet/20 shadow-[0_0_14px_rgba(99,102,241,0.7)] origin-left"
+            className="w-full h-full bg-slate-900 shadow-md origin-left"
           />
         </div>
 
@@ -105,19 +105,18 @@ export const Beat03CareerRoadmap: React.FC<Beat03CareerRoadmapProps> = ({
           const nodeDelay = shouldReduceMotion ? 0 : 0.3 + idx * 0.25;
           const cardDelay = shouldReduceMotion ? 0 : nodeDelay + 0.12;
 
-          // Cohesive Brand Indigo/Violet styling across all 4 nodes
-          let stemBgClass = 'bg-brand-indigo/30 dark:bg-brand-indigo/25';
+          let stemBgClass = 'bg-slate-300';
           let nodeStyleClasses = '';
           let iconColorClass = '';
 
           if (isActive) {
-            stemBgClass = 'bg-[#6C5CE7] shadow-[0_0_8px_rgba(108,92,231,0.6)]';
-            nodeStyleClasses = 'bg-[#6C5CE7] border-white text-white shadow-[0_0_20px_rgba(108,92,231,0.7)] scale-110 z-30';
+            stemBgClass = 'bg-black shadow-sm';
+            nodeStyleClasses = 'bg-black border-white text-white shadow-md scale-110 z-30';
             iconColorClass = 'text-white';
           } else {
-            stemBgClass = 'bg-brand-indigo/30 dark:bg-brand-indigo/25';
-            nodeStyleClasses = 'bg-white dark:bg-[#0B0B14] border-slate-300 dark:border-brand-indigo/35 text-brand-indigo dark:text-indigo-300 hover:border-brand-indigo group-hover:scale-105 shadow-sm dark:shadow-none';
-            iconColorClass = 'text-brand-indigo dark:text-indigo-300';
+            stemBgClass = 'bg-slate-300';
+            nodeStyleClasses = 'bg-white border-slate-300 text-slate-700 hover:border-black group-hover:scale-105 shadow-sm';
+            iconColorClass = 'text-slate-700';
           }
 
           return (
@@ -163,7 +162,7 @@ export const Beat03CareerRoadmap: React.FC<Beat03CareerRoadmapProps> = ({
                       initial={{ scale: 1, opacity: 0.8 }}
                       animate={{ scale: [1, 1.5, 1], opacity: [0.8, 0, 0.8] }}
                       transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                      className="absolute -inset-1.5 rounded-full border-2 border-[#6C5CE7] pointer-events-none"
+                      className="absolute -inset-1.5 rounded-full border-2 border-black pointer-events-none"
                     />
                   )}
 
@@ -193,23 +192,23 @@ export const Beat03CareerRoadmap: React.FC<Beat03CareerRoadmapProps> = ({
                   onMouseEnter={() => setActiveStep(step.num)}
                   className={`w-64 lg:w-72 p-4 rounded-xl backdrop-blur-md transition-all duration-200 border text-left cursor-pointer ${
                     isActive
-                      ? 'bg-white/95 dark:bg-obsidian-800/95 border-[#6C5CE7] shadow-glow scale-[1.02]'
-                      : 'bg-white/65 dark:bg-obsidian-800/65 border-slate-200/80 dark:border-obsidian-700/80 hover:border-brand-indigo/40'
+                      ? 'bg-white border-black shadow-md scale-[1.02]'
+                      : 'bg-white/80 border-slate-200 hover:border-black shadow-sm'
                   }`}
                 >
                   {/* Card Top-Right Step Number Badge */}
                   <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-brand-indigo dark:text-brand-indigo-light">
+                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-black">
                       {step.tag}
                     </span>
-                    <span className="text-[11px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-obsidian-700 text-slate-500 dark:text-slate-400">
+                    <span className="text-[11px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">
                       0{idx + 1}
                     </span>
                   </div>
-                  <h3 className="text-sm font-bold font-display text-slate-900 dark:text-white mb-1">
+                  <h3 className="text-sm font-bold font-display text-slate-900 mb-1">
                     {step.title}
                   </h3>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  <p className="text-xs text-slate-600 leading-relaxed">
                     {step.desc}
                   </p>
                 </motion.div>
@@ -226,7 +225,7 @@ export const Beat03CareerRoadmap: React.FC<Beat03CareerRoadmapProps> = ({
         <div className="relative pl-2 sm:pl-4 space-y-6">
           
           {/* Continuous Vertical Guide Line */}
-          <div className="absolute left-[26px] sm:left-[34px] top-6 bottom-6 w-0.5 bg-slate-200 dark:bg-obsidian-700 pointer-events-none" />
+          <div className="absolute left-[26px] sm:left-[34px] top-6 bottom-6 w-0.5 bg-slate-200 pointer-events-none" />
 
           {steps.map((step, idx) => {
             const isActive = activeStep === step.num;
@@ -235,11 +234,11 @@ export const Beat03CareerRoadmap: React.FC<Beat03CareerRoadmapProps> = ({
             let mobileNodeStyle = '';
             let iconColor = '';
             if (isActive) {
-              mobileNodeStyle = 'bg-[#6C5CE7] border-white text-white shadow-glow scale-105';
+              mobileNodeStyle = 'bg-black border-white text-white shadow-md scale-105';
               iconColor = 'text-white';
             } else {
-              mobileNodeStyle = 'bg-white dark:bg-[#0B0B14] border-slate-300 dark:border-brand-indigo/40 text-brand-indigo dark:text-indigo-300 shadow-xs';
-              iconColor = 'text-brand-indigo dark:text-indigo-300';
+              mobileNodeStyle = 'bg-white border-slate-300 text-slate-700 shadow-xs';
+              iconColor = 'text-slate-700';
             }
 
             return (
@@ -263,22 +262,22 @@ export const Beat03CareerRoadmap: React.FC<Beat03CareerRoadmapProps> = ({
                 <div
                   className={`flex-1 p-4 rounded-xl border backdrop-blur-md transition-all duration-200 text-left ${
                     isActive
-                      ? 'bg-white dark:bg-obsidian-800 border-[#6C5CE7] shadow-md'
-                      : 'bg-white/70 dark:bg-obsidian-800/70 border-slate-200 dark:border-obsidian-700'
+                      ? 'bg-white border-black shadow-md'
+                      : 'bg-white/80 border-slate-200 shadow-sm'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2 mb-1">
-                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-brand-indigo dark:text-brand-indigo-light">
+                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-black">
                       {step.tag}
                     </span>
-                    <span className="text-[11px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-obsidian-700 text-slate-500 dark:text-slate-400">
+                    <span className="text-[11px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">
                       0{idx + 1}
                     </span>
                   </div>
-                  <h3 className="text-sm font-bold font-display text-slate-900 dark:text-white mb-1">
+                  <h3 className="text-sm font-bold font-display text-slate-900 mb-1">
                     {step.title}
                   </h3>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  <p className="text-xs text-slate-600 leading-relaxed">
                     {step.desc}
                   </p>
                 </div>

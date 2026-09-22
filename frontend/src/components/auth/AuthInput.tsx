@@ -20,7 +20,7 @@ export const AuthInput = React.forwardRef<HTMLInputElement, AuthInputProps>(
       <div className="w-full flex flex-col gap-1.5 text-left">
         <label
           htmlFor={id}
-          className="text-xs font-medium text-[#94A3B8] tracking-wide"
+          className="text-xs font-semibold text-slate-700 tracking-wide"
         >
           {label}
         </label>
@@ -32,12 +32,12 @@ export const AuthInput = React.forwardRef<HTMLInputElement, AuthInputProps>(
             aria-invalid={!!error}
             aria-describedby={error ? `${id}-error` : undefined}
             className={cn(
-              'w-full h-[52px] px-4 py-3.5 text-sm font-normal rounded-[14px] transition-all duration-200',
-              'bg-white/[0.03] text-[#F9FAFB]',
-              'border border-[#94A3B8]/14',
-              'placeholder-[#64748B]',
-              'focus:outline-none focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/25 focus:shadow-[0_0_16px_rgba(99,102,241,0.18)]',
-              error && 'border-red-500/80 focus:border-red-500 focus:ring-red-500/20',
+              'w-full h-[52px] px-4 py-3.5 text-sm font-medium rounded-[14px] transition-all duration-200',
+              'bg-slate-50 text-slate-900 focus:bg-white',
+              'border border-slate-200',
+              'placeholder:text-slate-400',
+              'focus:outline-none focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20',
+              error && 'border-red-500 focus:border-red-500 focus:ring-red-500/20',
               isPasswordType && 'pr-11',
               className
             )}
@@ -47,7 +47,7 @@ export const AuthInput = React.forwardRef<HTMLInputElement, AuthInputProps>(
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3.5 p-1 text-[#64748B] hover:text-[#94A3B8] focus:outline-none focus-visible:ring-1 focus-visible:ring-[#6366F1] rounded-md transition-colors"
+              className="absolute right-3.5 p-1 text-slate-400 hover:text-slate-600 focus:outline-none focus-visible:ring-1 focus-visible:ring-[#6366F1] rounded-md transition-colors"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

@@ -52,7 +52,7 @@ export const ResumeUploadBanner: React.FC<ResumeUploadBannerProps> = ({
   };
 
   return (
-    <div className="w-full rounded-2xl bg-[#0B0F19] border border-[#6366F1]/30 p-3.5 sm:p-4 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
+    <div className="w-full rounded-2xl bg-white border border-indigo-200/80 p-3.5 sm:p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
       <input
         type="file"
         ref={fileInputRef}
@@ -62,30 +62,30 @@ export const ResumeUploadBanner: React.FC<ResumeUploadBannerProps> = ({
       />
 
       <div className="flex items-center gap-3 min-w-0">
-        <div className="w-9 h-9 rounded-xl bg-[#6366F1]/15 text-[#6366F1] flex items-center justify-center shrink-0 border border-[#6366F1]/30">
+        <div className="w-9 h-9 rounded-xl bg-[#6366F1]/10 text-[#6366F1] flex items-center justify-center shrink-0 border border-[#6366F1]/20">
           <Sparkles className="w-4 h-4" />
         </div>
         <div className="min-w-0">
-          <div className="text-xs font-bold text-white flex items-center gap-2">
+          <div className="text-xs font-bold text-slate-900 flex items-center gap-2">
             <span>Already have a resume?</span>
-            <span className="text-[10px] font-mono px-2 py-0.2 rounded bg-[#6366F1]/20 text-[#6366F1] uppercase">
+            <span className="text-[10px] font-mono px-2 py-0.2 rounded bg-[#6366F1]/10 text-[#6366F1] uppercase">
               Auto-Fill
             </span>
           </div>
-          <p className="text-[11px] text-[#94A3B8] truncate">
+          <p className="text-[11px] text-slate-500 truncate">
             Upload PDF/DOCX to extract education, experience & skills for your review.
           </p>
         </div>
       </div>
 
       <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
-        {error && <span className="text-[11px] text-rose-400 font-medium">{error}</span>}
+        {error && <span className="text-[11px] text-rose-600 font-medium">{error}</span>}
 
         <button
           type="button"
           disabled={isUploading}
           onClick={() => fileInputRef.current?.click()}
-          className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white font-bold text-xs flex items-center gap-1.5 shadow-md hover:opacity-95 transition-all disabled:opacity-60"
+          className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-black text-white font-bold text-xs flex items-center gap-1.5 shadow-md transition-all disabled:opacity-60"
         >
           {isUploading ? (
             <>

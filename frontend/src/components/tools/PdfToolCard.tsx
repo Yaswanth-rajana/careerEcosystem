@@ -28,27 +28,27 @@ export const PdfToolCard: React.FC<PdfToolCardProps> = ({
       onClick={onClick}
       className={`p-6 sm:p-7 rounded-2xl border transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-5 group ${
         isActive
-          ? 'bg-indigo-50/40 dark:bg-indigo-950/40 border-[#6366F1] shadow-md ring-1 ring-[#6366F1]'
-          : 'bg-white dark:bg-[#111827] border-slate-200/80 dark:border-slate-800 hover:border-[#6366F1]/50 hover:shadow-sm'
+          ? 'bg-indigo-50/40 border-[#6366F1] shadow-md ring-1 ring-[#6366F1]'
+          : 'bg-white border-slate-200/80 hover:border-[#6366F1]/50 hover:shadow-sm'
       }`}
     >
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/70 text-[#6366F1] border border-indigo-200/60 dark:border-indigo-800/60 flex items-center justify-center font-bold shadow-sm group-hover:scale-105 transition-transform">
+          <div className="w-12 h-12 rounded-xl bg-indigo-50 text-[#6366F1] border border-indigo-200/60 flex items-center justify-center font-bold shadow-sm group-hover:scale-105 transition-transform">
             <Icon className="w-6 h-6" />
           </div>
           {badge && (
-            <span className="text-[10px] font-mono font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 px-2.5 py-0.5 rounded-full border border-indigo-200 dark:border-indigo-800">
+            <span className="text-[10px] font-mono font-bold text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200">
               {badge}
             </span>
           )}
         </div>
 
-        <h3 className="text-lg font-bold font-display text-slate-900 dark:text-white group-hover:text-[#6366F1] transition-colors">
+        <h3 className="text-lg font-bold font-display text-slate-900 group-hover:text-[#6366F1] transition-colors">
           {title}
         </h3>
 
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
           {description}
         </p>
       </div>
@@ -58,8 +58,8 @@ export const PdfToolCard: React.FC<PdfToolCardProps> = ({
           type="button"
           className={`w-full py-2.5 px-4 rounded-full text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
             isActive
-              ? 'bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white shadow-md'
-              : 'border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+              ? 'bg-black text-white shadow-md'
+              : 'border border-slate-200 text-slate-700 hover:bg-black hover:text-white'
           }`}
         >
           <span>{actionLabel}</span>

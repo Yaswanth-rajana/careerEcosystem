@@ -30,26 +30,26 @@ export const ConversionResult: React.FC<ConversionResultProps> = ({
   };
 
   return (
-    <div className="w-full p-8 sm:p-10 rounded-3xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-xl space-y-8 animate-fadeIn text-center sm:text-left">
+    <div className="w-full p-8 sm:p-10 rounded-3xl bg-white border border-slate-200 shadow-xl space-y-8 animate-fadeIn text-center sm:text-left">
       <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
-        <div className="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-950/70 text-emerald-500 border border-emerald-200 dark:border-emerald-800/80 flex items-center justify-center shrink-0 shadow-sm">
+        <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-500 border border-emerald-200 flex items-center justify-center shrink-0 shadow-sm">
           <CheckCircle2 className="w-9 h-9" />
         </div>
 
         <div className="space-y-1.5 flex-1">
-          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-100/70 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs font-bold font-mono">
+          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-100/70 border border-emerald-200 text-emerald-700 text-xs font-bold font-mono">
             ✓ CONVERSION COMPLETE
           </div>
-          <h3 className="text-xl sm:text-2xl font-extrabold font-display text-slate-900 dark:text-white truncate max-w-md">
+          <h3 className="text-xl sm:text-2xl font-extrabold font-display text-slate-900 truncate max-w-md">
             {outputFilename}
           </h3>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-xs sm:text-sm text-slate-500">
             PDF Document • {formatBytes(outputSizeBytes)}
           </p>
         </div>
       </div>
 
-      <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
+      <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between text-xs text-slate-600">
         <span className="flex items-center gap-2 font-medium">
           <FileText className="w-4 h-4 text-[#6366F1]" />
           Processed securely & stored temporarily
@@ -61,7 +61,7 @@ export const ConversionResult: React.FC<ConversionResultProps> = ({
         <a
           href={downloadUrl}
           download={outputFilename}
-          className="w-full sm:w-auto min-w-[200px] inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full font-bold text-white bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] hover:opacity-95 shadow-lg shadow-indigo-500/25 transition-all text-sm group"
+          className="w-full sm:w-auto min-w-[200px] inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full font-bold text-white bg-blue-600 hover:bg-black shadow-lg shadow-blue-500/25 transition-all text-sm group"
         >
           <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform shrink-0" />
           <span>Download PDF</span>
@@ -70,7 +70,7 @@ export const ConversionResult: React.FC<ConversionResultProps> = ({
         <button
           type="button"
           onClick={onReset}
-          className="w-full sm:w-auto px-6 py-3.5 rounded-full text-sm font-bold flex items-center justify-center gap-2 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          className="w-full sm:w-auto px-6 py-3.5 rounded-full text-sm font-bold flex items-center justify-center gap-2 border border-slate-300 text-slate-700 hover:bg-slate-100 transition-colors"
         >
           <RefreshCw className="w-4 h-4 shrink-0" />
           <span>Convert Another File</span>

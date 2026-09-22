@@ -61,12 +61,12 @@ export const HeroVisualizer = () => {
   };
 
   return (
-    <Card variant="accent" className="relative p-6 sm:p-8 backdrop-blur-xl border-slate-200/80 dark:border-obsidian-700">
+    <Card variant="accent" className="relative p-6 sm:p-8 backdrop-blur-xl border-slate-200/80 bg-white/80 shadow-md">
       
       {/* Panel Header: Dominant "Live Journey Preview" */}
-      <div className="flex items-center justify-between pb-4 border-b border-slate-200/60 dark:border-obsidian-700/60 mb-6">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
-          <Sparkles className="w-3.5 h-3.5 text-brand-indigo shrink-0" /> Live Journey Preview
+      <div className="flex items-center justify-between pb-4 border-b border-slate-200/60 mb-6">
+        <span className="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-1.5">
+          <Sparkles className="w-3.5 h-3.5 text-blue-600 shrink-0" /> Live Journey Preview
         </span>
       </div>
 
@@ -87,16 +87,16 @@ export const HeroVisualizer = () => {
               onClick={() => setActiveStage(stage.num)}
               className={`w-full p-3.5 rounded-xl border text-left transition-all duration-200 flex items-center justify-between group ${
                 isActive
-                  ? 'bg-white dark:bg-obsidian-800 border-brand-indigo/50 shadow-glow text-slate-900 dark:text-white opacity-100 scale-[1.01]'
-                  : 'bg-white/50 dark:bg-obsidian-800/50 border-brand-indigo/20 dark:border-brand-indigo/20 text-slate-700 dark:text-slate-300 opacity-60 hover:opacity-100 hover:bg-white dark:hover:bg-obsidian-800'
+                  ? 'bg-white border-blue-500/50 shadow-md text-slate-900 opacity-100 scale-[1.01]'
+                  : 'bg-slate-50/80 border-slate-200 text-slate-700 opacity-70 hover:opacity-100 hover:bg-white'
               }`}
             >
               <div className="flex items-center gap-3">
                 <div
                   className={`w-8 h-8 rounded-lg flex flex-col items-center justify-center transition-all duration-200 shrink-0 ${
                     isActive
-                      ? 'bg-brand-gradient text-white shadow-sm opacity-100'
-                      : 'bg-slate-100 dark:bg-obsidian-700/80 text-slate-600 dark:text-slate-300 group-hover:bg-brand-gradient group-hover:text-white opacity-80 group-hover:opacity-100'
+                      ? 'bg-blue-600 text-white shadow-sm opacity-100'
+                      : 'bg-slate-200/70 text-slate-600 group-hover:bg-blue-600 group-hover:text-white opacity-80 group-hover:opacity-100'
                   }`}
                 >
                   {stage.icon}
@@ -112,7 +112,7 @@ export const HeroVisualizer = () => {
                   Active Focus
                 </Badge>
               ) : (
-                <span className="text-[10px] font-mono text-brand-indigo/70 dark:text-brand-indigo-light/70 opacity-70 group-hover:opacity-100">
+                <span className="text-[10px] font-mono text-blue-600 opacity-70 group-hover:opacity-100 font-medium">
                   Upcoming
                 </span>
               )}
@@ -122,9 +122,9 @@ export const HeroVisualizer = () => {
       </motion.div>
 
       {/* Lightweight Interactive One-Line Micro-Preview */}
-      <div className="mt-5 pt-4 border-t border-slate-200/60 dark:border-obsidian-700/60 text-center">
-        <p className="text-xs text-slate-600 dark:text-slate-300 font-medium transition-all">
-          <strong className="text-brand-indigo dark:text-brand-indigo-light font-bold mr-1">
+      <div className="mt-5 pt-4 border-t border-slate-200/60 text-center">
+        <p className="text-xs text-slate-600 font-medium transition-all">
+          <strong className="text-blue-600 font-bold mr-1">
             Stage {currentStageObj.num}:
           </strong>
           {currentStageObj.preview}

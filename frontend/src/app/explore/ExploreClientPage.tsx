@@ -51,8 +51,8 @@ export const ExploreClientPage: React.FC<ExploreClientPageProps> = ({ candidate 
           ))}
         </div>
       ) : (
-        <div className="p-12 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 text-center space-y-3">
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white">No career paths found</h3>
+        <div className="p-12 rounded-2xl bg-white border border-slate-200 text-center space-y-3">
+          <h3 className="text-lg font-bold text-slate-900">No career paths found</h3>
           <p className="text-xs text-slate-500">
             No career roles match your selected category &ldquo;{selectedCategory}&rdquo; and query &ldquo;{searchQuery}&rdquo;.
           </p>

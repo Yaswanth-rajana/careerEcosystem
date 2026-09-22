@@ -14,7 +14,7 @@ export default async function ExplorePage() {
   const candidate = await getCandidateContextFromSession();
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-slate-50 dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 font-sans transition-colors">
+    <div className="min-h-screen flex flex-col justify-between bg-slate-50 text-slate-900 font-sans">
       <Header />
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
         <ExploreClientPage candidate={candidate} />

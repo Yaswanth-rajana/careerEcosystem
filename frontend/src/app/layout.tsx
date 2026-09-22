@@ -32,8 +32,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`dark scroll-smooth ${inter.variable} ${outfit.variable}`}>
-      <body className="bg-obsidian-900 text-slate-100 antialiased min-h-screen flex flex-col selection:bg-brand-indigo/30 selection:text-white font-sans">
+    <html lang="en" className={`scroll-smooth ${inter.variable} ${outfit.variable}`}>
+      <body className="bg-[#F7F8FC] text-slate-900 antialiased min-h-screen flex flex-col selection:bg-brand-indigo/20 selection:text-brand-indigo font-sans">
         <AuthProvider>
           {children}
         </AuthProvider>

@@ -27,11 +27,11 @@ export const Beat05Guidance = () => {
       <div className="space-y-10 max-w-5xl mx-auto">
         
         {/* Main Hero Visual Container: Candidate -> Mentor Bridge */}
-        <div className="relative p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-100/90 via-slate-50/80 to-indigo-50/40 dark:from-obsidian-900/60 dark:via-obsidian-900/50 dark:to-obsidian-900/40 border border-slate-200/80 dark:border-obsidian-700/50 backdrop-blur-md shadow-sm">
+        <div className="relative p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-100/90 via-slate-50/80 to-blue-50/40 border border-slate-200/80 backdrop-blur-md shadow-sm">
           
           {/* Header Label: MENTORSHIP */}
-          <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-8 flex items-center gap-2">
-            <Sparkles className="w-3.5 h-3.5 text-brand-indigo" /> MENTORSHIP
+          <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-8 flex items-center gap-2">
+            <Sparkles className="w-3.5 h-3.5 text-blue-600" /> MENTORSHIP
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
@@ -43,10 +43,10 @@ export const Beat05Guidance = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
-                className="p-6 rounded-2xl bg-white dark:bg-obsidian-800/60 border border-slate-200 dark:border-obsidian-700/60 text-left space-y-3 shadow-sm"
+                className="p-6 rounded-2xl bg-white border border-slate-200 text-left space-y-3 shadow-sm"
               >
                 <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-obsidian-700/70 text-slate-600 dark:text-slate-400 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center">
                     <User className="w-5 h-5" />
                   </div>
                   <Badge variant="neutral" size="sm" className="text-[10px]">
@@ -54,10 +54,10 @@ export const Beat05Guidance = () => {
                   </Badge>
                 </div>
                 <div>
-                  <h4 className="text-lg font-bold font-display text-slate-900 dark:text-white">
+                  <h4 className="text-lg font-bold font-display text-slate-900">
                     YOU
                   </h4>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
                     Exploring choices, closing skill gaps, and preparing for what&apos;s next.
                   </p>
                 </div>
@@ -73,8 +73,8 @@ export const Beat05Guidance = () => {
                   <svg className="w-full h-8 overflow-visible" viewBox="0 0 200 24" preserveAspectRatio="none" fill="none">
                     <defs>
                       <linearGradient id="long-arrow-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#6366F1" />
-                        <stop offset="100%" stopColor="#8B5CF6" />
+                        <stop offset="0%" stopColor="#2563EB" />
+                        <stop offset="100%" stopColor="#3B82F6" />
                       </linearGradient>
                       <filter id="arrow-glow" x="-20%" y="-20%" width="140%" height="140%">
                         <feGaussianBlur stdDeviation="1.8" result="blur" />
@@ -85,7 +85,7 @@ export const Beat05Guidance = () => {
                     {/* Muted Track Arrow */}
                     <path
                       d="M 5,12 L 182,12 M 170,5 L 184,12 L 170,19"
-                      className="stroke-slate-300 dark:stroke-slate-700"
+                      className="stroke-slate-300"
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -108,7 +108,7 @@ export const Beat05Guidance = () => {
                 </div>
 
                 {/* Mobile Fallback Arrow */}
-                <div className="block md:hidden text-brand-indigo my-2">
+                <div className="block md:hidden text-blue-600 my-2">
                   <motion.svg
                     className="w-5 h-7"
                     viewBox="0 0 24 32"
@@ -133,10 +133,10 @@ export const Beat05Guidance = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
-                className="p-6 rounded-2xl bg-white dark:bg-obsidian-800/90 border border-brand-indigo/40 dark:border-brand-indigo/50 shadow-md dark:shadow-glow text-left space-y-3 ring-1 ring-brand-indigo/20 dark:ring-brand-indigo/30"
+                className="p-6 rounded-2xl bg-white border border-blue-200 shadow-md text-left space-y-3 ring-1 ring-blue-500/20"
               >
                 <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-xl bg-brand-gradient text-white flex items-center justify-center shadow-md">
+                  <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-md">
                     <Award className="w-5 h-5" />
                   </div>
                   <Badge variant="brand" size="sm" className="text-[10px]">
@@ -144,10 +144,10 @@ export const Beat05Guidance = () => {
                   </Badge>
                 </div>
                 <div>
-                  <h4 className="text-lg font-bold font-display text-slate-900 dark:text-white">
+                  <h4 className="text-lg font-bold font-display text-slate-900">
                     Verified Industry Mentor
                   </h4>
-                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
+                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
                     Experienced professionals who offer practical guidance, feedback, and perspective.
                   </p>
                 </div>
@@ -159,7 +159,7 @@ export const Beat05Guidance = () => {
 
         {/* Mentorship Categories Grid */}
         <div className="space-y-4 text-left">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
             MENTORSHIP TRACKS
           </span>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -170,12 +170,12 @@ export const Beat05Guidance = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: idx * 0.1 }}
-                className="p-4 rounded-xl bg-white dark:bg-obsidian-800/80 border border-slate-200 dark:border-obsidian-700/60 flex items-start gap-3 hover:border-brand-indigo/40 shadow-xs transition-colors"
+                className="p-4 rounded-xl bg-white border border-slate-200 flex items-start gap-3 hover:border-blue-300 shadow-sm transition-colors"
               >
-                <CheckCircle2 className="w-4 h-4 text-brand-indigo shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                 <div>
-                  <h5 className="text-xs font-bold text-slate-900 dark:text-white">{cat.label}</h5>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{cat.desc}</p>
+                  <h5 className="text-xs font-bold text-slate-900">{cat.label}</h5>
+                  <p className="text-[11px] text-slate-500 mt-0.5">{cat.desc}</p>
                 </div>
               </motion.div>
             ))}

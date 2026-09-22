@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { CAREER_CATEGORIES } from '@/lib/careers/career-repository';
-import { Cpu, Database, Layout, Shield, TrendingUp, Zap, Wrench, Layers } from 'lucide-react';
+import { Cpu, Database, Layout, Shield, TrendingUp, Wrench, Layers } from 'lucide-react';
 
 export interface CareerCategorySelectorProps {
   selectedCategory: string;
@@ -16,7 +16,6 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   'Product & Design': Layout,
   Cybersecurity: Shield,
   'Business & Growth': TrendingUp,
-  'Electronics & Systems': Zap,
   'Mechanical & Manufacturing': Wrench,
 };
 
@@ -37,13 +36,13 @@ export const CareerCategorySelector: React.FC<CareerCategorySelectorProps> = ({
             <button
               key={cat}
               onClick={() => onSelectCategory(cat)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-200 select-none ${
+              className={`group flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-200 select-none ${
                 isSelected
-                  ? 'bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white shadow-md shadow-indigo-500/20 scale-[1.02]'
-                  : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800 hover:border-[#6366F1]/50 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-black text-white border-black shadow-md scale-[1.02]'
+                  : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-black hover:border-black hover:text-white shadow-sm'
               }`}
             >
-              <IconComp className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-[#6366F1]'}`} />
+              <IconComp className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-slate-600 group-hover:text-white'}`} />
               <span>{cat}</span>
             </button>
           );

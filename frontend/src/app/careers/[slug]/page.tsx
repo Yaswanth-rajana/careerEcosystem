@@ -44,7 +44,7 @@ export default async function CareerDetailPage({ params }: { params: { slug: str
   const progressMetrics = calculateCareerProgress(candidate, career.slug);
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-slate-50 dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 font-sans transition-colors">
+    <div className="min-h-screen flex flex-col justify-between bg-slate-50 text-slate-900 font-sans">
       <Header />
 
       {/* Section 01 — Career Hero */}

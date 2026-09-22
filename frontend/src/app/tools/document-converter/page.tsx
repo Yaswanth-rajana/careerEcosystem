@@ -142,7 +142,7 @@ export default function DocumentConverterPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-slate-50 dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 font-sans transition-colors">
+    <div className="min-h-screen flex flex-col justify-between bg-slate-50 text-slate-900 font-sans transition-colors">
       <Header />
 
       <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 w-full space-y-10 text-left">
@@ -152,21 +152,21 @@ export default function DocumentConverterPage() {
             Tools
           </Link>
           <span>/</span>
-          <span className="text-slate-800 dark:text-slate-200">Document Converter</span>
+          <span className="text-slate-800">Document Converter</span>
         </div>
 
         {/* Hero Section */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/70 border border-indigo-200 dark:border-indigo-800 text-[#6366F1] text-xs font-bold font-mono">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-[#6366F1] text-xs font-bold font-mono">
             <FileText className="w-3.5 h-3.5" />
             <span>DOCUMENT CONVERTER</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight font-display text-slate-900 dark:text-white">
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight font-display text-slate-900">
             Convert your documents quickly and securely.
           </h1>
 
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
             Upload a supported document and choose PDF as the output format.
           </p>
         </div>
@@ -178,17 +178,17 @@ export default function DocumentConverterPage() {
           )}
 
           {conversionState === 'FILE_SELECTED' && selectedFile && (
-            <div className="p-8 sm:p-10 rounded-3xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-lg space-y-8 animate-fadeIn">
-              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-6">
+            <div className="p-8 sm:p-10 rounded-3xl bg-white border border-slate-200 shadow-lg space-y-8 animate-fadeIn">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-950/70 text-[#6366F1] border border-indigo-200/60 dark:border-indigo-800/60 flex items-center justify-center font-bold font-mono text-sm shrink-0">
+                  <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-[#6366F1] border border-indigo-200/60 flex items-center justify-center font-bold font-mono text-sm shrink-0">
                     {getFileExtension(selectedFile.name)}
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold font-display text-slate-900 dark:text-white truncate max-w-xs sm:max-w-md">
+                    <h3 className="text-lg font-bold font-display text-slate-900 truncate max-w-xs sm:max-w-md">
                       {selectedFile.name}
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+                    <p className="text-xs text-slate-500 font-mono">
                       {getFileExtension(selectedFile.name)} • {formatFileSize(selectedFile.size)}
                     </p>
                   </div>
@@ -210,18 +210,18 @@ export default function DocumentConverterPage() {
                   Convert to:
                 </label>
                 <div className="flex items-center gap-3">
-                  <div className="px-5 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold font-mono text-sm text-[#6366F1] flex items-center gap-2">
+                  <div className="px-5 py-3 rounded-xl bg-slate-100 border border-slate-200 font-bold font-mono text-sm text-[#6366F1] flex items-center gap-2">
                     <FileText className="w-4 h-4" />
                     <span>PDF</span>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-center">
+              <div className="pt-4 border-t border-slate-100 flex justify-center">
                 <button
                   type="button"
                   onClick={handleStartConversion}
-                  className="w-full sm:w-auto min-w-[240px] px-8 py-3.5 rounded-full font-bold text-sm sm:text-base text-white bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] hover:opacity-95 shadow-lg shadow-indigo-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 text-center cursor-pointer"
+                  className="w-full sm:w-auto min-w-[240px] px-8 py-3.5 rounded-full font-bold text-sm sm:text-base text-white bg-blue-600 hover:bg-black shadow-lg shadow-blue-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 text-center cursor-pointer"
                 >
                   <span>Convert to PDF</span>
                   <ArrowRight className="w-4.5 h-4.5 shrink-0" />
@@ -252,27 +252,27 @@ export default function DocumentConverterPage() {
         </div>
 
         {/* Security & Privacy Statement */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-slate-200/70 dark:border-slate-800/80">
-          <div className="flex items-start gap-3 p-4 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200/50 dark:border-slate-800/50">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-slate-200/70">
+          <div className="flex items-start gap-3 p-4 rounded-2xl bg-white/60 border border-slate-200/50">
             <Lock className="w-4 h-4 text-[#6366F1] shrink-0 mt-0.5" />
             <div className="space-y-0.5">
-              <h5 className="text-xs font-bold text-slate-800 dark:text-slate-200">Secure Processing</h5>
+              <h5 className="text-xs font-bold text-slate-800">Secure Processing</h5>
               <p className="text-[11px] text-slate-500">Transferred over HTTPS with isolated document engine parsing.</p>
             </div>
           </div>
 
-          <div className="flex items-start gap-3 p-4 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200/50 dark:border-slate-800/50">
+          <div className="flex items-start gap-3 p-4 rounded-2xl bg-white/60 border border-slate-200/50">
             <Clock className="w-4 h-4 text-[#6366F1] shrink-0 mt-0.5" />
             <div className="space-y-0.5">
-              <h5 className="text-xs font-bold text-slate-800 dark:text-slate-200">Temporary Storage</h5>
+              <h5 className="text-xs font-bold text-slate-800">Temporary Storage</h5>
               <p className="text-[11px] text-slate-500">Files are processed temporarily and automatically removed after 60 minutes.</p>
             </div>
           </div>
 
-          <div className="flex items-start gap-3 p-4 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200/50 dark:border-slate-800/50">
+          <div className="flex items-start gap-3 p-4 rounded-2xl bg-white/60 border border-slate-200/50">
             <ShieldCheck className="w-4 h-4 text-[#6366F1] shrink-0 mt-0.5" />
             <div className="space-y-0.5">
-              <h5 className="text-xs font-bold text-slate-800 dark:text-slate-200">No Content Logging</h5>
+              <h5 className="text-xs font-bold text-slate-800">No Content Logging</h5>
               <p className="text-[11px] text-slate-500">Document contents are never read, indexed, or stored permanently.</p>
             </div>
           </div>

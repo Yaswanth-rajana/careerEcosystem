@@ -39,37 +39,37 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-[#0B0F19] text-[#F9FAFB] font-sans antialiased">
+    <div className="min-h-screen flex flex-col justify-between bg-[#F7F8FC] text-slate-900 font-sans antialiased">
       <AuthHeader />
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex items-center justify-center">
-        <div className="w-full max-w-[540px] p-8 sm:p-12 rounded-[28px] border border-[#94A3B8]/12 bg-[#111827] shadow-[0_0_80px_rgba(99,102,241,0.12)] space-y-6">
+        <div className="w-full max-w-[540px] p-8 sm:p-12 rounded-[28px] border border-slate-200 bg-white shadow-xl space-y-6">
           
           {/* Header */}
           <div className="space-y-2 text-left">
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#6366F1]">
               PATHWAY.ECO
             </span>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display tracking-tight text-[#F9FAFB]">
+            <h1 className="text-2xl sm:text-3xl font-bold font-display tracking-tight text-[#0F172A]">
               Reset your password.
             </h1>
-            <p className="text-sm text-[#94A3B8]">
+            <p className="text-sm text-slate-600">
               Enter your email and we&apos;ll help you get back into your account.
             </p>
           </div>
 
           {/* Error Banner */}
           {error && (
-            <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-xs flex items-start gap-2.5">
-              <AlertCircle className="w-4 h-4 shrink-0 text-red-400 mt-0.5" />
+            <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-start gap-2.5">
+              <AlertCircle className="w-4 h-4 shrink-0 text-red-500 mt-0.5" />
               <span>{error}</span>
             </div>
           )}
 
           {/* Success Banner */}
           {successMessage && (
-            <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-start gap-2.5">
-              <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400 mt-0.5" />
+            <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-start gap-2.5">
+              <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600 mt-0.5" />
               <span>{successMessage}</span>
             </div>
           )}
@@ -90,7 +90,7 @@ export default function ResetPasswordPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full h-[52px] rounded-[14px] bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/35 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:ring-offset-2 focus-visible:ring-offset-[#111827] disabled:opacity-60 disabled:pointer-events-none"
+              className="w-full h-[52px] rounded-[14px] bg-blue-600 hover:bg-black text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:opacity-60 disabled:pointer-events-none"
             >
               {isSubmitting ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -107,7 +107,7 @@ export default function ResetPasswordPage() {
           <div className="pt-2 text-center">
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 text-xs font-semibold text-[#94A3B8] hover:text-[#F9FAFB] transition-colors"
+              className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Sign In</span>
@@ -117,7 +117,7 @@ export default function ResetPasswordPage() {
         </div>
       </main>
 
-      <footer className="w-full py-6 text-center text-xs text-[#94A3B8]/60 border-t border-[#94A3B8]/10">
+      <footer className="w-full py-6 text-center text-xs text-slate-500 border-t border-slate-200/80">
         © {new Date().getFullYear()} PATHWAY.ECO. All rights reserved.
       </footer>
     </div>

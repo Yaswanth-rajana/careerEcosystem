@@ -57,32 +57,32 @@ export default function ToolsPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-slate-50 dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 font-sans transition-colors">
+    <div className="min-h-screen flex flex-col justify-between bg-slate-50 text-slate-900 font-sans transition-colors">
       <Header />
 
       <main className="flex-1 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 w-full space-y-12 text-left">
         {/* Hero Section */}
         <div className="text-center max-w-3xl mx-auto space-y-4 pt-2">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 text-slate-700 dark:text-slate-300 text-xs font-semibold shadow-xs">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold shadow-xs">
             <Wrench className="w-3.5 h-3.5 text-[#6366F1]" />
             <span>PATHWAY TOOLS PLATFORM</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight font-display text-slate-900 dark:text-white">
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight font-display text-slate-900">
             Tools that make your work{' '}
             <span className="bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] bg-clip-text text-transparent">
               easier.
             </span>
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
             Convert, organize, and prepare your documents without leaving PATHWAY.ECO.
           </p>
         </div>
 
         {/* Featured Production Tools */}
         <div className="space-y-4">
-          <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+          <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
             DOCUMENTS & PROCESSING
           </h2>
 
@@ -92,32 +92,32 @@ export default function ToolsPage() {
               return (
                 <div
                   key={tool.id}
-                  className="p-7 sm:p-8 rounded-3xl bg-white dark:bg-[#111827] border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-6 hover:border-[#6366F1]/60 hover:shadow-lg transition-all group"
+                  className="p-7 sm:p-8 rounded-3xl bg-white border border-slate-200/80 shadow-sm flex flex-col justify-between space-y-6 hover:border-[#6366F1]/60 hover:shadow-lg transition-all group"
                 >
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#6366F1] bg-indigo-50 dark:bg-indigo-950/60 px-3 py-1 rounded-full border border-indigo-200 dark:border-indigo-800">
+                      <span className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#6366F1] bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200">
                         <IconComp className="w-3.5 h-3.5" />
                         {tool.category}
                       </span>
-                      <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+                      <span className="text-[10px] font-mono font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
                         {tool.badge}
                       </span>
                     </div>
 
-                    <h3 className="text-2xl font-bold font-display text-slate-900 dark:text-white group-hover:text-[#6366F1] transition-colors">
+                    <h3 className="text-2xl font-bold font-display text-slate-900 group-hover:text-[#6366F1] transition-colors">
                       {tool.title}
                     </h3>
 
-                    <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                    <p className="text-sm text-slate-600 leading-relaxed">
                       {tool.description}
                     </p>
                   </div>
 
-                  <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                  <div className="pt-4 border-t border-slate-100">
                     <Link
                       href={tool.href}
-                      className="inline-flex items-center gap-2 text-sm font-bold text-white bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] px-5 py-3 rounded-xl shadow-sm hover:opacity-95 transition-all w-full justify-center group-hover:translate-x-0.5"
+                      className="inline-flex items-center gap-2 text-sm font-bold text-white bg-blue-600 hover:bg-black px-5 py-3 rounded-xl shadow-sm transition-all w-full justify-center group-hover:translate-x-0.5"
                     >
                       <span>{tool.actionLabel}</span>
                     </Link>
@@ -129,9 +129,9 @@ export default function ToolsPage() {
         </div>
 
         {/* Coming Soon Categories */}
-        <div className="space-y-6 pt-4 border-t border-slate-200/80 dark:border-slate-800/80">
+        <div className="space-y-6 pt-4 border-t border-slate-200/80">
           <div className="flex items-center justify-between">
-            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 flex items-center gap-2">
+            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
               <Sparkles className="w-3.5 h-3.5 text-[#6366F1]" />
               PLANNED UTILITIES
             </h2>
@@ -143,7 +143,7 @@ export default function ToolsPage() {
               const GroupIcon = group.icon;
               return (
                 <div key={group.category} className="space-y-4">
-                  <div className="flex items-center gap-2 text-sm font-bold font-mono text-slate-700 dark:text-slate-300">
+                  <div className="flex items-center gap-2 text-sm font-bold font-mono text-slate-700">
                     <GroupIcon className="w-4 h-4 text-[#6366F1]" />
                     <span>{group.category}</span>
                   </div>
@@ -152,15 +152,15 @@ export default function ToolsPage() {
                     {group.tools.map((item) => (
                       <div
                         key={item.title}
-                        className="p-4 rounded-2xl bg-slate-100/70 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between opacity-80"
+                        className="p-4 rounded-2xl bg-slate-100/70 border border-slate-200/60 flex items-center justify-between opacity-80"
                       >
                         <div className="space-y-0.5">
-                          <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                          <h4 className="text-sm font-semibold text-slate-800">
                             {item.title}
                           </h4>
-                          <p className="text-xs text-slate-500 dark:text-slate-400">{item.description}</p>
+                          <p className="text-xs text-slate-500">{item.description}</p>
                         </div>
-                        <span className="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 bg-slate-200/80 dark:bg-slate-800 px-2.5 py-1 rounded-full border border-slate-300 dark:border-slate-700 shrink-0">
+                        <span className="text-[10px] font-mono font-bold text-slate-500 bg-slate-200/80 px-2.5 py-1 rounded-full border border-slate-300 shrink-0">
                           Coming Soon
                         </span>
                       </div>

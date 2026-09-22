@@ -52,8 +52,14 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchMode }) => {
     }
   };
 
-  const handleGoogleClick = () => {
-    setErrors({ general: 'Google sign-up integration is ready. Configure OAuth client in production.' });
+  const handleGoogleSuccess = async (res: any) => {
+    await refreshUser();
+    const target = res.redirectTo || (res.user?.isOnboarded ? '/dashboard' : '/onboarding');
+    router.push(target);
+  };
+
+  const handleGoogleError = (errorMessage: string) => {
+    setErrors({ general: errorMessage });
   };
 
   return (
@@ -63,18 +69,18 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchMode }) => {
         <span className="text-[11px] font-bold uppercase tracking-wider text-[#6366F1]">
           PATHWAY.ECO
         </span>
-        <h2 className="text-2xl sm:text-3xl font-bold font-display tracking-tight text-[#F9FAFB]">
+        <h2 className="text-2xl sm:text-3xl font-bold font-display tracking-tight text-[#0F172A]">
           Start your journey.
         </h2>
-        <p className="text-sm text-[#94A3B8]">
+        <p className="text-sm text-slate-600">
           Build your profile and find your next step.
         </p>
       </div>
 
       {/* General Error Alert */}
       {errors.general && (
-        <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-xs flex items-start gap-2.5">
-          <AlertCircle className="w-4 h-4 shrink-0 text-red-400 mt-0.5" />
+        <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-start gap-2.5">
+          <AlertCircle className="w-4 h-4 shrink-0 text-red-500 mt-0.5" />
           <span>{errors.general}</span>
         </div>
       )}
@@ -121,7 +127,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchMode }) => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full h-[52px] rounded-[14px] bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/35 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:ring-offset-2 focus-visible:ring-offset-[#111827] disabled:opacity-60 disabled:pointer-events-none"
+          className="w-full h-[52px] rounded-[14px] bg-blue-600 hover:bg-black text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:opacity-60 disabled:pointer-events-none"
         >
           {isSubmitting ? (
             <Loader2 className="w-5 h-5 animate-spin" />
@@ -138,10 +144,14 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchMode }) => {
       <AuthDivider />
 
       {/* Google Button */}
-      <SocialAuthButton onClick={handleGoogleClick} disabled={isSubmitting} />
+      <SocialAuthButton
+        onSuccess={handleGoogleSuccess}
+        onError={handleGoogleError}
+        disabled={isSubmitting}
+      />
 
       {/* Mode Toggle Link */}
-      <div className="pt-2 text-center text-xs text-[#94A3B8]">
+      <div className="pt-2 text-center text-xs text-slate-600">
         Already have an account?{' '}
         <button
           type="button"

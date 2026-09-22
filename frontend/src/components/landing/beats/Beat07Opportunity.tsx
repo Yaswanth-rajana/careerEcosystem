@@ -27,8 +27,8 @@ export const Beat07Opportunity = () => {
       <div className="max-w-5xl mx-auto text-left space-y-6">
         
         {/* Header Label: HOW IT WORKS */}
-        <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
-          <Sparkles className="w-3.5 h-3.5 text-brand-indigo" /> HOW IT WORKS
+        <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+          <Sparkles className="w-3.5 h-3.5 text-blue-600" /> HOW IT WORKS
         </div>
 
         {/* ================= DESKTOP HORIZONTAL FLOW (md+) ================= */}
@@ -52,8 +52,8 @@ export const Beat07Opportunity = () => {
                   }}
                   className={`flex-1 p-4 sm:p-4.5 rounded-2xl border text-center flex flex-col items-center justify-center space-y-1.5 transition-all duration-300 relative ${
                     isMatch
-                      ? 'bg-brand-gradient text-white border-transparent shadow-[0_0_16px_rgba(108,92,231,0.4)] scale-[1.03] z-10'
-                      : 'bg-white dark:bg-obsidian-800/80 border-slate-200 dark:border-obsidian-700/80 text-slate-900 dark:text-slate-100'
+                      ? 'bg-blue-600 text-white border-blue-600 shadow-md scale-[1.03] z-10'
+                      : 'bg-white border-slate-200 text-slate-900 shadow-sm'
                   }`}
                 >
                   {/* Integrated Focal Glow Pulse for Step 04 MATCH */}
@@ -68,33 +68,33 @@ export const Beat07Opportunity = () => {
 
                   <span
                     className={`text-[10px] font-extrabold font-mono tracking-wider ${
-                      isMatch ? 'text-white/80' : 'text-brand-indigo dark:text-brand-indigo-light'
+                      isMatch ? 'text-white/80' : 'text-blue-600'
                     }`}
                   >
                     {step.num}
                   </span>
 
                   <h4 className={`text-xs font-bold font-display uppercase tracking-wider ${
-                    isMatch ? 'text-white text-sm' : 'text-slate-900 dark:text-white'
+                    isMatch ? 'text-white text-sm' : 'text-slate-900'
                   }`}>
                     {step.label}
                   </h4>
 
                   <p className={`text-[11px] leading-tight ${
-                    isMatch ? 'text-white/90 font-medium' : 'text-slate-500 dark:text-slate-400'
+                    isMatch ? 'text-white/90 font-medium' : 'text-slate-500'
                   }`}>
                     {step.desc}
                   </p>
                 </motion.div>
 
-                {/* Visible Thin Indigo Horizontal Connector Arrow */}
+                {/* Visible Thin Blue Horizontal Connector Arrow */}
                 {!isLast && (
                   <motion.div
                     initial={shouldReduceMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: -4 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.3, delay: stepDelay + 0.1 }}
-                    className="shrink-0 text-brand-indigo/80 dark:text-brand-indigo-light/80 px-1 drop-shadow-[0_0_6px_rgba(99,102,241,0.4)]"
+                    className="shrink-0 text-blue-500 px-1"
                   >
                     <ArrowRight className="w-4 h-4" />
                   </motion.div>
@@ -121,39 +121,39 @@ export const Beat07Opportunity = () => {
                   transition={{ duration: 0.35, delay: stepDelay }}
                   className={`w-full p-4 rounded-2xl border text-center flex flex-col items-center justify-center space-y-1 transition-all ${
                     isMatch
-                      ? 'bg-brand-gradient text-white border-transparent shadow-[0_0_16px_rgba(108,92,231,0.4)] scale-[1.02] z-10'
-                      : 'bg-white dark:bg-obsidian-800/80 border-slate-200 dark:border-obsidian-700 text-slate-900 dark:text-slate-100'
+                      ? 'bg-blue-600 text-white border-blue-600 shadow-md scale-[1.02] z-10'
+                      : 'bg-white border-slate-200 text-slate-900 shadow-sm'
                   }`}
                 >
                   <span
                     className={`text-[10px] font-extrabold font-mono tracking-wider ${
-                      isMatch ? 'text-white/80' : 'text-brand-indigo dark:text-brand-indigo-light'
+                      isMatch ? 'text-white/80' : 'text-blue-600'
                     }`}
                   >
                     {step.num}
                   </span>
 
                   <h4 className={`text-xs font-bold font-display uppercase tracking-wider ${
-                    isMatch ? 'text-white text-sm' : 'text-slate-900 dark:text-white'
+                    isMatch ? 'text-white text-sm' : 'text-slate-900'
                   }`}>
                     {step.label}
                   </h4>
 
                   <p className={`text-[11px] ${
-                    isMatch ? 'text-white/90 font-medium' : 'text-slate-500 dark:text-slate-400'
+                    isMatch ? 'text-white/90 font-medium' : 'text-slate-500'
                   }`}>
                     {step.desc}
                   </p>
                 </motion.div>
 
-                {/* Visible Thin Indigo Vertical Connector Arrow Mobile */}
+                {/* Visible Thin Blue Vertical Connector Arrow Mobile */}
                 {!isLast && (
                   <motion.div
                     initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.25, delay: stepDelay + 0.08 }}
-                    className="text-brand-indigo/80 dark:text-brand-indigo-light/80 py-1 drop-shadow-[0_0_6px_rgba(99,102,241,0.4)]"
+                    className="text-blue-500 py-1"
                   >
                     <ArrowDown className="w-4 h-4" />
                   </motion.div>

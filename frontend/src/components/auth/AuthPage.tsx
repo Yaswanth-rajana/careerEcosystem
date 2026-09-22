@@ -32,7 +32,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode }) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-[#0B0F19] text-[#F9FAFB] font-sans antialiased selection:bg-[#6366F1]/30 selection:text-white">
+    <div className="min-h-screen flex flex-col justify-between bg-[#F7F8FC] text-slate-900 font-sans antialiased selection:bg-[#6366F1]/20 selection:text-[#6366F1]">
       {/* Minimal Header */}
       <AuthHeader />
 
@@ -42,7 +42,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode }) => {
       </main>
 
       {/* Minimal Footer Notice */}
-      <footer className="w-full py-6 text-center text-xs text-[#94A3B8]/60 border-t border-[#94A3B8]/10">
+      <footer className="w-full py-6 text-center text-xs text-slate-500 border-t border-slate-200/80">
         © {new Date().getFullYear()} PATHWAY.ECO. All rights reserved.
       </footer>
     </div>

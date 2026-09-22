@@ -5,7 +5,7 @@ import { Loader2 } from 'lucide-react';
 export const Skeleton = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      'animate-pulse rounded-lg bg-slate-200 dark:bg-obsidian-700/60',
+      'animate-pulse rounded-lg bg-slate-200',
       className
     )}
     {...props}

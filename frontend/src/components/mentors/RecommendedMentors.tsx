@@ -49,20 +49,20 @@ export const RecommendedMentors: React.FC<RecommendedMentorsProps> = ({ onBookSe
   }, [candidateContext]);
 
   return (
-    <section className="py-12 border-b border-slate-200/60 dark:border-slate-800/60 bg-slate-50/50 dark:bg-[#0B0F19]/60">
+    <section className="py-12 border-b border-slate-200/60 bg-slate-50/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 text-brand-violet dark:text-brand-violet-light text-xs font-bold uppercase tracking-wider mb-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-bold uppercase tracking-wider mb-2">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Tailored Guidance</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold font-display text-slate-900 dark:text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold font-display text-slate-900 tracking-tight">
               {user ? 'Recommended for you' : 'Find a mentor for your next step'}
             </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+            <p className="text-sm text-slate-600 mt-1">
               {user
                 ? 'Based on your career goals, current skills, and active mentorship needs.'
                 : 'Connect with experienced professionals matched to your ambitions.'}
@@ -78,7 +78,7 @@ export const RecommendedMentors: React.FC<RecommendedMentorsProps> = ({ onBookSe
                 el?.scrollIntoView({ behavior: 'smooth' });
               }}
               rightIcon={<ArrowRight className="w-4 h-4" />}
-              className="border-slate-300 dark:border-slate-700 text-xs font-semibold self-start md:self-auto"
+              className="border-slate-300 text-xs font-semibold self-start md:self-auto"
             >
               Explore All Mentors
             </Button>
@@ -89,7 +89,7 @@ export const RecommendedMentors: React.FC<RecommendedMentorsProps> = ({ onBookSe
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-64 rounded-2xl bg-slate-200/60 dark:bg-slate-800/50 animate-pulse" />
+              <div key={i} className="h-64 rounded-2xl bg-slate-200/60 animate-pulse" />
             ))}
           </div>
         ) : (

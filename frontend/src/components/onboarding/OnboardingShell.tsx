@@ -29,6 +29,7 @@ import {
 import { ParsedResumeData } from '@backend/services/resumeParserService';
 import { ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { findCareerSlugByTitle, getCareerPathBySlug, setSavedTargetRole } from '@/lib/careers/career-repository';
 
 export const OnboardingShell: React.FC = () => {
   const router = useRouter();
@@ -391,6 +392,21 @@ export const OnboardingShell: React.FC = () => {
         throw new Error(result.error || 'Completion failed');
       }
 
+      // Sync user chosen target role to local saved roles so "My Path" navigates there
+      if (payload.careerDirection?.targetRole) {
+        const matchedSlug = findCareerSlugByTitle(payload.careerDirection.targetRole);
+        if (matchedSlug) {
+          const career = getCareerPathBySlug(matchedSlug);
+          if (career) {
+            setSavedTargetRole({
+              slug: career.slug,
+              title: career.title,
+              category: career.category,
+            });
+          }
+        }
+      }
+
       await refreshUser();
       router.push(result.redirectUrl || '/dashboard');
     } catch (err: any) {
@@ -401,17 +417,17 @@ export const OnboardingShell: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0B0F19] text-white">
+      <div className="min-h-screen flex items-center justify-center bg-[#F7F8FC] text-slate-900">
         <div className="flex flex-col items-center gap-3">
           <Loader2 className="w-8 h-8 text-[#6366F1] animate-spin" />
-          <span className="text-xs text-[#94A3B8] font-medium">Loading your PATHWAY profile…</span>
+          <span className="text-xs text-slate-500 font-medium">Loading your PATHWAY profile…</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen lg:h-screen lg:max-h-screen flex flex-col justify-between bg-[#0B0F19] text-[#F9FAFB] font-sans antialiased selection:bg-[#6366F1]/30 selection:text-white lg:overflow-hidden">
+    <div className="min-h-screen lg:h-screen lg:max-h-screen flex flex-col justify-between bg-[#F7F8FC] text-slate-900 font-sans antialiased selection:bg-[#6366F1]/20 selection:text-[#6366F1] lg:overflow-hidden">
       {/* Onboarding Focused Header */}
       <OnboardingHeader saveStatus={saveStatus} />
 
@@ -530,12 +546,12 @@ export const OnboardingShell: React.FC = () => {
 
               {/* Navigation Controls (Steps 1 to 6) */}
               {currentStep < 7 && (
-                <div className="flex items-center justify-between border-t border-[#94A3B8]/10 pt-6 mt-8">
+                <div className="flex items-center justify-between border-t border-slate-200/80 pt-6 mt-8">
                   <button
                     type="button"
                     onClick={handlePrevStep}
                     disabled={currentStep === 1}
-                    className="h-11 px-5 rounded-xl border border-[#94A3B8]/20 text-[#94A3B8] font-semibold text-xs flex items-center gap-2 hover:text-white hover:border-[#94A3B8]/40 transition-colors disabled:opacity-30 disabled:pointer-events-none"
+                    className="h-11 px-5 rounded-xl border border-slate-200 text-slate-600 font-semibold text-xs flex items-center gap-2 hover:text-slate-900 hover:border-slate-300 transition-colors disabled:opacity-30 disabled:pointer-events-none"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     <span>Back</span>
@@ -544,7 +560,7 @@ export const OnboardingShell: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleNextStep}
-                    className="h-12 px-7 rounded-xl bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white font-bold text-sm flex items-center gap-2 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/35 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+                    className="h-12 px-7 rounded-xl bg-blue-600 hover:bg-black text-white font-bold text-sm flex items-center gap-2 shadow-lg shadow-blue-500/20 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
                   >
                     <span>Continue</span>
                     <ArrowRight className="w-4 h-4" />
@@ -568,7 +584,7 @@ export const OnboardingShell: React.FC = () => {
       )}
 
       {/* Footer Notice */}
-      <footer className="w-full py-3 text-center text-xs text-[#94A3B8]/60 border-t border-[#94A3B8]/10 shrink-0">
+      <footer className="w-full py-3 text-center text-xs text-slate-500 border-t border-slate-200/80 shrink-0">
         © {new Date().getFullYear()} PATHWAY.ECO. Mandatory Candidate Profile Foundation. All progress auto-saved server-side.
       </footer>
     </div>

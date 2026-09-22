@@ -137,7 +137,7 @@ export const PillNav: React.FC<PillNavProps> = ({
   return (
     <div
       ref={navItemsRef}
-      className={`hidden md:flex items-center h-[48px] px-2 rounded-full bg-slate-100/90 dark:bg-[#0F172A]/75 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-xl shadow-sm dark:shadow-lg transition-colors ${className}`}
+      className={`hidden md:flex items-center h-[48px] px-2 rounded-full bg-slate-100/90 border border-slate-200/80 backdrop-blur-xl shadow-sm transition-colors ${className}`}
     >
       <ul className="flex items-center gap-1 sm:gap-1.5 m-0 p-0 list-none h-full" role="menubar">
         {items.map((item, i) => {
@@ -159,38 +159,18 @@ export const PillNav: React.FC<PillNavProps> = ({
               <Link
                 role="menuitem"
                 href={item.href}
-                style={
+                prefetch={true}
+                className={`relative h-[36px] px-3.5 rounded-full flex items-center gap-2 text-xs font-semibold select-none overflow-hidden whitespace-nowrap transition-colors duration-150 ${
                   isActive
-                    ? {
-                        background: 'linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)',
-                        boxShadow: '0 0 14px rgba(99, 102, 241, 0.35)',
-                        color: '#FFFFFF',
-                      }
-                    : undefined
-                }
-                className={`relative h-[36px] px-3.5 rounded-full flex items-center gap-2 text-xs font-semibold select-none overflow-hidden whitespace-nowrap transition-all duration-200 ${
-                  isActive
-                    ? 'font-bold'
-                    : 'text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white'
+                    ? 'font-bold bg-slate-900 text-white shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
                 aria-label={item.ariaLabel || item.label}
               >
-                {/* Active Indicator Sliding Highlight for Framer Motion */}
-                {isActive && (
-                  <motion.div
-                    layoutId={shouldReduceMotion ? undefined : 'activePillGlow'}
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                    style={{
-                      background: 'linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)',
-                    }}
-                    className="absolute inset-0 rounded-full z-0 shadow-[0_0_14px_rgba(99,102,241,0.35)]"
-                  />
-                )}
-
                 {/* GSAP Expand Circle Background Effect (non-active) */}
                 {!isActive && !shouldReduceMotion && (
                   <span
-                    className="hover-circle absolute left-1/2 bottom-0 rounded-full bg-[#6366F1]/10 dark:bg-[#6366F1]/20 pointer-events-none z-0"
+                    className="hover-circle absolute left-1/2 bottom-0 rounded-full bg-slate-900/10 pointer-events-none z-0"
                     aria-hidden="true"
                     ref={(el) => {
                       circleRefs.current[i] = el;
@@ -209,7 +189,7 @@ export const PillNav: React.FC<PillNavProps> = ({
                         className={`text-[9.5px] py-0.5 px-2 font-medium rounded-full transition-colors ${
                           isActive
                             ? 'bg-white/20 text-white border border-white/30'
-                            : 'bg-slate-200 dark:bg-[#1E293B] text-slate-600 dark:text-[#94A3B8] border border-slate-300/80 dark:border-[#334155]'
+                            : 'bg-slate-200 text-slate-600 border border-slate-300/80'
                         }`}
                       >
                         {item.badge}
@@ -220,7 +200,7 @@ export const PillNav: React.FC<PillNavProps> = ({
                   {/* Dual Hover Layer for GSAP slide up */}
                   {!isActive && !shouldReduceMotion && (
                     <span
-                      className="pill-label-hover absolute left-0 top-0 text-slate-900 dark:text-white font-bold inline-flex items-center gap-1.5 opacity-0 pointer-events-none whitespace-nowrap"
+                      className="pill-label-hover absolute left-0 top-0 text-slate-900 font-bold inline-flex items-center gap-1.5 opacity-0 pointer-events-none whitespace-nowrap"
                       aria-hidden="true"
                     >
                       {item.label}
@@ -228,7 +208,7 @@ export const PillNav: React.FC<PillNavProps> = ({
                         <Badge
                           variant="neutral"
                           size="sm"
-                          className="text-[9.5px] py-0.5 px-2 font-medium rounded-full bg-slate-200 dark:bg-[#1E293B] text-slate-900 dark:text-white border border-slate-300/80 dark:border-[#334155]"
+                          className="text-[9.5px] py-0.5 px-2 font-medium rounded-full bg-slate-200 text-slate-900 border border-slate-300/80"
                         >
                           {item.badge}
                         </Badge>
@@ -246,9 +226,9 @@ export const PillNav: React.FC<PillNavProps> = ({
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 6, scale: 0.96 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute top-full left-0 mt-1.5 w-60 p-2.5 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200/80 dark:border-slate-800 shadow-2xl z-50 text-left space-y-1.5"
+                    className="absolute top-full left-0 mt-1.5 w-60 p-2.5 rounded-2xl bg-white border border-slate-200/80 shadow-2xl z-50 text-left space-y-1.5"
                   >
-                    <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100 dark:border-slate-800 pb-1.5">
+                    <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100 pb-1.5">
                       Selected Target Roles ({item.subItems!.length})
                     </div>
                     <div className="space-y-1">
@@ -260,8 +240,8 @@ export const PillNav: React.FC<PillNavProps> = ({
                             href={sub.href}
                             className={`flex items-center justify-between p-2 rounded-xl text-xs font-semibold transition-all ${
                               isSubActive
-                                ? 'bg-indigo-50 dark:bg-indigo-950/60 text-[#6366F1] font-bold'
-                                : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/60'
+                                ? 'bg-blue-50 text-blue-600 font-bold'
+                                : 'text-slate-700 hover:bg-slate-100'
                             }`}
                           >
                             <span>{sub.label}</span>
@@ -270,10 +250,10 @@ export const PillNav: React.FC<PillNavProps> = ({
                         );
                       })}
                     </div>
-                    <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800">
+                    <div className="pt-1.5 border-t border-slate-100">
                       <Link
                         href="/explore"
-                        className="block px-2 py-1 text-[11px] font-bold text-[#6366F1] hover:underline"
+                        className="block px-2 py-1 text-[11px] font-bold text-blue-600 hover:underline"
                       >
                         Explore More Roles →
                       </Link>

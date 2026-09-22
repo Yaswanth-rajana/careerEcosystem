@@ -503,44 +503,6 @@ export const CAREER_PATHS: CareerPath[] = [
     interviewTopics: [{ id: 'int-dm-01', topic: 'Role-Specific Questions', category: 'Role Specific', questionCount: 12, keyQuestions: ['How do you optimize cost per acquisition (CPA)?'] }],
   },
 
-  // ================= ELECTRONICS & SYSTEMS =================
-  {
-    id: 'embedded-systems-engineer',
-    slug: 'embedded-systems-engineer',
-    title: 'Embedded Systems Engineer',
-    category: 'Electronics & Systems',
-    tagline: 'Design firmware, microcontrollers, and hardware-software integration for smart devices.',
-    shortDescription: 'Develop firmware in C/C++, PCB interfaces, and real-time operating systems (RTOS).',
-    typicalTrajectory: ['Beginner', 'Firmware Engineer', 'Embedded Systems Engineer', 'Senior Hardware Architect'],
-    roleOverview: {
-      whatYouDo: 'Embedded Systems Engineers write low-level microcontroller firmware in C/C++, interface hardware sensors over SPI/I2C, and configure RTOS tasks.',
-      youWillWorkOn: ['Embedded C/C++', 'STM32 Microcontrollers', 'FreeRTOS', 'SPI / I2C / UART Protocols', 'Oscilloscope Debugging'],
-      whereCanYouWork: ['Automotive & EV', 'Robotics', 'Consumer Electronics', 'Medical Devices'],
-    },
-    salaryRange: { min: 700000, max: 1600000, currency: 'INR', period: 'LPA', formatted: '₹7–16 LPA', source: 'Industry Benchmark', updatedAt: '2026' },
-    responsibilities: ['Write C/C++ firmware for STM32/ESP32', 'Configure FreeRTOS tasks and queues', 'Debug hardware buses using oscilloscopes'],
-    commonIndustries: ['Automotive', 'Robotics', 'IoT Hardware'],
-    skillGroups: {
-      mustKnow: [
-        { name: 'Embedded C', level: 'ADVANCED', importance: 'MUST_KNOW' },
-        { name: 'STM32 Microcontrollers', level: 'INTERMEDIATE', importance: 'MUST_KNOW' },
-        { name: 'SPI & I2C Protocols', level: 'INTERMEDIATE', importance: 'MUST_KNOW' },
-        { name: 'FreeRTOS', level: 'INTERMEDIATE', importance: 'MUST_KNOW' },
-      ],
-      goodToKnow: [{ name: 'PCB Reading', level: 'INTERMEDIATE', importance: 'GOOD_TO_KNOW' }],
-      advanced: [{ name: 'Embedded Linux', level: 'ADVANCED', importance: 'ADVANCED' }],
-    },
-    learningPhases: [
-      { phaseNumber: '01', title: 'FIRMWARE CORE', subtitle: 'Embedded C & RTOS', description: 'Learn hardware registers and multi-tasking.', topics: ['Embedded C register bitwise', 'STM32 GPIO & timers', 'FreeRTOS tasks & queues'], skills: ['Embedded C', 'STM32 Microcontrollers', 'FreeRTOS'] },
-    ],
-    projects: [
-      { id: 'p-emb-01', title: 'FreeRTOS Sensor Acquisition System', difficulty: 'Intermediate', skillsRequired: ['Embedded C', 'FreeRTOS', 'SPI & I2C Protocols'], description: 'Write multi-threaded firmware to sample accelerometer data and transmit via UART.', expectedOutcome: 'Tested FreeRTOS firmware code.' },
-    ],
-    certifications: [{ id: 'cert-arm-emb', name: 'ARM Accredited Engineer Certification', issuingOrganization: 'ARM', level: 'Intermediate' }],
-    practiceAreas: [{ id: 'prac-emb-01', title: 'Technical Challenges', category: 'Technical Challenges', description: 'Register bit-masking and interrupt service routines.', questionCount: 20 }],
-    interviewTopics: [{ id: 'int-emb-01', topic: 'Technical Fundamentals', category: 'Technical', questionCount: 15, keyQuestions: ['Explain Priority Inversion in RTOS.'] }],
-  },
-
   // ================= MECHANICAL & MANUFACTURING =================
   {
     id: 'mechanical-design-engineer',

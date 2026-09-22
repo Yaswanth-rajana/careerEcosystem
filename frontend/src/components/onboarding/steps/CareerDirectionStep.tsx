@@ -63,13 +63,13 @@ export const CareerDirectionStep: React.FC<CareerDirectionStepProps> = ({
     <div className="space-y-6 text-left">
       {/* Header text */}
       <div className="space-y-1">
-        <span className="text-[11px] font-bold uppercase tracking-wider text-[#6366F1]">
+        <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-600">
           Step 06 — Career Direction & Goal
         </span>
-        <h3 className="text-2xl font-bold font-display text-[#F9FAFB]">
+        <h3 className="text-2xl font-bold font-display text-slate-900">
           What are you working toward?
         </h3>
-        <p className="text-xs sm:text-sm text-[#94A3B8]">
+        <p className="text-xs sm:text-sm text-slate-600">
           Define your target job role(s) and primary objective. This powers PATHWAY.ECO skill-gap analysis and AI roadmap recommendations.
         </p>
       </div>
@@ -77,11 +77,11 @@ export const CareerDirectionStep: React.FC<CareerDirectionStepProps> = ({
       <div className="space-y-5">
         {/* Target Job Role Input */}
         <div className="space-y-2">
-          <label htmlFor="input-targetRole" className="block text-xs font-semibold text-[#94A3B8] uppercase tracking-wider flex items-center justify-between">
+          <label htmlFor="input-targetRole" className="block text-xs font-semibold text-slate-600 uppercase tracking-wider flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <Target className="w-3.5 h-3.5 text-[#6366F1]" /> Target Job Role(s) <span className="text-rose-400">*</span>
+              <Target className="w-3.5 h-3.5 text-indigo-600" /> Target Job Role(s) <span className="text-rose-500">*</span>
             </span>
-            <span className="text-[10px] text-[#6366F1] font-normal">Select multiple or type custom</span>
+            <span className="text-[10px] text-indigo-600 font-medium">Select multiple or type custom</span>
           </label>
           <input
             id="input-targetRole"
@@ -89,9 +89,9 @@ export const CareerDirectionStep: React.FC<CareerDirectionStepProps> = ({
             placeholder="e.g. Software Engineer, ML Engineer, Data Scientist..."
             value={formData.targetRole || ''}
             onChange={(e) => onChange({ targetRole: e.target.value })}
-            className="w-full h-12 px-4 rounded-xl bg-[#0B0F19] border border-[#94A3B8]/20 text-[#F9FAFB] placeholder-[#94A3B8]/40 text-sm focus:outline-none focus:border-[#6366F1] transition-all"
+            className="w-full h-12 px-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
           />
-          {errors.targetRole && <p className="text-xs text-rose-400 font-medium">{errors.targetRole}</p>}
+          {errors.targetRole && <p className="text-xs text-rose-600 font-medium">{errors.targetRole}</p>}
 
           {/* Quick suggestions */}
           <div className="flex flex-wrap gap-1.5 pt-1">
@@ -104,8 +104,8 @@ export const CareerDirectionStep: React.FC<CareerDirectionStepProps> = ({
                   onClick={() => handleToggleRole(role)}
                   className={`px-3 py-1 rounded-lg text-xs transition-all border ${
                     isSelected
-                      ? 'bg-[#6366F1] text-white border-[#6366F1] shadow-sm'
-                      : 'bg-[#0B0F19] border-[#94A3B8]/15 text-[#94A3B8] hover:text-white hover:border-[#6366F1]'
+                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                      : 'bg-white border-slate-200 text-slate-700 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50/50 shadow-sm'
                   }`}
                 >
                   {role}
@@ -117,8 +117,8 @@ export const CareerDirectionStep: React.FC<CareerDirectionStepProps> = ({
 
         {/* Primary Objective Selection */}
         <div className="space-y-2 pt-2">
-          <label className="block text-xs font-semibold text-[#94A3B8] uppercase tracking-wider flex items-center gap-1.5">
-            <Rocket className="w-3.5 h-3.5 text-[#6366F1]" /> What is your primary career goal?
+          <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+            <Rocket className="w-3.5 h-3.5 text-indigo-600" /> What is your primary career goal?
           </label>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -131,12 +131,12 @@ export const CareerDirectionStep: React.FC<CareerDirectionStepProps> = ({
                   onClick={() => onChange({ careerGoalType: gt.id })}
                   className={`p-3.5 rounded-xl border text-left text-xs font-semibold transition-all flex items-center justify-between ${
                     isSelected
-                      ? 'bg-[#6366F1]/15 border-[#6366F1] text-white shadow-sm'
-                      : 'bg-[#0B0F19] border-[#94A3B8]/15 text-[#94A3B8] hover:border-[#94A3B8]/30 hover:text-white'
+                      ? 'bg-indigo-50 border-indigo-500 text-indigo-900 shadow-sm'
+                      : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50'
                   }`}
                 >
                   <span>{gt.label}</span>
-                  {isSelected && <Sparkles className="w-3.5 h-3.5 text-[#6366F1]" />}
+                  {isSelected && <Sparkles className="w-3.5 h-3.5 text-indigo-600" />}
                 </button>
               );
             })}
@@ -146,8 +146,8 @@ export const CareerDirectionStep: React.FC<CareerDirectionStepProps> = ({
         {/* Target Industry & Timeframe Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
           <div className="space-y-1.5">
-            <label htmlFor="input-targetIndustry" className="block text-xs font-semibold text-[#94A3B8] uppercase tracking-wider flex items-center gap-1.5">
-              <Building2 className="w-3.5 h-3.5 text-[#6366F1]" /> Preferred Industry
+            <label htmlFor="input-targetIndustry" className="block text-xs font-semibold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+              <Building2 className="w-3.5 h-3.5 text-indigo-600" /> Preferred Industry
             </label>
             <input
               id="input-targetIndustry"
@@ -155,19 +155,19 @@ export const CareerDirectionStep: React.FC<CareerDirectionStepProps> = ({
               placeholder="e.g. Fintech, AI / Robotics, SaaS, Healthcare"
               value={formData.targetIndustry || ''}
               onChange={(e) => onChange({ targetIndustry: e.target.value })}
-              className="w-full h-11 px-4 rounded-xl bg-[#0B0F19] border border-[#94A3B8]/20 text-[#F9FAFB] text-sm focus:outline-none focus:border-[#6366F1]"
+              className="w-full h-11 px-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="input-timeframe" className="block text-xs font-semibold text-[#94A3B8] uppercase tracking-wider flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-[#6366F1]" /> Target Timeline
+            <label htmlFor="input-timeframe" className="block text-xs font-semibold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-indigo-600" /> Target Timeline
             </label>
             <select
               id="input-timeframe"
               value={formData.timeframe || 'Immediate (1-3 months)'}
               onChange={(e) => onChange({ timeframe: e.target.value })}
-              className="w-full h-11 px-4 rounded-xl bg-[#0B0F19] border border-[#94A3B8]/20 text-[#F9FAFB] text-sm focus:outline-none focus:border-[#6366F1]"
+              className="w-full h-11 px-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
             >
               <option value="Immediate (1-3 months)">Immediate (1–3 months)</option>
               <option value="Short term (3-6 months)">Short term (3–6 months)</option>
@@ -179,8 +179,8 @@ export const CareerDirectionStep: React.FC<CareerDirectionStepProps> = ({
 
         {/* Free text goal */}
         <div className="space-y-1.5 pt-2">
-          <label htmlFor="input-notes" className="block text-xs font-semibold text-[#94A3B8] uppercase tracking-wider flex items-center gap-1.5">
-            <Compass className="w-3.5 h-3.5 text-[#6366F1]" /> Where do you want to be next? (Free-text Vision)
+          <label htmlFor="input-notes" className="block text-xs font-semibold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+            <Compass className="w-3.5 h-3.5 text-indigo-600" /> Where do you want to be next? (Free-text Vision)
           </label>
           <textarea
             id="input-notes"
@@ -188,7 +188,7 @@ export const CareerDirectionStep: React.FC<CareerDirectionStepProps> = ({
             placeholder="Share your dream milestone, ideal company culture, or specific technology stack you want to master..."
             value={formData.notes || ''}
             onChange={(e) => onChange({ notes: e.target.value })}
-            className="w-full p-4 rounded-xl bg-[#0B0F19] border border-[#94A3B8]/20 text-[#F9FAFB] text-sm focus:outline-none focus:border-[#6366F1] resize-none"
+            className="w-full p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none"
           />
         </div>
       </div>

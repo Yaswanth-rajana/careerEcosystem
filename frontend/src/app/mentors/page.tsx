@@ -110,7 +110,7 @@ export default function MentorsPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-[#FAFAFC] dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 font-sans transition-colors duration-200">
+    <div className="min-h-screen flex flex-col justify-between bg-[#FAFAFC] text-slate-900 font-sans transition-colors duration-200">
       <Header />
 
       <main className="flex-1 w-full">
@@ -124,15 +124,15 @@ export default function MentorsPage() {
         <MentorshipNeeds onSelectNeed={handleSelectNeed} />
 
         {/* 4. Primary Discovery Area */}
-        <section id="mentor-discovery" className="py-16 bg-slate-50/70 dark:bg-[#0B0F19]">
+        <section id="mentor-discovery" className="py-16 bg-slate-50/70">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             {/* Discovery Header */}
             <div className="mb-8 space-y-2 text-left">
-              <h2 className="text-3xl font-extrabold font-display text-slate-900 dark:text-white tracking-tight">
+              <h2 className="text-3xl font-extrabold font-display text-slate-900 tracking-tight">
                 Find your mentor
               </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
+              <p className="text-sm text-slate-600">
                 Search by expertise, career goal, domain, or the kind of guidance you need.
               </p>
             </div>
@@ -171,10 +171,10 @@ export default function MentorsPage() {
 
                     {/* Pagination Controls */}
                     {data.totalPages > 1 && (
-                      <div className="pt-8 border-t border-slate-200/80 dark:border-slate-800 flex items-center justify-between text-xs font-semibold">
+                      <div className="pt-8 border-t border-slate-200/80 flex items-center justify-between text-xs font-semibold">
                         <span className="text-slate-500">
-                          Showing page <strong className="text-slate-900 dark:text-white">{data.page}</strong> of{' '}
-                          <strong className="text-slate-900 dark:text-white">{data.totalPages}</strong> ({data.total}{' '}
+                          Showing page <strong className="text-slate-900">{data.page}</strong> of{' '}
+                          <strong className="text-slate-900">{data.totalPages}</strong> ({data.total}{' '}
                           mentors)
                         </span>
 
@@ -185,7 +185,7 @@ export default function MentorsPage() {
                             disabled={data.page <= 1}
                             onClick={() => handleFilterChange({ page: data.page - 1 })}
                             leftIcon={<ChevronLeft className="w-4 h-4" />}
-                            className="border-slate-200 dark:border-slate-800"
+                            className="border-slate-200"
                           >
                             Previous
                           </Button>
@@ -196,7 +196,7 @@ export default function MentorsPage() {
                             disabled={!data.hasMore}
                             onClick={() => handleFilterChange({ page: data.page + 1 })}
                             rightIcon={<ChevronRight className="w-4 h-4" />}
-                            className="border-slate-200 dark:border-slate-800"
+                            className="border-slate-200"
                           >
                             Next
                           </Button>

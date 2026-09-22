@@ -91,10 +91,10 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
         tabIndex={disabled ? -1 : 0}
         role="button"
         aria-label="Upload document drag and drop area"
-        className={`relative group rounded-3xl border-2 border-dashed p-8 sm:p-12 text-center transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#6366F1] focus:ring-offset-2 dark:focus:ring-offset-[#0B0F19] ${
+        className={`relative group rounded-3xl border-2 border-dashed p-8 sm:p-12 text-center transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#6366F1] focus:ring-offset-2 ${
           isDragging
-            ? 'border-[#6366F1] bg-indigo-50/50 dark:bg-indigo-950/30 scale-[1.01]'
-            : 'border-slate-300 dark:border-slate-800 bg-white dark:bg-[#111827]/80 hover:border-[#6366F1]/60 hover:bg-slate-50/50 dark:hover:bg-[#111827]'
+            ? 'border-[#6366F1] bg-indigo-50/50 scale-[1.01]'
+            : 'border-slate-300 bg-white hover:border-[#6366F1]/60 hover:bg-slate-50/50'
         } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
       >
         <input
@@ -107,13 +107,13 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
         />
 
         <div className="flex flex-col items-center justify-center space-y-4">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-indigo-50 dark:bg-indigo-950/70 text-[#6366F1] flex items-center justify-center border border-indigo-200/60 dark:border-indigo-800/60 shadow-sm group-hover:scale-105 transition-transform">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-indigo-50 text-[#6366F1] flex items-center justify-center border border-indigo-200/60 shadow-sm group-hover:scale-105 transition-transform">
             <UploadCloud className="w-8 h-8 sm:w-10 sm:h-10" />
           </div>
 
           <div className="space-y-1 max-w-sm">
-            <p className="text-base sm:text-lg font-bold font-display text-slate-900 dark:text-white">
-              Drop your file here <span className="text-slate-400 dark:text-slate-500 font-normal">or</span>
+            <p className="text-base sm:text-lg font-bold font-display text-slate-900">
+              Drop your file here <span className="text-slate-400 font-normal">or</span>
             </p>
             <div className="pt-1">
               <button
@@ -123,7 +123,7 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
                   e.stopPropagation();
                   inputRef.current?.click();
                 }}
-                className="px-6 py-2.5 rounded-full text-sm font-bold text-white bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] hover:opacity-95 shadow-md shadow-indigo-500/20 active:scale-[0.98] transition-all"
+                className="px-6 py-2.5 rounded-full text-sm font-bold text-white bg-blue-600 hover:bg-black shadow-md shadow-blue-500/20 active:scale-[0.98] transition-all"
               >
                 Choose File
               </button>
@@ -131,18 +131,18 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
           </div>
 
           {/* Formats & Limits Info */}
-          <div className="pt-2 flex flex-wrap items-center justify-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-1.5 text-xs text-slate-500">
             {acceptedExtensions.map((ext) => (
               <span
                 key={ext}
-                className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700/60 font-mono font-medium text-[11px]"
+                className="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200/70 font-mono font-medium text-[11px]"
               >
                 {ext}
               </span>
             ))}
           </div>
 
-          <div className="inline-flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500 font-medium">
+          <div className="inline-flex items-center gap-1.5 text-xs text-slate-400 font-medium">
             <HardDrive className="w-3.5 h-3.5 text-[#6366F1]" />
             <span>Maximum file size: {maxSizeMb} MB</span>
           </div>
@@ -152,7 +152,7 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
       {errorMessage && (
         <div
           role="alert"
-          className="flex items-center gap-2 p-3.5 rounded-xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-900 text-red-700 dark:text-red-300 text-xs sm:text-sm animate-fadeIn"
+          className="flex items-center gap-2 p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm animate-fadeIn"
         >
           <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
           <span>{errorMessage}</span>

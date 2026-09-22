@@ -16,10 +16,10 @@ export const Beat11FinalCTA = () => {
 
   return (
     <StoryBeatContainer id="beat-11-final-cta">
-      <Card variant="accent" className="p-8 sm:p-12 lg:p-16 text-center relative overflow-hidden backdrop-blur-2xl border-slate-200/80 dark:border-obsidian-700">
+      <Card variant="accent" className="p-8 sm:p-12 lg:p-16 text-center relative overflow-hidden backdrop-blur-2xl border-slate-200 bg-white shadow-sm">
         
         {/* Glow ambient background */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-brand-indigo/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-500/5 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="max-w-3xl mx-auto space-y-6 relative z-10">
           
@@ -31,7 +31,7 @@ export const Beat11FinalCTA = () => {
             transition={{ duration: 0.4 }}
           >
             <Badge variant="brand" className="py-1 px-3">
-              <Sparkles className="w-3.5 h-3.5 mr-1.5 inline text-brand-indigo" />
+              <Sparkles className="w-3.5 h-3.5 mr-1.5 inline text-blue-600" />
               {user ? 'YOUR JOURNEY CONTINUES' : 'YOUR NEXT STEP STARTS HERE'}
             </Badge>
           </motion.div>
@@ -42,7 +42,7 @@ export const Beat11FinalCTA = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.45, delay: 0.15 }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-display text-slate-900 dark:text-white tracking-tight leading-tight"
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-display text-slate-900 tracking-tight leading-tight"
           >
             {user ? 'Continue your career journey.' : 'Start your journey.'}
           </motion.h3>
@@ -53,7 +53,7 @@ export const Beat11FinalCTA = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.45, delay: 0.25 }}
-            className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal"
+            className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal"
           >
             {user
               ? 'Discover where you want to go, understand what you need, and move forward with the right guidance.'
@@ -105,30 +105,30 @@ export const Beat11FinalCTA = () => {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.45 }}
-            className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500 dark:text-slate-400 border-t border-slate-200/60 dark:border-obsidian-700/60 mt-6"
+            className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-600 border-t border-slate-200 mt-6"
           >
             {user ? (
               <>
                 <span className="flex items-center gap-1.5 font-medium">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" /> Profile Ready
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Profile Ready
                 </span>
                 <span className="flex items-center gap-1.5 font-medium">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" /> Career Path Set
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Career Path Set
                 </span>
                 <span className="flex items-center gap-1.5 font-medium">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" /> Next Step Ready
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Next Step Ready
                 </span>
               </>
             ) : (
               <>
                 <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" /> Free Candidate Profile
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Free Candidate Profile
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" /> Personalized Career Path
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Personalized Career Path
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" /> Built Around Your Goals
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Built Around Your Goals
                 </span>
               </>
             )}

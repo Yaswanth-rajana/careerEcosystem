@@ -11,10 +11,19 @@ export interface AuthUser {
   name: string;
   role: string;
   isOnboarded: boolean;
+  avatarUrl?: string | null;
 }
 
 export interface AuthResponse {
   user?: AuthUser;
+  error?: string;
+}
+
+export interface GoogleAuthResponse {
+  success?: boolean;
+  user?: AuthUser;
+  onboardingComplete?: boolean;
+  redirectTo?: string;
   error?: string;
 }
 
@@ -91,3 +100,26 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
     return null;
   }
 }
+
+export async function loginWithGoogle(credential: string): Promise<GoogleAuthResponse> {
+  try {
+    const res = await fetch('/api/auth/google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ credential }),
+    });
+    const result = await res.json();
+    if (!res.ok) {
+      return { error: result.error || 'Google sign-in failed. Please try again.' };
+    }
+    return {
+      success: true,
+      user: result.user,
+      onboardingComplete: result.onboardingComplete,
+      redirectTo: result.redirectTo,
+    };
+  } catch (err: any) {
+    return { error: err.message || 'We couldn\'t complete Google sign-in. Please try again.' };
+  }
+}
+

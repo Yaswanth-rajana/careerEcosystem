@@ -33,17 +33,17 @@ export const OnboardingProgress: React.FC<OnboardingProgressProps> = ({
   return (
     <div className="w-full space-y-5 text-left pl-3 pr-2 py-1">
       {/* Header Summary */}
-      <div className="space-y-2.5 border-b border-[#94A3B8]/12 pb-4">
+      <div className="space-y-2.5 border-b border-slate-200/80 pb-4">
         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#6366F1]/10 border border-[#6366F1]/20 text-[#6366F1] text-[10px] font-bold uppercase tracking-wider">
           <Sparkles className="w-3 h-3" /> Career Pathway
         </div>
         <div className="flex items-baseline justify-between">
-          <h2 className="text-xl font-bold font-display text-white">Your Pathway</h2>
+          <h2 className="text-xl font-bold font-display text-slate-900">Your Pathway</h2>
           <span className="text-sm font-bold text-[#6366F1] font-mono">{percentage}%</span>
         </div>
 
         {/* Thin Progress Line */}
-        <div className="w-full h-1.5 rounded-full bg-[#94A3B8]/10 overflow-hidden relative">
+        <div className="w-full h-1.5 rounded-full bg-slate-200 overflow-hidden relative">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${percentage}%` }}
@@ -52,7 +52,7 @@ export const OnboardingProgress: React.FC<OnboardingProgressProps> = ({
                 ? { duration: 0.2 }
                 : { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
             }
-            className="h-full bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] rounded-full shadow-[0_0_8px_rgba(99,102,241,0.6)]"
+            className="h-full bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] rounded-full shadow-sm"
           />
         </div>
       </div>
@@ -74,7 +74,7 @@ export const OnboardingProgress: React.FC<OnboardingProgressProps> = ({
                   className={`absolute left-[15.5px] top-8 -bottom-3 w-0.5 z-0 transition-colors ${
                     isLineFilled
                       ? 'bg-gradient-to-b from-emerald-500 to-[#6366F1]'
-                      : 'bg-[#94A3B8]/15'
+                      : 'bg-slate-200'
                   }`}
                 />
               )}
@@ -86,10 +86,10 @@ export const OnboardingProgress: React.FC<OnboardingProgressProps> = ({
                 disabled={!isSelectable}
                 className={`w-8 h-8 rounded-full text-xs font-bold flex items-center justify-center shrink-0 z-10 relative transition-all border ${
                   isCurrent
-                    ? 'bg-gradient-to-tr from-[#6366F1] to-[#8B5CF6] text-white border-indigo-300 ring-4 ring-[#6366F1]/20 shadow-[0_0_12px_rgba(99,102,241,0.5)] scale-105'
+                    ? 'bg-gradient-to-tr from-[#6366F1] to-[#8B5CF6] text-white border-indigo-300 ring-4 ring-[#6366F1]/20 shadow-md scale-105'
                     : isDone
-                    ? 'bg-emerald-500 border-emerald-400 text-slate-950 font-bold shadow-sm'
-                    : 'bg-[#0B0F19] border-[#94A3B8]/25 text-[#94A3B8]/60 hover:border-[#94A3B8]/50'
+                    ? 'bg-emerald-500 border-emerald-400 text-white font-bold shadow-sm'
+                    : 'bg-white border-slate-300 text-slate-400 hover:border-slate-400'
                 }`}
               >
                 {isDone ? <Check className="w-4 h-4 stroke-[3]" /> : item.num}
@@ -102,21 +102,21 @@ export const OnboardingProgress: React.FC<OnboardingProgressProps> = ({
                 disabled={!isSelectable}
                 className={`flex-1 px-4 py-2 sm:px-4 sm:py-2 rounded-full text-left transition-all flex items-center justify-between border ${
                   isCurrent
-                    ? 'bg-[#6366F1]/15 border-[#6366F1]/40 text-white shadow-lg shadow-indigo-500/10'
+                    ? 'bg-[#6366F1]/10 border-[#6366F1]/30 text-slate-900 shadow-sm'
                     : isDone
-                    ? 'bg-transparent border-transparent text-slate-200 hover:bg-[#111827]/40'
-                    : 'bg-transparent border-transparent text-[#94A3B8]/40 cursor-not-allowed'
+                    ? 'bg-transparent border-transparent text-slate-700 hover:bg-slate-100'
+                    : 'bg-transparent border-transparent text-slate-400 cursor-not-allowed'
                 }`}
               >
                 <div className="min-w-0 flex-1">
                   <div
                     className={`text-xs font-semibold truncate ${
-                      isCurrent ? 'text-white font-bold' : isDone ? 'text-slate-200' : 'text-[#94A3B8]/60'
+                      isCurrent ? 'text-slate-900 font-bold' : isDone ? 'text-slate-700' : 'text-slate-400'
                     }`}
                   >
                     {item.title}
                   </div>
-                  <div className="text-[10px] text-[#94A3B8]/70 truncate hidden xl:block">
+                  <div className="text-[10px] text-slate-500 truncate hidden xl:block">
                     {item.subtitle}
                   </div>
                 </div>

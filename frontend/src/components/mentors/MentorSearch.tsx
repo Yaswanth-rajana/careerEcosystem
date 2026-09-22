@@ -36,13 +36,13 @@ export const MentorSearch: React.FC<MentorSearchProps> = ({ searchQuery, onSearc
         value={localInput}
         onChange={handleInputChange}
         placeholder="Search by skill, role, domain, or session topic..."
-        className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] text-slate-900 dark:text-white placeholder-slate-400 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-indigo focus:border-transparent transition-all shadow-sm"
+        className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all shadow-sm"
       />
       {localInput && (
         <button
           type="button"
           onClick={handleClear}
-          className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+          className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600"
           aria-label="Clear search"
         >
           <X className="w-4 h-4" />

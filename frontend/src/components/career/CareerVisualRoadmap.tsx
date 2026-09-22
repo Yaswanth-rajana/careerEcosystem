@@ -24,27 +24,27 @@ export const CareerVisualRoadmap: React.FC<CareerVisualRoadmapProps> = ({ curren
   return (
     <div className="space-y-4 text-left">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl sm:text-2xl font-bold font-display text-slate-900 dark:text-white">
+        <h2 className="text-xl sm:text-2xl font-bold font-display text-slate-900">
           Your Career Roadmap
         </h2>
-        <span className="text-xs font-mono font-semibold text-[#6366F1] dark:text-[#818CF8] bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800 px-3 py-1 rounded-full">
+        <span className="text-xs font-mono font-semibold text-blue-600 bg-blue-50 border border-blue-200 px-3 py-1 rounded-full">
           Current: {ROADMAP_STAGES[normalizedIndex]?.label || '01 Learn'}
         </span>
       </div>
 
       {/* Desktop Horizontal 7-Stage Pipeline */}
-      <div className="hidden lg:block relative p-6 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-x-auto">
+      <div className="hidden lg:block relative p-6 rounded-2xl bg-white border border-slate-200/80 shadow-sm overflow-x-auto">
         <div className="flex items-start justify-between min-w-[780px] relative">
           
           {/* Connector Line */}
-          <div className="absolute top-[18px] left-[35px] right-[35px] h-1 bg-slate-200 dark:bg-slate-800 pointer-events-none z-0" />
+          <div className="absolute top-[18px] left-[35px] right-[35px] h-1 bg-slate-200 pointer-events-none z-0" />
           
           {/* Active Connector Progress Fill */}
           <div
             style={{
               width: `${(normalizedIndex / (ROADMAP_STAGES.length - 1)) * 100}%`,
             }}
-            className="absolute top-[18px] left-[35px] max-w-[calc(100%-70px)] h-1 bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] transition-all duration-500 pointer-events-none z-0"
+            className="absolute top-[18px] left-[35px] max-w-[calc(100%-70px)] h-1 bg-blue-600 transition-all duration-500 pointer-events-none z-0"
           />
 
           {ROADMAP_STAGES.map((stage, idx) => {
@@ -60,11 +60,11 @@ export const CareerVisualRoadmap: React.FC<CareerVisualRoadmapProps> = ({ curren
                       <CheckCircle2 className="w-5 h-5" />
                     </div>
                   ) : isCurrent ? (
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white flex items-center justify-center shadow-lg ring-4 ring-indigo-500/20 animate-pulse">
+                    <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg ring-4 ring-blue-500/20 animate-pulse">
                       <ArrowRightCircle className="w-5 h-5" />
                     </div>
                   ) : (
-                    <div className="w-9 h-9 rounded-full bg-white dark:bg-[#111827] border-2 border-slate-300 dark:border-slate-700 text-slate-400 flex items-center justify-center">
+                    <div className="w-9 h-9 rounded-full bg-white border-2 border-slate-300 text-slate-400 flex items-center justify-center">
                       <Circle className="w-4 h-4" />
                     </div>
                   )}
@@ -74,15 +74,15 @@ export const CareerVisualRoadmap: React.FC<CareerVisualRoadmapProps> = ({ curren
                 <span
                   className={`text-xs font-bold tracking-tight block ${
                     isCurrent
-                      ? 'text-[#6366F1] dark:text-[#818CF8]'
+                      ? 'text-blue-600'
                       : isCompleted
-                      ? 'text-slate-800 dark:text-slate-200'
-                      : 'text-slate-400 dark:text-slate-500'
+                      ? 'text-slate-800'
+                      : 'text-slate-400'
                   }`}
                 >
                   {stage.label}
                 </span>
-                <span className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight block mt-0.5">
+                <span className="text-[10px] text-slate-500 leading-tight block mt-0.5">
                   {stage.desc}
                 </span>
               </div>
@@ -92,7 +92,7 @@ export const CareerVisualRoadmap: React.FC<CareerVisualRoadmapProps> = ({ curren
       </div>
 
       {/* Mobile & Tablet Vertical Stage Stepper (< lg) */}
-      <div className="block lg:hidden relative p-5 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
+      <div className="block lg:hidden relative p-5 rounded-2xl bg-white border border-slate-200/80 shadow-sm space-y-4">
         {ROADMAP_STAGES.map((stage, idx) => {
           const isCompleted = idx < normalizedIndex;
           const isCurrent = idx === normalizedIndex;
@@ -105,11 +105,11 @@ export const CareerVisualRoadmap: React.FC<CareerVisualRoadmapProps> = ({ curren
                     <CheckCircle2 className="w-4 h-4" />
                   </div>
                 ) : isCurrent ? (
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white flex items-center justify-center shadow-md ring-2 ring-indigo-500/30">
+                  <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md ring-2 ring-blue-500/30">
                     <ArrowRightCircle className="w-4 h-4" />
                   </div>
                 ) : (
-                  <div className="w-8 h-8 rounded-full border-2 border-slate-300 dark:border-slate-700 text-slate-400 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full border-2 border-slate-300 text-slate-400 flex items-center justify-center">
                     <Circle className="w-3.5 h-3.5" />
                   </div>
                 )}
@@ -120,26 +120,26 @@ export const CareerVisualRoadmap: React.FC<CareerVisualRoadmapProps> = ({ curren
                   <span
                     className={`text-xs font-bold ${
                       isCurrent
-                        ? 'text-[#6366F1] dark:text-[#818CF8]'
+                        ? 'text-blue-600'
                         : isCompleted
-                        ? 'text-slate-800 dark:text-slate-200'
-                        : 'text-slate-500 dark:text-slate-400'
+                        ? 'text-slate-800'
+                        : 'text-slate-500'
                     }`}
                   >
                     {stage.label}
                   </span>
                   {isCurrent && (
-                    <span className="text-[10px] font-semibold text-[#6366F1] bg-indigo-50 dark:bg-indigo-950/60 px-2 py-0.5 rounded">
+                    <span className="text-[10px] font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
                       Current Stage
                     </span>
                   )}
                   {isCompleted && (
-                    <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+                    <span className="text-[10px] font-semibold text-emerald-600">
                       Completed ✓
                     </span>
                   )}
                 </div>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{stage.desc}</p>
+                <p className="text-[11px] text-slate-500 mt-0.5">{stage.desc}</p>
               </div>
             </div>
           );

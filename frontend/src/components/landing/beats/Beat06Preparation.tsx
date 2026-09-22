@@ -48,8 +48,8 @@ export const Beat06Preparation = () => {
       <div className="w-full max-w-5xl text-left space-y-8">
         
         {/* Header Label: YOUR READINESS PATH */}
-        <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
-          <Sparkles className="w-3.5 h-3.5 text-brand-indigo" /> YOUR READINESS PATH
+        <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+          <Sparkles className="w-3.5 h-3.5 text-blue-600" /> YOUR READINESS PATH
         </div>
 
         {/* Left-Aligned Vertical Timeline Container */}
@@ -67,14 +67,14 @@ export const Beat06Preparation = () => {
             let iconColorClass = '';
 
             if (isActive) {
-              nodeClasses = 'bg-brand-gradient text-white border-white shadow-glow ring-4 ring-brand-indigo/30 scale-105';
+              nodeClasses = 'bg-blue-600 text-white border-white shadow-md ring-4 ring-blue-500/20 scale-105';
               iconColorClass = 'text-white';
             } else if (step.isDestination) {
-              nodeClasses = 'bg-white dark:bg-[#0B0B14] border-brand-violet text-brand-violet shadow-sm group-hover:border-brand-violet group-hover:scale-105';
-              iconColorClass = 'text-brand-violet';
+              nodeClasses = 'bg-white border-blue-500 text-blue-600 shadow-sm group-hover:border-blue-600 group-hover:scale-105';
+              iconColorClass = 'text-blue-600';
             } else {
-              nodeClasses = 'bg-white dark:bg-[#0B0B14] border-slate-300 dark:border-slate-700 text-brand-indigo dark:text-brand-indigo-light group-hover:border-brand-indigo group-hover:scale-105 shadow-sm dark:shadow-none';
-              iconColorClass = 'text-brand-indigo dark:text-brand-indigo-light';
+              nodeClasses = 'bg-white border-slate-300 text-blue-600 group-hover:border-blue-500 group-hover:scale-105 shadow-sm';
+              iconColorClass = 'text-blue-600';
             }
 
             return (
@@ -92,7 +92,7 @@ export const Beat06Preparation = () => {
                 <div className="w-5 sm:w-6 text-left shrink-0">
                   <span
                     className={`text-xs font-mono font-bold tracking-tight transition-colors ${
-                      isActive ? 'text-brand-indigo dark:text-brand-indigo-light' : 'text-slate-400 dark:text-slate-500'
+                      isActive ? 'text-blue-600' : 'text-slate-400'
                     }`}
                   >
                     {step.num}
@@ -104,7 +104,7 @@ export const Beat06Preparation = () => {
                   
                   {/* Base Vertical Connector Line */}
                   {!isLast && (
-                    <div className="absolute left-1/2 -translate-x-1/2 top-1/2 h-20 sm:h-24 w-0.5 bg-slate-200 dark:bg-obsidian-700 pointer-events-none z-0" />
+                    <div className="absolute left-1/2 -translate-x-1/2 top-1/2 h-20 sm:h-24 w-0.5 bg-slate-200 pointer-events-none z-0" />
                   )}
 
                   {/* Animated Glowing Vertical Connector Line */}
@@ -115,7 +115,7 @@ export const Beat06Preparation = () => {
                       viewport={{ once: true }}
                       transition={{ duration: 0.8, delay: stepDelay + 0.1, ease: 'easeInOut' }}
                       style={{ transformOrigin: 'top center' }}
-                      className="absolute left-1/2 -translate-x-1/2 top-1/2 h-20 sm:h-24 w-0.5 bg-gradient-to-b from-brand-indigo via-indigo-400 to-brand-violet shadow-[0_0_8px_rgba(99,102,241,0.6)] pointer-events-none z-0"
+                      className="absolute left-1/2 -translate-x-1/2 top-1/2 h-20 sm:h-24 w-0.5 bg-blue-500 shadow-sm pointer-events-none z-0"
                     />
                   )}
 
@@ -132,14 +132,14 @@ export const Beat06Preparation = () => {
                   <h3
                     className={`text-base sm:text-lg font-bold font-display transition-colors ${
                       isActive
-                        ? 'text-slate-900 dark:text-white'
-                        : 'text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white'
+                        ? 'text-slate-900'
+                        : 'text-slate-700 group-hover:text-slate-900'
                     }`}
                   >
                     {step.title}
                   </h3>
 
-                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                     {step.desc}
                   </p>
                 </div>

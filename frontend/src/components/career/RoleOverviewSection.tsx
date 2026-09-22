@@ -25,25 +25,25 @@ export const RoleOverviewSection: React.FC<RoleOverviewSectionProps> = ({ career
   return (
     <div id="role-overview" className="space-y-6 text-left">
       <div className="flex items-center gap-2">
-        <HelpCircle className="w-5 h-5 text-[#6366F1]" />
-        <h2 className="text-xl sm:text-2xl font-bold font-display text-slate-900 dark:text-white">
+        <HelpCircle className="w-5 h-5 text-blue-600" />
+        <h2 className="text-xl sm:text-2xl font-bold font-display text-slate-900">
           Understand the Role
         </h2>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Block 1: WHAT YOU DO */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
-          <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <Briefcase className="w-4 h-4 text-[#6366F1]" />
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
+        <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+            <Briefcase className="w-4 h-4 text-blue-600" />
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">
               WHAT YOU DO
             </h3>
           </div>
           <ul className="space-y-2.5 text-xs">
             {whatYouDoItems.map((item, idx) => (
-              <li key={idx} className="flex items-start gap-2 text-slate-700 dark:text-slate-300">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#6366F1] shrink-0 mt-0.5" />
+              <li key={idx} className="flex items-start gap-2 text-slate-700">
+                <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0 mt-0.5" />
                 <span>{item}</span>
               </li>
             ))}
@@ -51,17 +51,17 @@ export const RoleOverviewSection: React.FC<RoleOverviewSectionProps> = ({ career
         </div>
 
         {/* Block 2: YOU WILL WORK ON */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
-          <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <Code className="w-4 h-4 text-purple-500" />
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
+        <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+            <Code className="w-4 h-4 text-blue-600" />
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">
               YOU WILL WORK ON
             </h3>
           </div>
           <ul className="space-y-2.5 text-xs">
             {youWillWorkOnItems.map((item, idx) => (
-              <li key={idx} className="flex items-start gap-2 text-slate-700 dark:text-slate-300">
-                <CheckCircle2 className="w-3.5 h-3.5 text-purple-500 shrink-0 mt-0.5" />
+              <li key={idx} className="flex items-start gap-2 text-slate-700">
+                <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0 mt-0.5" />
                 <span>{item}</span>
               </li>
             ))}
@@ -69,10 +69,10 @@ export const RoleOverviewSection: React.FC<RoleOverviewSectionProps> = ({ career
         </div>
 
         {/* Block 3: WHERE CAN YOU WORK? */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
-          <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
             <Building2 className="w-4 h-4 text-emerald-500" />
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">
               WHERE CAN YOU WORK?
             </h3>
           </div>
@@ -80,7 +80,7 @@ export const RoleOverviewSection: React.FC<RoleOverviewSectionProps> = ({ career
             {whereCanYouWorkItems.map((item, idx) => (
               <span
                 key={idx}
-                className="text-xs px-3 py-1 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 border border-emerald-200/70 dark:border-emerald-800/60 font-medium"
+                className="text-xs px-3 py-1 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-200/70 font-medium"
               >
                 {item}
               </span>

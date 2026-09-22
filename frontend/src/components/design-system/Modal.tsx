@@ -53,7 +53,7 @@ export const Modal = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm"
           />
 
           {/* Modal Card */}
@@ -63,27 +63,27 @@ export const Modal = ({
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
             className={cn(
-              'relative w-full z-10 bg-white dark:bg-obsidian-800 border border-slate-200 dark:border-obsidian-700 rounded-2xl shadow-2xl overflow-hidden',
+              'relative w-full z-10 bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden',
               maxWidths[maxWidth]
             )}
           >
             {/* Header */}
-            <div className="flex items-start justify-between p-6 border-b border-slate-100 dark:border-obsidian-700/60">
+            <div className="flex items-start justify-between p-6 border-b border-slate-100">
               <div>
                 {title && (
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+                  <h3 className="text-lg font-bold text-slate-900">
                     {title}
                   </h3>
                 )}
                 {description && (
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  <p className="text-xs text-slate-500 mt-1">
                     {description}
                   </p>
                 )}
               </div>
               <button
                 onClick={onClose}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg p-1 transition-colors"
+                className="text-slate-400 hover:text-slate-600 rounded-lg p-1 transition-colors"
                 aria-label="Close dialog"
               >
                 <X className="w-5 h-5" />

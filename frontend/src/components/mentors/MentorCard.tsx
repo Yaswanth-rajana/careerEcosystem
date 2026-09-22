@@ -18,7 +18,7 @@ interface MentorCardProps {
 export const MentorCard: React.FC<MentorCardProps> = ({
   mentor,
   onBookSession,
-  behindGlowColor = 'rgba(99, 102, 241, 0.45)',
+  behindGlowColor = 'rgba(37, 99, 235, 0.45)',
   enableTilt = true,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -107,7 +107,7 @@ export const MentorCard: React.FC<MentorCardProps> = ({
 
       {/* 3D Tilt Shell Card matching User Reference Layout */}
       <div
-        className="pc-card relative flex flex-col justify-between h-full rounded-3xl border border-slate-200/90 dark:border-slate-800/90 bg-white/95 dark:bg-[#0E1424]/95 hover:border-brand-indigo/60 backdrop-blur-xl p-6 shadow-md hover:shadow-2xl transition-all duration-200 ease-out overflow-hidden"
+        className="pc-card relative flex flex-col justify-between h-full rounded-3xl border border-slate-200/90 bg-white hover:border-blue-500/60 backdrop-blur-xl p-6 shadow-md hover:shadow-xl transition-all duration-200 ease-out overflow-hidden"
         style={{
           transform: isHovered
             ? 'perspective(600px) rotateX(var(--rotate-y)) rotateY(var(--rotate-x)) translateZ(4px)'
@@ -128,7 +128,7 @@ export const MentorCard: React.FC<MentorCardProps> = ({
           <div>
             {/* Top Row: Large Circular Avatar (Left) + Rating (Right) */}
             <div className="flex items-start justify-between mb-5">
-              <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-slate-200 dark:border-slate-700 shrink-0 shadow-md">
+              <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-slate-200 shrink-0 shadow-md">
                 <Image
                   src={mentor.avatar}
                   alt={mentor.name}
@@ -139,7 +139,7 @@ export const MentorCard: React.FC<MentorCardProps> = ({
               </div>
 
               {/* Rating Top Right */}
-              <div className="flex items-center gap-1.5 font-bold text-base text-slate-900 dark:text-white pt-1">
+              <div className="flex items-center gap-1.5 font-bold text-base text-slate-900 pt-1">
                 <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
                 <span>{mentor.rating.toFixed(1)}</span>
               </div>
@@ -148,21 +148,21 @@ export const MentorCard: React.FC<MentorCardProps> = ({
             {/* Mentor Details: Name, Role, Experience, Company */}
             <div className="space-y-3 text-left">
               <div>
-                <h3 className="font-extrabold text-xl font-display text-slate-900 dark:text-white mb-1 tracking-tight">
+                <h3 className="font-extrabold text-xl font-display text-slate-900 mb-1 tracking-tight">
                   {mentor.name}
                 </h3>
-                <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                <p className="text-sm font-semibold text-slate-700">
                   {mentor.role}
                 </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                <p className="text-xs text-slate-500 font-medium">
                   {mentor.experienceYears} Years of Experience
                 </p>
               </div>
 
               {/* Company / Domain Row */}
-              <div className="flex items-center gap-2 pt-1 text-xs font-semibold text-slate-700 dark:text-slate-200">
-                <div className="w-5 h-5 rounded-full bg-brand-indigo/10 text-brand-indigo flex items-center justify-center shrink-0">
-                  <Building2 className="w-3 h-3 text-brand-indigo" />
+              <div className="flex items-center gap-2 pt-1 text-xs font-semibold text-slate-700">
+                <div className="w-5 h-5 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                  <Building2 className="w-3 h-3 text-blue-600" />
                 </div>
                 <span className="truncate">{mentor.domain}</span>
               </div>
@@ -175,13 +175,13 @@ export const MentorCard: React.FC<MentorCardProps> = ({
               variant="primary"
               size="md"
               onClick={() => onBookSession && onBookSession(mentor)}
-              className="w-full font-bold bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white py-3 rounded-xl shadow-md text-sm transition-all"
+              className="w-full font-bold bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl shadow-md text-sm transition-all"
             >
               Book a FREE Session
             </Button>
 
             <Link href={`/mentors/${mentor.id}`} className="block text-center">
-              <span className="text-xs font-semibold text-slate-500 hover:text-brand-indigo dark:hover:text-brand-indigo-light transition-colors">
+              <span className="text-xs font-semibold text-slate-500 hover:text-blue-600 transition-colors">
                 View Profile →
               </span>
             </Link>

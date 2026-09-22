@@ -23,7 +23,7 @@ const NEEDS_CARDS: Array<{
     title: 'Career Direction',
     description: "Not sure what's next? Map out your trajectory with an expert.",
     sessionType: 'Career Guidance',
-    icon: <Compass className="w-5 h-5 text-brand-indigo" />,
+    icon: <Compass className="w-5 h-5 text-blue-600" />,
   },
   {
     id: 'need-2',
@@ -31,7 +31,7 @@ const NEEDS_CARDS: Array<{
     title: 'Resume Review',
     description: 'Make your profile & portfolio stand out to recruiters.',
     sessionType: 'Resume Review',
-    icon: <FileText className="w-5 h-5 text-purple-500" />,
+    icon: <FileText className="w-5 h-5 text-blue-600" />,
   },
   {
     id: 'need-3',
@@ -39,7 +39,7 @@ const NEEDS_CARDS: Array<{
     title: 'Mock Interview',
     description: 'Practice live interviews before the real high-stakes round.',
     sessionType: 'Mock Interview',
-    icon: <Video className="w-5 h-5 text-brand-violet" />,
+    icon: <Video className="w-5 h-5 text-blue-600" />,
   },
   {
     id: 'need-4',
@@ -47,7 +47,7 @@ const NEEDS_CARDS: Array<{
     title: 'Technical Guidance',
     description: 'Get unstuck with expert system design & code review help.',
     sessionType: 'Technical Guidance',
-    icon: <Code className="w-5 h-5 text-blue-500" />,
+    icon: <Code className="w-5 h-5 text-blue-600" />,
   },
   {
     id: 'need-5',
@@ -79,15 +79,15 @@ export const MentorshipNeeds: React.FC<MentorshipNeedsProps> = ({ onSelectNeed }
   };
 
   return (
-    <section id="mentorship-needs" className="py-16 border-b border-slate-200/60 dark:border-slate-800/60 bg-white dark:bg-[#0B0F19]">
+    <section id="mentorship-needs" className="py-16 border-b border-slate-200/60 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-          <h2 className="text-3xl font-extrabold font-display text-slate-900 dark:text-white tracking-tight">
+          <h2 className="text-3xl font-extrabold font-display text-slate-900 tracking-tight">
             What do you need help with?
           </h2>
-          <p className="text-base text-slate-600 dark:text-slate-400">
+          <p className="text-base text-slate-600">
             Start with the challenge. We&apos;ll help you find the right mentor.
           </p>
         </div>
@@ -102,26 +102,26 @@ export const MentorshipNeeds: React.FC<MentorshipNeedsProps> = ({ onSelectNeed }
               viewport={{ once: true }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
               onClick={() => handleCardClick(item.sessionType)}
-              className="group cursor-pointer p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/60 dark:bg-[#111827]/60 hover:bg-white dark:hover:bg-[#111827] hover:border-brand-indigo/60 dark:hover:border-brand-indigo/60 transition-all duration-300 shadow-sm hover:shadow-lg text-left relative overflow-hidden"
+              className="group cursor-pointer p-6 rounded-2xl border border-slate-200/80 bg-slate-50/60 hover:bg-white hover:border-blue-500/60 transition-all duration-300 shadow-sm hover:shadow-lg text-left relative overflow-hidden"
             >
               <div className="flex items-center justify-between mb-4">
-                <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform">
                   {item.icon}
                 </div>
-                <span className="font-display font-extrabold text-2xl text-slate-300 dark:text-slate-700 group-hover:text-brand-indigo transition-colors">
+                <span className="font-display font-extrabold text-2xl text-slate-300 group-hover:text-blue-600 transition-colors">
                   {item.num}
                 </span>
               </div>
 
-              <h3 className="font-bold text-lg text-slate-900 dark:text-white font-display mb-1.5 group-hover:text-brand-indigo dark:group-hover:text-brand-indigo-light transition-colors">
+              <h3 className="font-bold text-lg text-slate-900 font-display mb-1.5 group-hover:text-blue-600 transition-colors">
                 {item.title}
               </h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              <p className="text-xs text-slate-600 leading-relaxed">
                 &quot;{item.description}&quot;
               </p>
 
               {/* Click Indicator */}
-              <div className="mt-4 pt-3 border-t border-slate-200/50 dark:border-slate-800/50 flex items-center gap-1.5 text-xs font-semibold text-brand-indigo dark:text-brand-indigo-light opacity-80 group-hover:opacity-100">
+              <div className="mt-4 pt-3 border-t border-slate-200/50 flex items-center gap-1.5 text-xs font-semibold text-blue-600 opacity-80 group-hover:opacity-100">
                 <span>Filter mentors for {item.sessionType}</span>
                 <span className="transform group-hover:translate-x-1 transition-transform">→</span>
               </div>

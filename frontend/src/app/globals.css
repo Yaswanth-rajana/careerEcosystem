@@ -5,32 +5,21 @@
 @tailwind utilities;
 
 :root {
+  color-scheme: light;
+  
   --font-inter: 'Inter', system-ui, -apple-system, sans-serif;
   --font-outfit: 'Outfit', system-ui, sans-serif;
   
-  --bg-primary: #FAFAFC;
+  --bg-primary: #F7F8FC;
   --bg-surface: #FFFFFF;
   --bg-elevated: #F1F5F9;
   
   --text-primary: #0F172A;
-  --text-secondary: #475569;
+  --text-secondary: #334155;
   --text-muted: #64748B;
   
   --border-subtle: #E2E8F0;
   --border-strong: #CBD5E1;
-}
-
-.dark {
-  --bg-primary: #0B0F19;
-  --bg-surface: #111827;
-  --bg-elevated: #1F2937;
-  
-  --text-primary: #F9FAFB;
-  --text-secondary: #CBD5E1;
-  --text-muted: #94A3B8;
-  
-  --border-subtle: #1E293B;
-  --border-strong: #334155;
 }
 
 @layer base {
@@ -66,16 +55,9 @@
   border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
-.dark .glass-panel {
-  background: rgba(17, 24, 39, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
 /* Focus styles for WCAG 2.1 AA */
 *:focus-visible {
-  outline: 2px solid #6366F1;
+  outline: 2px solid #2563EB;
   outline-offset: 2px;
 }
 
@@ -89,7 +71,4 @@
 ::-webkit-scrollbar-thumb {
   background: #CBD5E1;
   border-radius: 4px;
-}
-.dark ::-webkit-scrollbar-thumb {
-  background: #334155;
 }

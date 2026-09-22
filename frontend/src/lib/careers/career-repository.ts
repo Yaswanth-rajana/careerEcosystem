@@ -16,7 +16,6 @@ export const CAREER_CATEGORIES = [
   'Product & Design',
   'Cybersecurity',
   'Business & Growth',
-  'Electronics & Systems',
   'Mechanical & Manufacturing',
 ] as const;
 
@@ -399,6 +398,52 @@ export function getMatchingJobsForCandidate({
   ];
 }
 
+export function findCareerSlugByTitle(roleTitle?: string): string | null {
+  if (!roleTitle) return null;
+  const normalized = roleTitle.toLowerCase().trim();
+  
+  // Direct slug or title match
+  const directMatch = CAREER_PATHS.find(
+    (c) => c.slug === normalized || c.title.toLowerCase() === normalized
+  );
+  if (directMatch) return directMatch.slug;
+
+  // Fuzzy / substring match
+  const fuzzyMatch = CAREER_PATHS.find((c) => {
+    const titleLower = c.title.toLowerCase();
+    return titleLower.includes(normalized) || normalized.includes(titleLower);
+  });
+  if (fuzzyMatch) return fuzzyMatch.slug;
+
+  // Keyword mapping fallbacks
+  if (normalized.includes('software') || normalized.includes('developer') || normalized.includes('full stack') || normalized.includes('frontend') || normalized.includes('backend')) {
+    return 'software-engineer';
+  }
+  if (normalized.includes('cloud') || normalized.includes('aws') || normalized.includes('azure')) {
+    return 'cloud-engineer';
+  }
+  if (normalized.includes('devops')) {
+    return 'devops-engineer';
+  }
+  if (normalized.includes('data analyst') || normalized.includes('analytics')) {
+    return 'data-analyst';
+  }
+  if (normalized.includes('data scientist') || normalized.includes('ai') || normalized.includes('machine learning') || normalized.includes('ml')) {
+    return 'data-scientist';
+  }
+  if (normalized.includes('ui') || normalized.includes('ux') || normalized.includes('designer')) {
+    return 'ui-ux-designer';
+  }
+  if (normalized.includes('product')) {
+    return 'product-manager';
+  }
+  if (normalized.includes('cyber')) {
+    return 'cybersecurity-engineer';
+  }
+
+  return null;
+}
+
 export interface SavedRoleItem {
   slug: string;
   title: string;
@@ -422,6 +467,31 @@ export function getSavedTargetRoles(): SavedRoleItem[] {
   return [];
 }
 
+export function setSavedTargetRole(role: SavedRoleItem): SavedRoleItem[] {
+  if (typeof window === 'undefined') return [];
+  const roles = getSavedTargetRoles();
+  const existingIdx = roles.findIndex((r) => r.slug === role.slug);
+
+  let newRoles: SavedRoleItem[];
+  if (existingIdx >= 0) {
+    newRoles = [...roles];
+    // Move existing to the end so it's the primary active path
+    const [existing] = newRoles.splice(existingIdx, 1);
+    newRoles.push(existing);
+  } else {
+    newRoles = [...roles, { slug: role.slug, title: role.title, category: role.category }];
+  }
+
+  try {
+    localStorage.removeItem('pathway_user_explicitly_cleared_roles');
+    localStorage.setItem('pathway_selected_roles', JSON.stringify(newRoles));
+    localStorage.setItem('pathway_selected_role', JSON.stringify(role));
+    window.dispatchEvent(new Event('pathway_selected_roles_changed'));
+  } catch {}
+
+  return newRoles;
+}
+
 export function toggleTargetRole(role: SavedRoleItem): { isSelected: boolean; roles: SavedRoleItem[] } {
   if (typeof window === 'undefined') return { isSelected: false, roles: [] };
   const roles = getSavedTargetRoles();
@@ -439,6 +509,12 @@ export function toggleTargetRole(role: SavedRoleItem): { isSelected: boolean; ro
   }
 
   try {
+    if (newRoles.length === 0) {
+      localStorage.setItem('pathway_user_explicitly_cleared_roles', 'true');
+    } else {
+      localStorage.removeItem('pathway_user_explicitly_cleared_roles');
+    }
+
     localStorage.setItem('pathway_selected_roles', JSON.stringify(newRoles));
     if (newRoles.length > 0) {
       const active = newRoles[newRoles.length - 1];
