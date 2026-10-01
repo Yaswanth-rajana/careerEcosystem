@@ -25,6 +25,7 @@
       "zod": ["./node_modules/zod", "../node_modules/zod"],
       "bcryptjs": ["./node_modules/bcryptjs", "../node_modules/bcryptjs"],
       "jose": ["./node_modules/jose", "../node_modules/jose"],
+      "pdf-lib": ["./node_modules/pdf-lib", "../node_modules/pdf-lib"],
       "@prisma/client": [
         "./node_modules/@prisma/client",
         "../node_modules/@prisma/client"
@@ -32,5 +33,11 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "../backend/src/**/*.ts"],
-  "exclude": ["node_modules", "../backend/src/testRunner.ts", "../backend/src/**/__tests__/**"]
+  "exclude": [
+    "node_modules",
+    "../backend/src/testRunner.ts",
+    "../backend/src/**/__tests__/**",
+    "../backend/src/services/tools/**",
+    "../backend/src/scripts/**"
+  ]
 }
