@@ -594,6 +594,19 @@ export default function MentorApplyPage() {
                         }
                         updateField('phone', val.slice(0, 10));
                       }}
+                      onKeyDown={(e) => {
+                        if (
+                          e.key === 'e' ||
+                          e.key === 'E' ||
+                          e.key === '+' ||
+                          e.key === '-' ||
+                          e.key === '.' ||
+                          e.key === ' ' ||
+                          (/^[a-zA-Z]$/.test(e.key) && !e.ctrlKey && !e.metaKey)
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
                       placeholder="9876543210"
                       className="w-full px-3.5 py-2.5 text-sm bg-transparent focus:outline-none placeholder:text-slate-400"
                     />
