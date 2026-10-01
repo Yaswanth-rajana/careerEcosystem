@@ -13,17 +13,36 @@ model User {
   passwordHash          String?
   name                  String
   role                  String              @default("CANDIDATE") // CANDIDATE, MENTOR, RECRUITER, ADMIN
-  googleId              String?             @unique
+  googleId              String?
   provider              String              @default("local")
   avatarUrl             String?
   isOnboarded           Boolean             @default(false)
   onboardingCompletedAt DateTime?
+  status                String              @default("ACTIVE") // ACTIVE, SUSPENDED, DEACTIVATED
+  mustChangePassword    Boolean             @default(false)
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
 
-  sessions           Session[]
-  profile            Profile?
-  onboardingProgress OnboardingProgress?
+  sessions             Session[]
+  profile              Profile?
+  onboardingProgress   OnboardingProgress?
+  savedJobs            SavedJob[]
+  jobApplications      JobApplication[]
+  bookings             Booking[]
+  mentorSessions       MentorshipSession[]
+  mentorReviews        MentorshipReview[]
+  mentorApplications   MentorApplication[]
+  passwordSetupTokens  PasswordSetupToken[]
+  recruiterProfile     RecruiterProfile?
+  companyMemberships   CompanyMember[]
+  employerApplications EmployerApplication[]
+  interviewsAsCandidate Interview[]
+  offersAsCandidate    Offer[]
+  assessmentSubmissions AssessmentSubmission[]
+
+  @@index([role])
+  @@index([status])
+  @@index([createdAt])
 }
 
 model Session {
@@ -279,5 +298,629 @@ model ConversionJob {
   @@index([expiresAt])
   @@index([userId])
   @@index([guestTokenHash])
+}
+
+model Job {
+  id               String           @id @default(auto()) @map("_id") @db.ObjectId
+  title            String
+  company          String
+  companyLogo      String?
+  companyId        String?          @db.ObjectId
+  location         String
+  workMode         String           // Remote, Hybrid, On-site
+  employmentType   String           // Full-time, Part-time, Internship, Contract
+  experienceLevel  String           // Fresher, 0-1 years, 1-3 years, 3-5 years, 5+ years
+  skills           String[]         @default([])
+  salaryMin        Int?
+  salaryMax        Int?
+  salaryCurrency   String?          @default("INR")
+  salaryPeriod     String?          @default("YEAR") // YEAR, MONTH, HOUR
+  description      String
+  responsibilities String[]         @default([])
+  requirements     String[]         @default([])
+  niceToHave       String[]         @default([])
+  benefits         String[]         @default([])
+  status           String           @default("PUBLISHED") // DRAFT, PUBLISHED, PAUSED, CLOSED, ARCHIVED
+  jobVerified      Boolean          @default(false)
+  companyVerified  Boolean          @default(false)
+  featured         Boolean          @default(false)
+  publishedAt      DateTime?        @default(now())
+  expiresAt        DateTime?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  companyRef       Company?         @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  createdById      String?          @db.ObjectId
+
+  savedBy          SavedJob[]
+  applications     JobApplication[]
+  assessments      Assessment[]
+  interviews       Interview[]
+  offers           Offer[]
+
+  @@index([status, publishedAt])
+  @@index([companyId])
+  @@index([workMode])
+  @@index([employmentType])
+  @@index([experienceLevel])
+}
+
+model SavedJob {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  jobId     String   @db.ObjectId
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job  Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, jobId])
+  @@index([userId])
+  @@index([jobId])
+}
+
+model JobApplication {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  candidateId String    @db.ObjectId
+  jobId       String    @db.ObjectId
+  status      String    @default("APPLIED") // APPLIED, UNDER_REVIEW, SHORTLISTED, TASK_PENDING, TASK_SUBMITTED, INTERVIEW, OFFER, REJECTED, WITHDRAWN
+  coverNote   String?
+  answers     String?   // JSON string of candidate screening answers
+  resumeUrl   String?
+  feedback    String?   // Recruiter feedback
+  reviewedAt  DateTime?
+  withdrawnAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  candidate User @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  job       Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  assessmentSubmissions AssessmentSubmission[]
+  interviews            Interview[]
+  offers                Offer[]
+
+  @@unique([candidateId, jobId])
+  @@index([candidateId])
+  @@index([jobId])
+  @@index([status])
+}
+
+model Course {
+  id                 String         @id @default(auto()) @map("_id") @db.ObjectId
+  title              String
+  slug               String         @unique
+  description        String
+  shortDescription   String?
+  category           String
+  level              String         @default("BEGINNER") // BEGINNER, INTERMEDIATE, ADVANCED
+  instructorName     String
+  instructorTitle    String?
+  instructorAvatar   String?
+  durationHours      Int            @default(0)
+  lessonsCount       Int            @default(0)
+  skills             String[]       @default([])
+  learningObjectives String[]       @default([])
+  status             String         @default("DRAFT") // DRAFT, REVIEW, PUBLISHED, PAUSED, ARCHIVED
+  isFeatured         Boolean        @default(false)
+  publishedAt        DateTime?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  modules            CourseModule[]
+
+  @@index([status, publishedAt])
+  @@index([category])
+  @@index([level])
+  @@index([createdAt])
+}
+
+model CourseModule {
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  courseId    String         @db.ObjectId
+  title       String
+  description String?
+  order       Int            @default(1)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  course      Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons     CourseLesson[]
+
+  @@index([courseId])
+}
+
+model CourseLesson {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  moduleId    String       @db.ObjectId
+  title       String
+  durationMin Int          @default(10)
+  type        String       @default("VIDEO") // VIDEO, ARTICLE, QUIZ, PROJECT
+  contentUrl  String?
+  contentBody String?
+  order       Int          @default(1)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  module      CourseModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@index([moduleId])
+}
+
+model Mentor {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String?   @db.ObjectId
+  name            String
+  email           String    @unique
+  avatar          String?
+  headline        String
+  bio             String
+  domain          String
+  company         String?
+  experienceYears Int       @default(0)
+  rating          Float     @default(5.0)
+  reviewCount     Int       @default(0)
+  sessionCount    Int       @default(0)
+  startingPrice   Int       @default(0)
+  expertise       String[]  @default([])
+  sessionTypes    String[]  @default([])
+  skillsList            String[]  @default([])
+  status                String    @default("PENDING") // PENDING, UNDER_REVIEW, APPROVED, REJECTED, SUSPENDED
+  rejectionReason       String?
+  approvedAt            DateTime?
+  applicationId         String?   @db.ObjectId
+  publicProfileEnabled  Boolean   @default(true)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  services               MentorshipService[]
+  availabilityRules      AvailabilityRule[]
+  availabilityExceptions AvailabilityException[]
+  bookings               Booking[]
+  sessions               MentorshipSession[]
+  reviews                MentorshipReview[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([domain])
+  @@index([createdAt])
+}
+
+model AuditLog {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  actorId      String   @db.ObjectId
+  actorEmail   String
+  actorName    String
+  action       String   // e.g. COURSE_CREATED, COURSE_PUBLISHED, MENTOR_APPROVED, JOB_APPROVED, USER_STATUS_CHANGED, etc.
+  resourceType String   // COURSE, MENTOR, JOB, USER, APPLICATION, SYSTEM
+  resourceId   String
+  details      String?  // JSON stringified payload
+  ipAddress    String?
+  createdAt    DateTime @default(now())
+
+  @@index([actorId])
+  @@index([action])
+  @@index([resourceType])
+  @@index([createdAt])
+}
+
+model MentorshipService {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  mentorId        String    @db.ObjectId
+  title           String
+  description     String
+  category        String    // CAREER_GUIDANCE, RESUME_REVIEW, MOCK_INTERVIEW, TECHNICAL_GUIDANCE, CAREER_SWITCH, LONG_TERM_MENTORSHIP
+  duration        Int       // In minutes: 30, 45, 60
+  price           Int       @default(0)
+  currency        String    @default("INR")
+  active          Boolean   @default(true)
+  bookingSettings String?   // JSON string of settings
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  mentor          Mentor    @relation(fields: [mentorId], references: [id], onDelete: Cascade)
+  bookings        Booking[]
+
+  @@index([mentorId, active])
+  @@index([mentorId])
+}
+
+model AvailabilityRule {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  mentorId  String   @db.ObjectId
+  dayOfWeek Int      // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  startTime String   // "09:00"
+  endTime   String   // "17:00"
+  timezone  String   @default("Asia/Kolkata")
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  mentor    Mentor   @relation(fields: [mentorId], references: [id], onDelete: Cascade)
+
+  @@index([mentorId, dayOfWeek])
+  @@index([mentorId])
+}
+
+model AvailabilityException {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  mentorId  String   @db.ObjectId
+  date      String   // "YYYY-MM-DD"
+  type      String   @default("UNAVAILABLE") // UNAVAILABLE, CUSTOM_HOURS
+  startTime String?  // "10:00"
+  endTime   String?  // "14:00"
+  reason    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  mentor    Mentor   @relation(fields: [mentorId], references: [id], onDelete: Cascade)
+
+  @@index([mentorId, date])
+  @@index([mentorId])
+}
+
+model Booking {
+  id                 String              @id @default(auto()) @map("_id") @db.ObjectId
+  mentorId           String              @db.ObjectId
+  candidateId        String              @db.ObjectId
+  serviceId          String              @db.ObjectId
+  scheduledStart     DateTime
+  scheduledEnd       DateTime
+  timezone           String              @default("Asia/Kolkata")
+  status             String              @default("CONFIRMED") // PENDING, CONFIRMED, RESCHEDULE_REQUESTED, RESCHEDULED, CANCELLED_BY_CANDIDATE, CANCELLED_BY_MENTOR, COMPLETED, NO_SHOW
+  studentNotes       String?
+  cancellationReason String?
+  rescheduledFromId  String?             @db.ObjectId
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+
+  mentor             Mentor              @relation(fields: [mentorId], references: [id], onDelete: Cascade)
+  candidate          User                @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  service            MentorshipService   @relation(fields: [serviceId], references: [id])
+  session            MentorshipSession?
+  review             MentorshipReview?
+
+  @@index([mentorId, status])
+  @@index([mentorId, scheduledStart])
+  @@index([candidateId])
+  @@index([serviceId])
+  @@index([scheduledStart, scheduledEnd])
+}
+
+model MentorshipSession {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  bookingId   String    @unique @db.ObjectId
+  mentorId    String    @db.ObjectId
+  candidateId String    @db.ObjectId
+  startedAt   DateTime?
+  endedAt     DateTime?
+  meetingUrl  String?
+  notes       String?
+  actionItems String?   // JSON string of [{ id, text, completed: boolean }]
+  status      String    @default("SCHEDULED") // SCHEDULED, IN_PROGRESS, COMPLETED, CANCELLED
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  booking     Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  mentor      Mentor    @relation(fields: [mentorId], references: [id], onDelete: Cascade)
+  candidate   User      @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([mentorId, status])
+  @@index([candidateId])
+}
+
+model MentorshipReview {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  bookingId   String   @unique @db.ObjectId
+  mentorId    String   @db.ObjectId
+  candidateId String   @db.ObjectId
+  rating      Int      // 1 to 5
+  review      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  booking     Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  mentor      Mentor   @relation(fields: [mentorId], references: [id], onDelete: Cascade)
+  candidate   User     @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([mentorId, createdAt])
+  @@index([candidateId])
+}
+
+model MentorApplication {
+  id                       String    @id @default(auto()) @map("_id") @db.ObjectId
+  referenceId              String    @unique // e.g. PM-2026-00124
+  userId                   String?   @db.ObjectId
+  fullName                 String
+  email                    String
+  phone                    String
+  location                 String?
+  currentRole              String
+  company                  String?
+  experienceYears          Int       @default(0)
+  industry                 String?
+  linkedIn                 String?
+  gitHub                   String?
+  portfolio                String?
+  domain                   String
+  expertise                String[]  @default([])
+  additionalExpertise      String?
+  offerings                String[]  @default([])
+  preferredSessionDuration Int       @default(45) // 30, 45, 60 minutes
+  startingPrice            Int       @default(0)
+  whyMentor                String
+  whoToHelp                String
+  additionalInfo           String?
+  status                   String    @default("PENDING") // PENDING, UNDER_REVIEW, APPROVED, REJECTED
+  decisionReason           String?
+  internalAdminNotes       String?
+  reviewedBy               String?
+  reviewedAt               DateTime?
+  approvedAt               DateTime?
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+
+  user                     User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([email])
+  @@index([status])
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model PasswordSetupToken {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String    @db.ObjectId
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model EmailDelivery {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  eventType         String    // MENTOR_APPLICATION_RECEIVED, MENTOR_APPLICATION_APPROVED, MENTOR_APPLICATION_REJECTED, MENTOR_WELCOME_RESENT
+  recipient         String
+  referenceType     String    // MENTOR_APPLICATION, USER
+  referenceId       String
+  provider          String    @default("ZEPTOMAIL")
+  status            String    // SENT, FAILED, SIMULATED
+  providerMessageId String?
+  attempts          Int       @default(1)
+  lastError         String?
+  sentAt            DateTime?
+  createdAt         DateTime  @default(now())
+
+  @@index([recipient])
+  @@index([referenceId])
+  @@index([status])
+  @@index([eventType])
+}
+
+// ==========================================
+// EMPLOYER & RECRUITER DOMAIN
+// ==========================================
+
+model EmployerApplication {
+  id                        String    @id @default(auto()) @map("_id") @db.ObjectId
+  referenceId               String    @unique // e.g. EMP-2026-00001
+  userId                    String?   @db.ObjectId
+  fullName                  String
+  workEmail                 String
+  phone                     String
+  designation               String
+  linkedInUrl               String?
+  companyName               String
+  companyWebsite            String
+  companyLinkedIn           String?
+  industry                  String
+  companySize               String
+  headquartersLocation      String
+  rolesHired                String[]  @default([])
+  hiringVolume              String?
+  preferredExperienceLevels String[]  @default([])
+  hiringLocations           String[]  @default([])
+  workModes                 String[]  @default([])
+  verificationNotes         String?
+  status                    String    @default("PENDING") // PENDING, UNDER_REVIEW, NEEDS_INFORMATION, APPROVED, REJECTED, SUSPENDED
+  decisionReason            String?
+  internalAdminNotes        String?
+  reviewedBy                String?
+  reviewedAt                DateTime?
+  approvedAt                DateTime?
+  companyId                 String?   @db.ObjectId
+  createdAt                 DateTime  @default(now())
+  updatedAt                 DateTime  @updatedAt
+
+  user                      User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  company                   Company?  @relation(fields: [companyId], references: [id], onDelete: SetNull)
+
+  @@index([workEmail])
+  @@index([status])
+  @@index([createdAt])
+  @@index([userId])
+}
+
+model Company {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  slug            String    @unique
+  logoUrl         String?
+  website         String
+  linkedIn        String?
+  industry        String
+  size            String
+  location        String
+  description     String?
+  culture         String?
+  benefits        String[]  @default([])
+  verified        Boolean   @default(false)
+  status          String    @default("ACTIVE") // ACTIVE, SUSPENDED
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  members         CompanyMember[]
+  recruiters      RecruiterProfile[]
+  jobs            Job[]
+  assessments     Assessment[]
+  interviews      Interview[]
+  offers          Offer[]
+  applications    EmployerApplication[]
+
+  @@index([status])
+  @@index([name])
+}
+
+model CompanyMember {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  companyId       String    @db.ObjectId
+  userId          String    @db.ObjectId
+  role            String    @default("RECRUITER") // COMPANY_ADMIN, RECRUITER, HIRING_MANAGER, INTERVIEWER
+  title           String?
+  status          String    @default("ACTIVE") // ACTIVE, INVITED, SUSPENDED
+  joinedAt        DateTime  @default(now())
+
+  company         Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([companyId, userId])
+  @@index([companyId])
+  @@index([userId])
+}
+
+model RecruiterProfile {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String    @unique @db.ObjectId
+  companyId       String    @db.ObjectId
+  designation     String
+  phone           String?
+  linkedInUrl     String?
+  status          String    @default("ACTIVE") // ACTIVE, SUSPENDED
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company         Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+  @@index([status])
+}
+
+model Assessment {
+  id               String                 @id @default(auto()) @map("_id") @db.ObjectId
+  companyId        String                 @db.ObjectId
+  jobId            String?                @db.ObjectId
+  title            String
+  description      String?
+  type             String                 @default("MCQ") // MCQ, TECHNICAL, CODING, CUSTOM
+  timeLimitMinutes Int                    @default(30)
+  passingScore     Int                    @default(70)
+  status           String                 @default("ACTIVE") // DRAFT, ACTIVE, ARCHIVED
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+
+  company          Company                @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  job              Job?                   @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  questions        AssessmentQuestion[]
+  submissions      AssessmentSubmission[]
+
+  @@index([companyId])
+  @@index([jobId])
+  @@index([status])
+}
+
+model AssessmentQuestion {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  assessmentId  String      @db.ObjectId
+  question      String
+  type          String      @default("MCQ") // MCQ, CODING, SQL, SHORT_ANSWER
+  options       String[]    @default([])
+  correctAnswer String
+  points        Int         @default(1)
+  order         Int         @default(1)
+
+  assessment    Assessment  @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+
+  @@index([assessmentId])
+}
+
+model AssessmentSubmission {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  assessmentId  String         @db.ObjectId
+  applicationId String         @db.ObjectId
+  candidateId   String         @db.ObjectId
+  score         Int
+  passed        Boolean
+  answers       String         // JSON string of candidate answers
+  submittedAt   DateTime       @default(now())
+
+  assessment    Assessment     @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  application   JobApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  candidate     User           @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([assessmentId])
+  @@index([applicationId])
+  @@index([candidateId])
+}
+
+model Interview {
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  companyId       String         @db.ObjectId
+  jobId           String         @db.ObjectId
+  applicationId   String         @db.ObjectId
+  candidateId     String         @db.ObjectId
+  title           String
+  type            String         @default("TECHNICAL") // TECHNICAL, HR, MANAGERIAL, BEHAVIORAL
+  scheduledAt     DateTime
+  durationMinutes Int            @default(45)
+  meetingUrl      String?
+  interviewerName String?
+  notes           String?
+  status          String         @default("SCHEDULED") // SCHEDULED, COMPLETED, CANCELLED, NO_SHOW
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  company         Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  job             Job            @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  application     JobApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  candidate       User           @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([companyId, status])
+  @@index([jobId])
+  @@index([applicationId])
+  @@index([candidateId])
+  @@index([scheduledAt])
+}
+
+model Offer {
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  companyId       String         @db.ObjectId
+  jobId           String         @db.ObjectId
+  applicationId   String         @db.ObjectId
+  candidateId     String         @db.ObjectId
+  positionTitle   String
+  salaryOffered   Int
+  currency        String         @default("INR")
+  salaryPeriod    String         @default("YEAR") // YEAR, MONTH, HOUR
+  startDate       DateTime?
+  expiresAt       DateTime?
+  notes           String?
+  status          String         @default("SENT") // DRAFT, SENT, ACCEPTED, DECLINED, WITHDRAWN
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  company         Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  job             Job            @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  application     JobApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  candidate       User           @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([companyId, status])
+  @@index([jobId])
+  @@index([applicationId])
+  @@index([candidateId])
 }
 

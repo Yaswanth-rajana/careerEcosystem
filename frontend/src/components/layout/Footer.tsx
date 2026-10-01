@@ -7,8 +7,8 @@ export const Footer = () => {
     { label: 'Career Discovery', href: '#beat-02-possibilities' },
     { label: 'Courses', href: '#beat-04-learning' },
     { label: 'Mentorship', href: '#beat-05-guidance' },
-    { label: 'Jobs', href: '#beat-07-opportunity' },
-    { label: 'Career Guidance', href: '#beat-10-ecosystem' },
+    { label: 'Jobs', href: '/jobs' },
+    { label: 'Hire Talent (For Employers)', href: '/employers/apply' },
   ];
 
   const journeyLinks = [

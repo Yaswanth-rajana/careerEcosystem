@@ -4,8 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { CareerPath, CandidateCareerContext } from '@/lib/careers/career-types';
 import { toggleTargetRole, isTargetRoleSelected, getSavedTargetRoles } from '@/lib/careers/career-repository';
 import { Button } from '@/components/design-system/Button';
-import { ArrowRight, Compass, CheckCircle2, BookmarkCheck, TrendingUp, AlertCircle, Info } from 'lucide-react';
+import { ArrowRight, Compass, CheckCircle2, BookmarkCheck, TrendingUp, AlertCircle, Info, Lock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/lib/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export interface CareerDetailHeroProps {
   career: CareerPath;
@@ -13,25 +15,43 @@ export interface CareerDetailHeroProps {
 }
 
 export const CareerDetailHero: React.FC<CareerDetailHeroProps> = ({ career, candidate }) => {
+  const { user } = useAuth();
+  const router = useRouter();
   const [isSaved, setIsSaved] = useState(false);
   const [notification, setNotification] = useState<{ type: 'selected' | 'deselected'; text: string } | null>(null);
   const [totalSavedCount, setTotalSavedCount] = useState(0);
 
   useEffect(() => {
+    if (!user) {
+      setIsSaved(false);
+      setTotalSavedCount(0);
+      return;
+    }
+
     const roles = getSavedTargetRoles();
     setIsSaved(roles.some((r) => r.slug === career.slug));
     setTotalSavedCount(roles.length);
 
     const handleUpdate = () => {
+      if (!user) {
+        setIsSaved(false);
+        setTotalSavedCount(0);
+        return;
+      }
       const updatedRoles = getSavedTargetRoles();
       setIsSaved(updatedRoles.some((r) => r.slug === career.slug));
       setTotalSavedCount(updatedRoles.length);
     };
     window.addEventListener('pathway_selected_roles_changed', handleUpdate);
     return () => window.removeEventListener('pathway_selected_roles_changed', handleUpdate);
-  }, [career.slug]);
+  }, [career.slug, user]);
 
   const handleStartPath = () => {
+    if (!user) {
+      router.push(`/login?from=/careers/${career.slug}`);
+      return;
+    }
+
     const { isSelected, roles } = toggleTargetRole({
       slug: career.slug,
       title: career.title,
@@ -128,13 +148,23 @@ export const CareerDetailHero: React.FC<CareerDetailHeroProps> = ({ career, cand
             variant="primary"
             size="lg"
             onClick={handleStartPath}
-            leftIcon={isSaved ? <BookmarkCheck className="w-5 h-5 text-white" /> : undefined}
-            rightIcon={!isSaved ? <ArrowRight className="w-5 h-5" /> : undefined}
+            leftIcon={
+              isSaved ? (
+                <BookmarkCheck className="w-5 h-5 text-white" />
+              ) : !user ? (
+                <Lock className="w-4 h-4 text-white/90" />
+              ) : undefined
+            }
+            rightIcon={!isSaved && user ? <ArrowRight className="w-5 h-5" /> : undefined}
             className={`shadow-md font-bold transition-all ${
               isSaved ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'
             }`}
           >
-            {isSaved ? 'Target Role Selected ✓' : 'Start This Career Path'}
+            {isSaved
+              ? 'Target Role Selected ✓'
+              : !user
+              ? 'Sign In to Select Role'
+              : 'Start This Career Path'}
           </Button>
 
           <Button

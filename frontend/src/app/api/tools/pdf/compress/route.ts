@@ -1,11 +1,26 @@
 import { NextResponse } from 'next/server';
 import { PdfToolsService } from '@backend/services/tools/pdf-tools-service';
 import { ToolError } from '@backend/services/tools/errors';
+import { getAuthenticatedUser } from '@/lib/serverAuth';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
+    const user = await getAuthenticatedUser();
+    if (!user) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: 'UNAUTHORIZED',
+            message: 'Authentication required. Please sign in to compress PDF files.',
+          },
+        },
+        { status: 401 }
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
     const level = (formData.get('level') as 'basic' | 'balanced' | 'strong') || 'balanced';

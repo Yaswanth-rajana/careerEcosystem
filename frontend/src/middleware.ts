@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
-const PROTECTED_ROUTES = ['/dashboard', '/explore', '/learn', '/jobs', '/guidance', '/profile'];
+const PROTECTED_ROUTES = ['/dashboard', '/profile', '/my-path', '/tools/'];
 const AUTH_ROUTES = ['/login', '/register', '/reset-password'];
 const SESSION_COOKIE = 'career_session';
 
@@ -12,12 +12,17 @@ export function middleware(request: NextRequest) {
   const isOnboardingRoute = pathname.startsWith('/onboarding');
   const isAuthRoute = AUTH_ROUTES.some((route) => pathname.startsWith(route));
 
-  // 1. Pass through non-restricted routes immediately
+  // 1. Authenticated user visiting the root landing page -> /dashboard
+  if (pathname === '/' && token) {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
+
+  // 2. Pass through non-restricted routes immediately
   if (!isProtectedRoute && !isOnboardingRoute && !isAuthRoute) {
     return NextResponse.next();
   }
 
-  // 2. Unauthenticated user attempting to access protected or onboarding routes
+  // 3. Unauthenticated user attempting to access protected or onboarding routes
   if (!token) {
     if (isProtectedRoute || isOnboardingRoute) {
       const loginUrl = new URL('/login', request.url);
@@ -27,7 +32,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // 3. Authenticated user attempting to access auth routes (login / register / reset-password)
+  // 4. Authenticated user attempting to access auth routes (login / register / reset-password)
   if (isAuthRoute) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
@@ -37,12 +42,11 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    '/',
     '/dashboard/:path*',
-    '/explore/:path*',
-    '/learn/:path*',
-    '/jobs/:path*',
-    '/guidance/:path*',
     '/profile/:path*',
+    '/my-path/:path*',
+    '/tools/:path+',
     '/onboarding/:path*',
     '/login',
     '/register',

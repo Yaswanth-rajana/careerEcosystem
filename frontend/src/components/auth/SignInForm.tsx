@@ -47,14 +47,20 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onSwitchMode }) => {
       setIsSubmitting(false);
     } else {
       await refreshUser();
-      const target = res.user?.isOnboarded ? '/dashboard' : '/onboarding';
+      const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+      const redirectParam = searchParams?.get('from') || searchParams?.get('redirect');
+      const safeTarget = redirectParam && redirectParam.startsWith('/') && !redirectParam.startsWith('//') ? redirectParam : null;
+      const target = res.user?.isOnboarded ? (safeTarget || '/dashboard') : '/onboarding';
       router.push(target);
     }
   };
 
   const handleGoogleSuccess = async (res: any) => {
     await refreshUser();
-    const target = res.redirectTo || (res.user?.isOnboarded ? '/dashboard' : '/onboarding');
+    const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    const redirectParam = searchParams?.get('from') || searchParams?.get('redirect');
+    const safeTarget = redirectParam && redirectParam.startsWith('/') && !redirectParam.startsWith('//') ? redirectParam : null;
+    const target = res.redirectTo || (res.user?.isOnboarded ? (safeTarget || '/dashboard') : '/onboarding');
     router.push(target);
   };
 

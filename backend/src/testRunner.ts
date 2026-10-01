@@ -7,6 +7,7 @@ import {
   Step6CareerDirectionSchema,
   FullOnboardingPayloadSchema,
 } from './validations/onboardingSchemas';
+import { calculateProfileCompletion, PROFILE_COMPLETION_RULES } from './services/profileCompletion';
 
 async function runTests() {
   console.log('🧪 Running Candidate Onboarding & Resume Parser Verification Tests...\n');
@@ -359,6 +360,78 @@ async function runTests() {
     console.log('✓ Tools Platform Integration Tests Completed.');
   } catch (err: any) {
     assert(false, `Tools Platform test error: ${err.message}`);
+  }
+
+  // 4. Canonical Profile Completion & Architecture Tests
+  console.log('\n--- Profile Completion & DTO Rules Verification ---');
+  try {
+    // Empty profile test
+    const emptyResult = calculateProfileCompletion({
+      personal: { name: '', phone: null, location: null, headline: null },
+      educationCount: 0,
+      experienceCount: 0,
+      skillsCount: 0,
+      projectsCount: 0,
+      careerDirection: null,
+      jobPreferences: null,
+      linksCount: 0,
+      certificationsCount: 0,
+    });
+    assert(emptyResult.percentage === 0, 'Empty candidate profile produces 0% completion');
+    assert(emptyResult.missingSections.includes('personal'), 'Empty profile correctly marks personal as missing');
+    assert(emptyResult.nextSection === 'personal', 'Empty profile suggests personal as first recommended section');
+
+    // Partial profile test
+    const partialResult = calculateProfileCompletion({
+      personal: {
+        name: 'Yaswanth',
+        phone: '+91 9999999999',
+        location: 'Hyderabad, India',
+        headline: 'Full Stack Engineer',
+        candidateType: 'STUDENT',
+      },
+      educationCount: 1,
+      experienceCount: 0, // Student, so experience rule passes
+      skillsCount: 3,
+      projectsCount: 0,
+      careerDirection: null,
+      jobPreferences: null,
+      linksCount: 0,
+      certificationsCount: 0,
+    });
+    // personal (20) + education (15) + experience (15, student) + skills (15) = 65%
+    assert(partialResult.percentage === 65, `Partial profile completion calculated correctly (expected 65%, got ${partialResult.percentage}%)`);
+    assert(partialResult.completedSections.includes('personal'), 'Personal section completed');
+    assert(partialResult.completedSections.includes('skills'), 'Skills section completed');
+    assert(partialResult.missingSections.includes('projects'), 'Projects section identified as missing');
+    assert(partialResult.nextSection === 'projects', 'Next recommended section is projects');
+
+    // Complete profile test
+    const completeResult = calculateProfileCompletion({
+      personal: {
+        name: 'Yaswanth',
+        phone: '+91 9999999999',
+        location: 'Hyderabad, India',
+        headline: 'Full Stack Engineer',
+      },
+      educationCount: 1,
+      experienceCount: 1,
+      skillsCount: 5,
+      projectsCount: 2,
+      careerDirection: { targetRole: 'Senior Full Stack Engineer' },
+      jobPreferences: { workEnvironment: 'Remote' },
+      linksCount: 2,
+      certificationsCount: 1,
+    });
+    assert(completeResult.percentage === 100, 'Fully filled profile yields 100% completion');
+    assert(completeResult.missingSections.length === 0, 'No missing sections for complete profile');
+    assert(completeResult.nextSection === 'complete', 'Next section is "complete"');
+
+    // Configuration-driven test
+    assert(PROFILE_COMPLETION_RULES.personal.weight === 20, 'Profile completion uses configuration-driven weights');
+    console.log('✓ Profile Completion tests passed successfully.');
+  } catch (err: any) {
+    assert(false, `Profile completion test error: ${err.message}`);
   }
 
   console.log(`\nResults: ${passed} passed, ${failed} failed.`);

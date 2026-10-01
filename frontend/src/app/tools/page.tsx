@@ -1,8 +1,10 @@
 import React from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { Wrench, FileText, Layers, Image as ImageIcon, Code2, ArrowRight, Sparkles } from 'lucide-react';
+import { Wrench, FileText, Layers, Image as ImageIcon, Code2, ArrowRight, Sparkles, Lock } from 'lucide-react';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
+import { SESSION_COOKIE_NAME } from '@backend/auth/security';
 
 export const metadata = {
   title: 'Tools Platform | PATHWAY.ECO',
@@ -10,6 +12,10 @@ export const metadata = {
 };
 
 export default function ToolsPage() {
+  const cookieStore = cookies();
+  const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+  const isAuthenticated = !!token;
+
   const activeTools = [
     {
       id: 'tool-doc-converter',
@@ -78,6 +84,22 @@ export default function ToolsPage() {
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
             Convert, organize, and prepare your documents without leaving PATHWAY.ECO.
           </p>
+
+          {/* Login Requirement Banner if Unauthenticated */}
+          {!isAuthenticated && (
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 px-5 rounded-2xl bg-amber-50/90 border border-amber-200/90 text-amber-900 text-xs sm:text-sm max-w-2xl mx-auto shadow-xs text-left">
+              <div className="flex items-center gap-2.5">
+                <Lock className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>Sign in required to convert and edit documents with our tools platform.</span>
+              </div>
+              <Link
+                href="/login?from=/tools"
+                className="font-bold text-blue-600 hover:text-blue-700 bg-white border border-blue-200/80 hover:border-blue-300 px-3.5 py-1.5 rounded-xl shadow-xs shrink-0 whitespace-nowrap transition-all"
+              >
+                Sign In →
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Featured Production Tools */}
@@ -89,6 +111,7 @@ export default function ToolsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {activeTools.map((tool) => {
               const IconComp = tool.icon;
+              const toolHref = isAuthenticated ? tool.href : `/login?from=${encodeURIComponent(tool.href)}`;
               return (
                 <div
                   key={tool.id}
@@ -100,9 +123,17 @@ export default function ToolsPage() {
                         <IconComp className="w-3.5 h-3.5" />
                         {tool.category}
                       </span>
-                      <span className="text-[10px] font-mono font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                        {tool.badge}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-mono font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                          {tool.badge}
+                        </span>
+                        {!isAuthenticated && (
+                          <span className="text-[10px] font-mono font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 flex items-center gap-1">
+                            <Lock className="w-2.5 h-2.5 text-amber-600" />
+                            Sign in required
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     <h3 className="text-2xl font-bold font-display text-slate-900 group-hover:text-[#6366F1] transition-colors">
@@ -116,10 +147,11 @@ export default function ToolsPage() {
 
                   <div className="pt-4 border-t border-slate-100">
                     <Link
-                      href={tool.href}
+                      href={toolHref}
                       className="inline-flex items-center gap-2 text-sm font-bold text-white bg-blue-600 hover:bg-black px-5 py-3 rounded-xl shadow-sm transition-all w-full justify-center group-hover:translate-x-0.5"
                     >
-                      <span>{tool.actionLabel}</span>
+                      {!isAuthenticated && <Lock className="w-4 h-4 text-white/90" />}
+                      <span>{isAuthenticated ? tool.actionLabel : `Sign In to Use ${tool.title} →`}</span>
                     </Link>
                   </div>
                 </div>

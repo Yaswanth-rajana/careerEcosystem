@@ -13,6 +13,19 @@ export async function POST(request: Request) {
     const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
     const user = token ? await UserService.getSession(token) : null;
 
+    if (!user) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: 'UNAUTHORIZED',
+            message: 'Authentication required. Please sign in to convert documents.',
+          },
+        },
+        { status: 401 }
+      );
+    }
+
     const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0] || '127.0.0.1';
 
     const formData = await request.formData();

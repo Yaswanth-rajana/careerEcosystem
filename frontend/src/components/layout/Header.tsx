@@ -54,6 +54,10 @@ export const Header: React.FC<HeaderProps> = ({ user: initialUser, onLogout }) =
   // Listen to target roles changes and sync user profile if logged in
   useEffect(() => {
     const updateSavedRoles = () => {
+      if (!currentUser) {
+        setSavedRoles([]);
+        return;
+      }
       const currentSaved = getSavedTargetRoles();
       setSavedRoles(currentSaved);
     };
@@ -102,6 +106,12 @@ export const Header: React.FC<HeaderProps> = ({ user: initialUser, onLogout }) =
   const handleLogout = async () => {
     setUserDropdownOpen(false);
     setMobileMenuOpen(false);
+    setSavedRoles([]);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('pathway_selected_roles');
+      localStorage.removeItem('pathway_selected_role');
+      window.dispatchEvent(new Event('pathway_selected_roles_changed'));
+    }
     if (onLogout) {
       onLogout();
     } else {
@@ -134,7 +144,9 @@ export const Header: React.FC<HeaderProps> = ({ user: initialUser, onLogout }) =
   }));
 
   const navItems: PillNavItem[] = [
-    { label: 'Home', href: '/' },
+    currentUser
+      ? { label: 'Dashboard', href: '/dashboard' }
+      : { label: 'Home', href: '/' },
     { label: 'Explore', href: '/explore' },
     {
       label: 'My Path',

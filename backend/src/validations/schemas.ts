@@ -79,3 +79,75 @@ export const FullOnboardingSchema = z.object({
   step3: OnboardingStep3Schema,
   step4: OnboardingStep4Schema,
 });
+
+// Mentor Onboarding Step Schemas
+export const MentorApplicationStep1Schema = z.object({
+  fullName: z.string().min(2, 'Full name is required (at least 2 characters)'),
+  email: z.string().email('Please enter a valid email address'),
+  phone: z.string().min(7, 'A valid contact phone number is required'),
+  location: z.string().optional(),
+});
+
+export const MentorApplicationStep2Schema = z.object({
+  currentRole: z.string().min(2, 'Current or most recent role is required'),
+  company: z.string().optional(),
+  experienceYears: z.number().int().min(0, 'Years of experience must be 0 or greater').max(60),
+  industry: z.string().optional(),
+  linkedIn: z.string().url('Please enter a valid LinkedIn URL').optional().or(z.literal('')),
+  gitHub: z.string().url('Please enter a valid GitHub URL').optional().or(z.literal('')),
+  portfolio: z.string().url('Please enter a valid Portfolio URL').optional().or(z.literal('')),
+});
+
+export const MentorApplicationStep3Schema = z.object({
+  domain: z.string().min(2, 'Primary domain is required'),
+  expertise: z.array(z.string()).min(1, 'Please select at least one area of expertise'),
+  additionalExpertise: z.string().optional(),
+});
+
+export const MentorApplicationStep4Schema = z.object({
+  offerings: z.array(z.string()).min(1, 'Please select at least one mentorship offering'),
+  preferredSessionDuration: z.union([z.literal(30), z.literal(45), z.literal(60)]).default(45),
+  startingPrice: z.number().int().min(0).default(0),
+});
+
+export const MentorApplicationStep5Schema = z.object({
+  whyMentor: z.string().min(20, 'Please share your motivation for becoming a mentor (at least 20 characters)'),
+  whoToHelp: z.string().min(10, 'Please describe who you would like to help (at least 10 characters)'),
+  additionalInfo: z.string().optional(),
+});
+
+export const MentorApplicationSubmissionSchema = z.object({
+  fullName: z.string().min(2, 'Full name is required'),
+  email: z.string().email('Please enter a valid email address'),
+  phone: z.string().min(7, 'A valid contact phone number is required'),
+  location: z.string().optional().nullable(),
+  currentRole: z.string().min(2, 'Current or most recent role is required'),
+  company: z.string().optional().nullable(),
+  experienceYears: z.number().int().min(0).max(60),
+  industry: z.string().optional().nullable(),
+  linkedIn: z.string().url('Please enter a valid LinkedIn URL').optional().or(z.literal('')).nullable(),
+  gitHub: z.string().url('Please enter a valid GitHub URL').optional().or(z.literal('')).nullable(),
+  portfolio: z.string().url('Please enter a valid Portfolio URL').optional().or(z.literal('')).nullable(),
+  domain: z.string().min(2, 'Primary domain is required'),
+  expertise: z.array(z.string()).min(1, 'Please select at least one area of expertise'),
+  additionalExpertise: z.string().optional().nullable(),
+  offerings: z.array(z.string()).min(1, 'Please select at least one mentorship offering'),
+  preferredSessionDuration: z.union([z.literal(30), z.literal(45), z.literal(60)]).default(45),
+  startingPrice: z.number().int().min(0).default(0),
+  whyMentor: z.string().min(20, 'Please share your motivation for becoming a mentor'),
+  whoToHelp: z.string().min(10, 'Please describe who you would like to help'),
+  additionalInfo: z.string().optional().nullable(),
+  confirmAccuracy: z.boolean().refine((val) => val === true, {
+    message: 'You must confirm that the information provided is accurate',
+  }),
+});
+
+export const PasswordSetupSchema = z.object({
+  token: z.string().min(1, 'Setup token is required'),
+  password: z.string().min(8, 'Password must be at least 8 characters long'),
+  confirmPassword: z.string().min(8, 'Please confirm your password'),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: 'Passwords do not match',
+  path: ['confirmPassword'],
+});
+

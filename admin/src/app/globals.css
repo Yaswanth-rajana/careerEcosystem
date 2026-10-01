@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+
+  --font-inter: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-outfit: 'Outfit', system-ui, sans-serif;
+
+  --bg-primary: #F7F8FC;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #F1F5F9;
+
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
+
+  --border-subtle: #E2E8F0;
+  --border-strong: #CBD5E1;
+}
+
+@layer base {
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-inter);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1 {
+    font-family: var(--font-outfit);
+    font-weight: 800;
+  }
+
+  h2, h3 {
+    font-family: var(--font-outfit);
+    font-weight: 700;
+  }
+
+  h4, h5, h6 {
+    font-family: var(--font-outfit);
+    font-weight: 600;
+  }
+}
+
+/* Custom Scrollbar aligned with main portal */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}

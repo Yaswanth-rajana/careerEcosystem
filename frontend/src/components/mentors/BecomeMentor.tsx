@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { Sparkles, CheckCircle2, ArrowRight, UserPlus } from 'lucide-react';
 import { Button } from '@/components/design-system/Button';
 import { Modal } from '@/components/design-system/Modal';
@@ -44,15 +45,16 @@ export const BecomeMentor: React.FC = () => {
             </div>
 
             <div className="pt-4">
-              <Button
-                variant="primary"
-                size="lg"
-                onClick={() => setIsModalOpen(true)}
-                rightIcon={<ArrowRight className="w-4 h-4" />}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 shadow-md"
-              >
-                Become a Mentor
-              </Button>
+              <Link href="/mentors/apply">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  rightIcon={<ArrowRight className="w-4 h-4" />}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 shadow-md"
+                >
+                  Become a Mentor
+                </Button>
+              </Link>
             </div>
           </div>
 
