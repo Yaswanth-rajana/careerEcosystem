@@ -27,6 +27,11 @@ export function MentorSidebar({
 }) {
   const pathname = usePathname();
   const { mentor } = useMentorAuth();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const navItems = [
     { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -72,7 +77,7 @@ export function MentorSidebar({
         </div>
 
         {/* Mentor Status Pill */}
-        {mentor && (
+        {mounted && mentor && (
           <div className="px-5 py-3 border-b border-slate-100 bg-slate-50/60">
             <div className="flex items-center justify-between">
               <span className="text-xs font-medium text-slate-500">Status</span>

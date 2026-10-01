@@ -10,6 +10,11 @@ import Link from 'next/link';
 export function MentorShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { mentor, isLoading } = useMentorAuth();
+  const [mounted, setMounted] = useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-50 flex">
@@ -24,7 +29,7 @@ export function MentorShell({ children }: { children: React.ReactNode }) {
         <MentorHeader onMenuClick={() => setSidebarOpen(true)} />
 
         {/* Global status banner if mentor is not APPROVED */}
-        {!isLoading && mentor && mentor.status !== 'APPROVED' && (
+        {mounted && !isLoading && mentor && mentor.status !== 'APPROVED' && (
           <div className="bg-amber-50 border-b border-amber-200/80 px-4 sm:px-6 lg:px-8 py-3">
             <div className="flex items-center gap-3">
               {mentor.status === 'PENDING' || mentor.status === 'UNDER_REVIEW' ? (

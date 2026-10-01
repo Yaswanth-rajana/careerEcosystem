@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, LogOut, ExternalLink, Calendar, Briefcase } from 'lucide-react';
 import { useMentorAuth } from '@/lib/mentorAuthContext';
 import Link from 'next/link';
@@ -8,15 +8,18 @@ import Link from 'next/link';
 export function MentorHeader({ onMenuClick }: { onMenuClick: () => void }) {
   const { mentor, user, logout } = useMentorAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [greeting, setGreeting] = useState('Welcome');
+  const [mounted, setMounted] = useState(false);
 
-  const getGreeting = () => {
+  useEffect(() => {
+    setMounted(true);
     const hour = new Date().getHours();
-    if (hour < 12) return 'Good morning';
-    if (hour < 18) return 'Good afternoon';
-    return 'Good evening';
-  };
+    if (hour < 12) setGreeting('Good morning');
+    else if (hour < 18) setGreeting('Good afternoon');
+    else setGreeting('Good evening');
+  }, []);
 
-  const mentorName = mentor?.name || user?.name || 'Mentor';
+  const mentorName = mounted ? (mentor?.name || user?.name || 'Mentor') : 'Mentor';
 
   return (
     <header className="sticky top-0 z-30 h-16 bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -31,8 +34,8 @@ export function MentorHeader({ onMenuClick }: { onMenuClick: () => void }) {
 
         <div>
           <h2 className="text-sm sm:text-base font-semibold text-slate-900 tracking-tight">
-            {getGreeting()},{' '}
-            <span className="text-blue-600">{mentorName}</span>
+            <span suppressHydrationWarning>{greeting}</span>,{' '}
+            <span className="text-blue-600" suppressHydrationWarning>{mentorName}</span>
           </h2>
           <p className="text-xs text-slate-500 hidden sm:block">
             {mentor?.headline || 'Operational Mentorship Workspace'}

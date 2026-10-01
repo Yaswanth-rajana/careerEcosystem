@@ -13,8 +13,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="antialiased font-sans bg-[#F8FAFC] text-slate-900 min-h-screen">
+    <html lang="en" suppressHydrationWarning>
+      <body className="antialiased font-sans bg-[#F8FAFC] text-slate-900 min-h-screen" suppressHydrationWarning>
         <RecruiterAuthProvider>{children}</RecruiterAuthProvider>
       </body>
     </html>

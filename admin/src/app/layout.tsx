@@ -18,8 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="bg-[#F7F8FC] text-slate-900 antialiased min-h-screen selection:bg-blue-600/20 selection:text-blue-600 font-sans">
+    <html lang="en" suppressHydrationWarning>
+      <body className="bg-[#F7F8FC] text-slate-900 antialiased min-h-screen selection:bg-blue-600/20 selection:text-blue-600 font-sans" suppressHydrationWarning>
         <AdminAuthProvider>{children}</AdminAuthProvider>
       </body>
     </html>
