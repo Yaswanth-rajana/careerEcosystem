@@ -96,7 +96,7 @@ export class MockConversionProvider implements ConversionProvider {
           });
           y -= 25;
 
-          const paragraphs = rawText.split(/\r?\n/).map(p => p.trim()).filter(Boolean);
+          const paragraphs = rawText.split(/\r?\n/).map((p: string) => p.trim()).filter(Boolean);
 
           for (const rawPara of paragraphs) {
             const para = sanitizeText(rawPara);

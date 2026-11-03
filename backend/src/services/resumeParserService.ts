@@ -1,5 +1,3 @@
-import mammoth from 'mammoth';
-
 export interface ParsedResumeData {
   rawText: string;
   personalInfo: {
@@ -194,12 +192,18 @@ export class ResumeParserService {
   }
 
   /**
-   * DOCX text extraction via mammoth.
+   * DOCX text extraction via mammoth (dynamically imported to avoid static compile-time bundling).
    */
   private static async extractFromDocx(buffer: Buffer): Promise<string> {
     try {
-      const result = await mammoth.extractRawText({ buffer });
-      return result.value || '';
+      let mammothModule: any;
+      try {
+        mammothModule = (await import('mammoth')).default || (await import('mammoth'));
+      } catch {
+        mammothModule = eval('require')('mammoth');
+      }
+      const result = await mammothModule.extractRawText({ buffer });
+      return result?.value || '';
     } catch {
       throw new Error('Unable to read this DOCX file. Please verify the document is not corrupted.');
     }
