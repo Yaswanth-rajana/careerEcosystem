@@ -14,7 +14,7 @@ interface ServiceModalProps {
 export function ServiceModal({ isOpen, onClose, service, onSave }: ServiceModalProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState<MentorshipCategory>('CAREER_GUIDANCE');
+  const [category, setCategory] = useState<MentorshipCategory>('CAREER_DIRECTION');
   const [duration, setDuration] = useState<number>(45);
   const [price, setPrice] = useState<number>(999);
   const [active, setActive] = useState(true);
@@ -25,14 +25,14 @@ export function ServiceModal({ isOpen, onClose, service, onSave }: ServiceModalP
     if (service) {
       setTitle(service.title);
       setDescription(service.description);
-      setCategory(service.category);
+      setCategory(service.category === 'CAREER_GUIDANCE' ? 'CAREER_DIRECTION' : service.category);
       setDuration(service.duration);
       setPrice(service.price);
       setActive(service.active);
     } else {
       setTitle('');
       setDescription('');
-      setCategory('CAREER_GUIDANCE');
+      setCategory('CAREER_DIRECTION');
       setDuration(45);
       setPrice(999);
       setActive(true);
@@ -118,7 +118,7 @@ export function ServiceModal({ isOpen, onClose, service, onSave }: ServiceModalP
               onChange={(e) => setCategory(e.target.value as MentorshipCategory)}
               className="w-full px-3.5 py-2 text-sm bg-slate-50/50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition"
             >
-              {MENTORSHIP_CATEGORIES.map((cat) => (
+              {MENTORSHIP_CATEGORIES.filter((cat) => cat.value !== 'CAREER_GUIDANCE').map((cat) => (
                 <option key={cat.value} value={cat.value}>
                   {cat.label}
                 </option>

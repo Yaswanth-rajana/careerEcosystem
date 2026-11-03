@@ -2,21 +2,28 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { CareerPath, CandidateCareerContext } from '@/lib/careers/career-types';
+import { CareerPath, CandidateCareerContext, CareerLevelId, CareerLevelDefinition } from '@/lib/careers/career-types';
 import { getRecommendedMentorsForCandidate } from '@/lib/careers/career-repository';
 import { Mentor } from '@/lib/mentors/mentor-types';
 import { MentorCard } from '@/components/mentors/MentorCard';
 import { BookingModal } from '@/components/mentors/BookingModal';
-import { UserCheck, ArrowRight } from 'lucide-react';
+import { UserCheck, ArrowRight, Sparkles, MessageCircle } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useRouter } from 'next/navigation';
 
 export interface CareerMentorsSectionProps {
   career: CareerPath;
   candidate: CandidateCareerContext | null;
+  selectedLevel?: CareerLevelId;
+  levelData?: CareerLevelDefinition;
 }
 
-export const CareerMentorsSection: React.FC<CareerMentorsSectionProps> = ({ career, candidate }) => {
+export const CareerMentorsSection: React.FC<CareerMentorsSectionProps> = ({
+  career,
+  candidate,
+  selectedLevel = 'entry',
+  levelData,
+}) => {
   const { user } = useAuth();
   const router = useRouter();
   const [mentors, setMentors] = useState<Mentor[]>([]);
@@ -37,6 +44,33 @@ export const CareerMentorsSection: React.FC<CareerMentorsSectionProps> = ({ care
     setSelectedBookingMentor(mentor);
     setIsBookingOpen(true);
   };
+
+  const getMentorshipFocus = (levelId: CareerLevelId) => {
+    switch (levelId) {
+      case 'senior':
+        return {
+          title: 'Staff & Senior Leadership Mentorship',
+          desc: 'Connect on technical leadership, enterprise architecture reviews, staff-level impact, and strategic decision-making.',
+        };
+      case 'mid':
+        return {
+          title: 'Specialization & Architecture Mentorship',
+          desc: 'Discuss deep domain specialization, production system design, technical trade-offs, and mid-to-senior transition.',
+        };
+      case 'junior':
+        return {
+          title: 'Code Quality & Production Mentorship',
+          desc: 'Review practical code maintainability, real-world deployment workflows, and junior career progression.',
+        };
+      default:
+        return {
+          title: 'Foundational Direction & Career Guidance',
+          desc: 'Clarify learning roadmaps, get personalized resume feedback, and navigate early-career entry points.',
+        };
+    }
+  };
+
+  const focus = getMentorshipFocus(selectedLevel);
 
   if (!mentors || mentors.length === 0) return null;
 
@@ -62,6 +96,26 @@ export const CareerMentorsSection: React.FC<CareerMentorsSectionProps> = ({ care
           <span>Find a Mentor</span>
           <ArrowRight className="w-3.5 h-3.5" />
         </Link>
+      </div>
+
+      {/* Level-Specific Mentorship Focus Area Recommendation */}
+      <div className="p-4 rounded-xl bg-blue-50/70 border border-blue-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div className="flex items-start sm:items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0 mt-0.5 sm:mt-0 shadow-xs">
+            <MessageCircle className="w-4 h-4" />
+          </div>
+          <div>
+            <h4 className="font-bold text-slate-900 text-xs">
+              Recommended Focus for {levelData?.label || 'Target Level'}: {focus.title}
+            </h4>
+            <p className="text-slate-600 text-[11px] mt-0.5 leading-snug">
+              {focus.desc}
+            </p>
+          </div>
+        </div>
+        <span className="text-[10px] font-mono font-bold text-blue-700 bg-white border border-blue-200 px-2.5 py-1 rounded-md shrink-0 self-start sm:self-auto">
+          Tailored Guidance
+        </span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

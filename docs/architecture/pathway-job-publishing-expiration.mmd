@@ -1,0 +1,46 @@
+sequenceDiagram
+    autonumber
+    %% PATHWAY.ECO — Workflow 2: Recruiter Job Publishing & 30-Day Scheduled Expiration
+    
+    actor Recruiter as Recruiter Portal (:3002)
+    actor Cron as Scheduled HTTP Cron Runner
+    actor Candidate as Candidate Portal (:3000)
+    participant MW as Edge Middleware
+    participant Auth as ServerAuth Guard
+    participant RBAC as RecruiterRbacService
+    participant Zod as Zod Engine
+    participant JobService as RecruiterJobService
+    participant ExpService as JobExpirationService
+    participant DB as Prisma / MongoDB
+
+    Recruiter->>MW: POST /api/recruiter/jobs (Cookie: career_recruiter_session)
+    MW->>Auth: Pass through route (valid cookie)
+    Auth->>DB: Resolve Recruiter & Company membership
+    DB-->>Auth: Recruiter active, company: auth.company.id
+    Auth->>RBAC: assertPermission(auth, 'jobs:create')
+    Auth->>RBAC: assertPermission(auth, 'jobs:publish')
+    RBAC-->>Auth: RBAC privileges verified
+    Auth->>Zod: RecruiterJobCreateSchema.parse(payload)
+    Zod-->>JobService: Validated typed job data
+    
+    JobService->>JobService: Calculate timestamps (publishedAt = now, expiresAt = now + 30d)
+    JobService->>DB: db.job.create({ status: 'PUBLISHED', publishedAt, expiresAt, companyId })
+    DB-->>JobService: Job record committed
+    JobService->>DB: AuditLog JOB_CREATED & JOB_PUBLISHED
+    JobService-->>Recruiter: HTTP 201 Created { job: JobDTO }
+
+    Candidate->>DB: GET /api/jobs (Query status == PUBLISHED && publishedAt > now - 30d)
+    DB-->>Candidate: Job listed on public search board
+
+    Note over Cron, ExpService: Daily Scheduled HTTP Cron Trigger (Vercel Cron / External Runner)
+    Cron->>MW: GET /api/jobs/cron/expire (Authorization: Bearer CRON_SECRET)
+    MW->>ExpService: Validate CRON_SECRET or Admin Session
+    ExpService->>ExpService: Compute cutoff threshold = new Date(now - 30 days)
+    ExpService->>DB: db.job.updateMany({ status: 'EXPIRED' where publishedAt <= cutoff })
+    DB-->>ExpService: result { count: updatedJobsCount }
+    ExpService-->>Cron: HTTP 200 OK { success: true, updatedCount, threshold, timestamp }
+
+    Candidate->>MW: POST /api/jobs/:id/apply (Attempting to apply to expired job)
+    MW->>ExpService: isJobExpired(job) check in ApplicationService
+    ExpService-->>Candidate: HTTP 400 Bad Request ("This job is no longer accepting applications.")
+    Note over Recruiter, DB: Recruiter reviews existing applicants; historical pipeline intact

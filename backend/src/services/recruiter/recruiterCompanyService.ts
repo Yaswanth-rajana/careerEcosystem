@@ -4,11 +4,17 @@ import { CompanyProfileUpdateSchema } from '../../validations/recruiterSchemas';
 import { AuditService } from '../auditService';
 import { z } from 'zod';
 
+import { RecruiterRbacService } from './recruiterRbacService';
+
 export class RecruiterCompanyService {
   /**
    * Retrieves company profile data for the authenticated recruiter's company.
    */
-  static async getCompanyProfile(companyId: string): Promise<CompanyProfileDTO> {
+  static async getCompanyProfile(companyId: string, auth?: AuthenticatedRecruiter): Promise<CompanyProfileDTO> {
+    if (auth) {
+      RecruiterRbacService.assertPermission(auth, 'company:view');
+    }
+
     const company = await db.company.findUnique({
       where: { id: companyId },
     });
@@ -43,6 +49,8 @@ export class RecruiterCompanyService {
     data: z.infer<typeof CompanyProfileUpdateSchema>,
     auth: AuthenticatedRecruiter
   ): Promise<CompanyProfileDTO> {
+    RecruiterRbacService.assertPermission(auth, 'company:manage');
+
     const validated = CompanyProfileUpdateSchema.parse(data);
 
     const updated = await db.company.update({

@@ -29,6 +29,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, size = 'sm' })
       case 'PENDING':
       case 'NEEDS_INFORMATION':
       case 'TASK_PENDING':
+      case 'EXPIRED':
         return 'bg-amber-50 text-amber-800 border-amber-200';
 
       case 'DRAFT':

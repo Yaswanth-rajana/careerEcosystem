@@ -7,6 +7,13 @@ interface CareerJourneyProps {
 }
 
 export const CareerJourney: React.FC<CareerJourneyProps> = ({ journey }) => {
+  const stageCount = journey.stages.length;
+  const currentStageIndex = journey.stages.findIndex((s) => s.status === 'CURRENT');
+  const safeCurrentIndex = Math.max(0, currentStageIndex);
+  const trackOffsetPercent = stageCount > 0 ? 100 / (2 * stageCount) : 0;
+  const progressPercent =
+    stageCount > 1 ? (safeCurrentIndex / (stageCount - 1)) * 100 : 0;
+
   return (
     <section className="space-y-3">
       <div className="flex items-center justify-between">
@@ -25,26 +32,30 @@ export const CareerJourney: React.FC<CareerJourneyProps> = ({ journey }) => {
       <div className="rounded-2xl bg-white border border-slate-200/80 p-5 sm:p-6 shadow-sm space-y-5">
         {/* Horizontal Timeline (Scrollable on mobile) */}
         <div className="overflow-x-auto py-2.5 scrollbar-thin">
-          <div className="relative min-w-[720px] pt-3 pb-1">
+          <div className="relative min-w-[660px] pt-3 pb-1">
             {/* Continuous Connecting Track Line (Dead center at y=30px: 12px pt + 18px half circle) */}
-            <div className="absolute top-[30px] left-[6.25%] right-[6.25%] -translate-y-1/2 h-0.5 bg-slate-200 z-0">
+            <div
+              className="absolute top-[30px] -translate-y-1/2 h-0.5 bg-slate-200 z-0"
+              style={{
+                left: `${trackOffsetPercent}%`,
+                right: `${trackOffsetPercent}%`,
+              }}
+            >
               <div
                 className="h-full bg-blue-600 transition-all duration-500 ease-out"
                 style={{
-                  width: `${
-                    (Math.max(
-                      0,
-                      journey.stages.findIndex((s) => s.status === 'CURRENT')
-                    ) /
-                      (journey.stages.length - 1)) *
-                    100
-                  }%`,
+                  width: `${progressPercent}%`,
                 }}
               />
             </div>
 
-            {/* 8 Uniform Stage Columns */}
-            <div className="grid grid-cols-8 relative z-10">
+            {/* Uniform Stage Columns */}
+            <div
+              className="grid relative z-10"
+              style={{
+                gridTemplateColumns: `repeat(${stageCount}, minmax(0, 1fr))`,
+              }}
+            >
               {journey.stages.map((stage, index) => {
                 const isCompleted = stage.status === 'COMPLETED';
                 const isCurrent = stage.status === 'CURRENT';

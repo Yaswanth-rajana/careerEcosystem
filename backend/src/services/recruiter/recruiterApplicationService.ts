@@ -6,6 +6,8 @@ import {
 } from '../../types/recruiter';
 import { ApplicationStatus } from '../../types/jobs';
 import { AuditService } from '../auditService';
+import { EmailService } from '../email/emailService';
+import { RecruiterRbacService } from './recruiterRbacService';
 
 export interface ListRecruiterApplicationsParams {
   page?: number;
@@ -21,7 +23,15 @@ export class RecruiterApplicationService {
   /**
    * Retrieves paginated applications strictly for the recruiter's company jobs.
    */
-  static async listApplications(companyId: string, params: ListRecruiterApplicationsParams = {}) {
+  static async listApplications(
+    companyId: string,
+    params: ListRecruiterApplicationsParams = {},
+    auth?: AuthenticatedRecruiter
+  ) {
+    if (auth) {
+      RecruiterRbacService.assertActiveMembership(auth);
+    }
+
     const page = Math.max(1, params.page || 1);
     const limit = Math.min(100, Math.max(1, params.limit || 25));
     const skip = (page - 1) * limit;
@@ -31,6 +41,31 @@ export class RecruiterApplicationService {
         companyId,
       },
     };
+
+    if (auth) {
+      if (
+        auth.companyRole === 'HIRING_MANAGER' &&
+        auth.membership.assignedJobIds.length > 0
+      ) {
+        where.jobId = { in: auth.membership.assignedJobIds };
+      } else if (
+        auth.companyRole === 'TECHNICAL_INTERVIEWER' ||
+        auth.companyRole === 'HR_INTERVIEWER'
+      ) {
+        const assignedInterviews = await db.interview.findMany({
+          where: {
+            companyId,
+            OR: [
+              { interviewerId: auth.user.id },
+              { interviewerName: auth.user.name },
+            ],
+          },
+          select: { applicationId: true },
+        });
+        const assignedIds = assignedInterviews.map((i) => i.applicationId);
+        where.id = { in: assignedIds };
+      }
+    }
 
     if (params.status && params.status !== 'All') {
       where.status = params.status;
@@ -68,9 +103,17 @@ export class RecruiterApplicationService {
                 select: {
                   headline: true,
                   location: true,
+                  resumes: {
+                    select: { id: true, filename: true },
+                    take: 1,
+                    orderBy: { createdAt: 'desc' },
+                  },
                 },
               },
             },
+          },
+          resume: {
+            select: { id: true, filename: true, fileSize: true, fileType: true },
           },
           job: {
             select: {
@@ -89,22 +132,30 @@ export class RecruiterApplicationService {
       }),
     ]);
 
-    const items: RecruiterApplicationListDTO[] = applications.map((app) => ({
-      id: app.id,
-      candidateId: app.candidate.id,
-      candidateName: app.candidate.name,
-      candidateEmail: app.candidate.email,
-      candidateAvatar: app.candidate.avatarUrl,
-      candidateHeadline: app.candidate.profile?.headline || null,
-      candidateLocation: app.candidate.profile?.location || null,
-      jobId: app.job.id,
-      jobTitle: app.job.title,
-      status: app.status as ApplicationStatus,
-      appliedAt: app.createdAt.toISOString(),
-      hasResume: Boolean(app.resumeUrl),
-      resumeUrl: app.resumeUrl,
-      latestScore: app.assessmentSubmissions?.[0]?.score || null,
-    }));
+    const items: RecruiterApplicationListDTO[] = applications.map((app) => {
+      const profileResume = app.candidate.profile?.resumes?.[0];
+      const resumeFilename = app.resumeFilename || app.resume?.filename || profileResume?.filename || null;
+      const hasResume = Boolean(app.resumeId || app.resumeFilename || app.resumeUrl || profileResume);
+      const resumeUrl = hasResume ? `/api/recruiter/applications/${app.id}/resume` : null;
+
+      return {
+        id: app.id,
+        candidateId: app.candidate.id,
+        candidateName: app.candidate.name,
+        candidateEmail: app.candidate.email,
+        candidateAvatar: app.candidate.avatarUrl,
+        candidateHeadline: app.candidate.profile?.headline || null,
+        candidateLocation: app.candidate.profile?.location || null,
+        jobId: app.job.id,
+        jobTitle: app.job.title,
+        status: app.status as ApplicationStatus,
+        appliedAt: app.createdAt.toISOString(),
+        hasResume,
+        resumeUrl,
+        resumeFilename,
+        latestScore: app.assessmentSubmissions?.[0]?.score || null,
+      };
+    });
 
     return {
       items,
@@ -120,8 +171,13 @@ export class RecruiterApplicationService {
    */
   static async getApplicationDetail(
     applicationId: string,
-    companyId: string
+    companyId: string,
+    auth?: AuthenticatedRecruiter
   ): Promise<RecruiterApplicationDetailDTO> {
+    if (auth) {
+      await RecruiterRbacService.assertApplicationAccess(auth, applicationId);
+    }
+
     const app = await db.jobApplication.findFirst({
       where: {
         id: applicationId,
@@ -130,6 +186,9 @@ export class RecruiterApplicationService {
       include: {
         job: {
           select: { id: true, title: true, companyId: true },
+        },
+        resume: {
+          select: { id: true, filename: true, fileSize: true, fileType: true },
         },
         candidate: {
           select: {
@@ -145,7 +204,12 @@ export class RecruiterApplicationService {
                 education: true,
                 experience: true,
                 projects: true,
+                certifications: true,
                 professionalLinks: true,
+                resumes: {
+                  orderBy: { createdAt: 'desc' },
+                  take: 1,
+                },
               },
             },
           },
@@ -168,6 +232,13 @@ export class RecruiterApplicationService {
     }
 
     const p = app.candidate.profile;
+    const profileResume = p?.resumes?.[0] || null;
+    const resumeFilename = app.resumeFilename || app.resume?.filename || profileResume?.filename || null;
+    const resumeFileSize = app.resumeFileSize || app.resume?.fileSize || profileResume?.fileSize || null;
+    const resumeFileType = app.resumeFileType || app.resume?.fileType || profileResume?.fileType || null;
+    const hasResume = Boolean(app.resumeId || app.resumeFilename || app.resumeUrl || profileResume);
+    const resumeUrl = hasResume ? `/api/recruiter/applications/${app.id}/resume` : null;
+    const resumeId = app.resumeId || app.resume?.id || profileResume?.id || null;
 
     return {
       id: app.id,
@@ -176,7 +247,12 @@ export class RecruiterApplicationService {
       status: app.status as ApplicationStatus,
       coverNote: app.coverNote,
       answers: app.answers,
-      resumeUrl: app.resumeUrl,
+      hasResume,
+      resumeUrl,
+      resumeId,
+      resumeFilename,
+      resumeFileSize,
+      resumeFileType,
       feedback: app.feedback,
       reviewedAt: app.reviewedAt?.toISOString() || null,
       withdrawnAt: app.withdrawnAt?.toISOString() || null,
@@ -202,25 +278,44 @@ export class RecruiterApplicationService {
           institution: ed.institution,
           degree: ed.degree,
           fieldOfStudy: ed.fieldOfStudy,
+          location: ed.location || null,
           startYear: ed.startYear,
-          endYear: ed.endYear,
+          endYear: ed.endYear || null,
+          isCurrent: ed.isCurrent,
+          gpa: ed.gpa || null,
+          coursework: ed.coursework || null,
+          achievements: ed.achievements || null,
         })),
         experience: (p?.experience || []).map((ex) => ({
           id: ex.id,
           company: ex.company,
           roleTitle: ex.roleTitle,
+          employmentType: ex.employmentType || null,
+          location: ex.location || null,
           startDate: ex.startDate,
-          endDate: ex.endDate,
+          endDate: ex.endDate || null,
           isCurrent: ex.isCurrent,
-          description: ex.description,
+          description: ex.description || null,
+          responsibilities: ex.responsibilities || null,
+          achievements: ex.achievements || null,
         })),
         projects: (p?.projects || []).map((pr) => ({
           id: pr.id,
           title: pr.title,
-          description: pr.description,
-          technologies: pr.technologies,
-          projectUrl: pr.projectUrl,
-          githubUrl: pr.githubUrl,
+          description: pr.description || null,
+          role: pr.role || null,
+          technologies: pr.technologies || [],
+          projectUrl: pr.projectUrl || null,
+          githubUrl: pr.githubUrl || null,
+          demoUrl: pr.demoUrl || null,
+        })),
+        certifications: (p?.certifications || []).map((cert) => ({
+          id: cert.id,
+          name: cert.name,
+          issuingOrganization: cert.issuingOrganization,
+          issueDate: cert.issueDate || null,
+          expiryDate: cert.expiryDate || null,
+          credentialUrl: cert.credentialUrl || null,
         })),
         professionalLinks: (p?.professionalLinks || []).map((pl) => ({
           platform: pl.platform,
@@ -264,6 +359,25 @@ export class RecruiterApplicationService {
     feedback: string | null | undefined,
     auth: AuthenticatedRecruiter
   ) {
+    RecruiterRbacService.assertPermission(auth, 'pipeline:transition');
+    await RecruiterRbacService.assertApplicationAccess(auth, applicationId);
+
+    const ALLOWED_STATUSES: ApplicationStatus[] = [
+      'APPLIED',
+      'UNDER_REVIEW',
+      'SHORTLISTED',
+      'TASK_PENDING',
+      'TASK_SUBMITTED',
+      'INTERVIEW',
+      'OFFER',
+      'REJECTED',
+      'WITHDRAWN',
+    ];
+
+    if (!ALLOWED_STATUSES.includes(status)) {
+      throw new Error(`Invalid application status: ${status}`);
+    }
+
     const app = await db.jobApplication.findFirst({
       where: {
         id: applicationId,
@@ -277,6 +391,10 @@ export class RecruiterApplicationService {
 
     if (!app) {
       throw new Error('Application not found or access denied.');
+    }
+
+    if (app.status === 'WITHDRAWN') {
+      throw new Error('Cannot update an application that was withdrawn by the candidate.');
     }
 
     const previousStatus = app.status;
@@ -303,6 +421,22 @@ export class RecruiterApplicationService {
         previousStatus,
         newStatus: status,
       },
+    });
+
+    // Safe, non-blocking notification dispatch
+    Promise.resolve().then(async () => {
+      try {
+        await EmailService.sendCandidateStatusUpdatedEmail({
+          candidateEmail: app.candidate.email,
+          candidateName: app.candidate.name,
+          jobTitle: app.job.title,
+          companyName: auth.company.name,
+          status,
+          feedback: null, // Internal recruiter evaluations are never exposed to candidate
+        });
+      } catch (err) {
+        console.error('[RecruiterApplicationService] Status update email error:', err);
+      }
     });
 
     return this.getApplicationDetail(updated.id, companyId);

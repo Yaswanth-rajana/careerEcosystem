@@ -30,6 +30,15 @@ export async function POST(request: Request) {
     const updatedState = await OnboardingService.saveStepData(user.id, stepNumber, payload);
     return NextResponse.json(updatedState);
   } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'Server error' }, { status: 500 });
+    const isValidation = error.name === 'ZodError' || error.errors;
+    const status = isValidation ? 400 : 500;
+    return NextResponse.json(
+      {
+        success: false,
+        error: error.message || 'Server error',
+        details: error.errors || undefined,
+      },
+      { status }
+    );
   }
 }

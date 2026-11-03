@@ -1,0 +1,58 @@
+flowchart TB
+    classDef clientStyle fill:#EEF2FF,stroke:#4F46E5,stroke-width:2px,color:#1E1B4B;
+    classDef apiStyle fill:#F0F9FF,stroke:#0284C7,stroke-width:2px,color:#0C4A6E;
+    classDef domainStyle fill:#F8FAFC,stroke:#64748B,stroke-width:2px,color:#0F172A;
+    classDef dbStyle fill:#ECFDF5,stroke:#059669,stroke-width:2px,color:#064E3B;
+    classDef extStyle fill:#FFFBEB,stroke:#D97706,stroke-width:2px,color:#78350F;
+
+    subgraph Clients ["1. UNTRUSTED CLIENT PERIMETER (Frontends)"]
+        CandidatePortal["Candidate Portal (:3000)<br/>Next.js App Router"]
+        RecruiterPortal["Recruiter Portal (:3002)<br/>Next.js App Router"]
+        MentorPortal["Mentor Portal (:3001)<br/>Next.js App Router"]
+        AdminPortal["Admin Portal (:3003)<br/>Next.js App Router"]
+    end
+    class CandidatePortal,RecruiterPortal,MentorPortal,AdminPortal clientStyle;
+
+    subgraph Gateway ["2. SHARED BACKEND API GATEWAY (@backend/*)"]
+        direction TB
+        AppRouter["Next.js App Router Route Handlers (/api/**)"]
+        EdgeAuth["Edge Route Guards & Cookie Resolvers"]
+        RbacResolver["RecruiterRbacService (28 Permissions Matrix)"]
+        ZodValidator["Schema Validation Engine (Zod)"]
+    end
+    class AppRouter,EdgeAuth,RbacResolver,ZodValidator apiStyle;
+
+    subgraph Domains ["3. CORE DOMAIN SERVICES LAYER"]
+        IdentityDomain["Identity & Access<br/>UserService, serverAuth"]
+        CandidateDomain["Candidate Profiles & Onboarding<br/>ProfileService, OnboardingService"]
+        ResumeDomain["Resume Processing & Parsing<br/>ResumeParserService, Heuristics"]
+        JobDomain["Jobs & Applications<br/>JobService, ApplicationService"]
+        PipelineDomain["Recruitment Pipeline & RBAC<br/>RecruiterApplicationService, RbacService"]
+        MentorDomain["Mentorship & Discovery<br/>MentorService, BookingService"]
+        AdminDomain["Platform Administration<br/>AdminUserService, AdminJobService"]
+        NotificationDomain["Notifications & Audit<br/>EmailService, AuditService"]
+    end
+    class IdentityDomain,CandidateDomain,ResumeDomain,JobDomain,PipelineDomain,MentorDomain,AdminDomain,NotificationDomain domainStyle;
+
+    subgraph Persistence ["4. DATA PERSISTENCE LAYER (Prisma & MongoDB)"]
+        PrismaClient["Prisma Data-Access Layer<br/>Single Connection Gateway"]
+        MongoAtlas[("MongoDB Atlas Replica Set<br/>Strict Multi-Tenant Scoping")]
+    end
+    class PrismaClient,MongoAtlas dbStyle;
+
+    subgraph Integrations ["5. VERIFIED EXTERNAL INTEGRATIONS"]
+        ZeptoMail["ZeptoMail REST API<br/>Transactional Delivery"]
+        Gotenberg["Gotenberg 8 Container<br/>Headless Chromium PDF"]
+        GoogleOAuth["Google OAuth JWKS<br/>OpenID Connect Token Auth"]
+        DiskStorage["Local File Storage<br/>S3-Ready StorageFactory"]
+    end
+    class ZeptoMail,Gotenberg,GoogleOAuth,DiskStorage extStyle;
+
+    Clients -->|HTTPS REST / JSON| Gateway
+    Gateway --> Domains
+    Domains -->|Prisma ORM Client| PrismaClient
+    PrismaClient --> MongoAtlas
+    NotificationDomain -->|HTTPS REST| ZeptoMail
+    ResumeDomain -->|Local Buffer| DiskStorage
+    ResumeDomain -->|HTTP REST :3001| Gotenberg
+    IdentityDomain -->|RS256 Certs| GoogleOAuth

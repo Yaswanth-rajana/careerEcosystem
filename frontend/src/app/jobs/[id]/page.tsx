@@ -54,7 +54,7 @@ export default function JobDetailPage() {
         setIsSaved(data.isSaved);
       } catch (err: any) {
         console.error('Failed to load job details:', err);
-        setError(err.message || 'Job opportunity not found or no longer active.');
+        setError(err.message || 'This job is no longer available.');
       } finally {
         setIsLoading(false);
       }
@@ -140,7 +140,7 @@ export default function JobDetailPage() {
           <div className="bg-white border border-slate-200/90 rounded-3xl p-8 shadow-xs">
             <h2 className="text-xl font-bold text-slate-900 mb-2">Opportunity Unavailable</h2>
             <p className="text-sm text-slate-500 mb-6">
-              {error || 'This job posting may have been closed or is no longer accepting applications.'}
+              {error || 'This job is no longer available.'}
             </p>
             <Link href="/jobs">
               <Button variant="primary" size="md">
@@ -195,36 +195,35 @@ export default function JobDetailPage() {
                 )}
               </div>
 
-              <div>
-                <div className="flex items-center gap-2.5 flex-wrap">
-                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-slate-900 font-display">
-                    {job.title}
-                  </h1>
-                  {job.jobVerified && (
-                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Verified Opportunity
-                    </span>
-                  )}
-                </div>
+              <div className="space-y-1.5">
+                {/* 1. Job Title — largest text */}
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-slate-900 font-display">
+                  {job.title}
+                </h1>
 
-                <div className="flex items-center gap-2 text-sm text-slate-600 mt-1 flex-wrap">
+                {/* 2. Company name + one verification indicator + location */}
+                <div className="flex items-center gap-2 text-sm text-slate-600 flex-wrap">
                   <span className="font-bold text-slate-800">{job.company}</span>
                   {job.companyVerified && (
-                    <span title="Verified Company" className="inline-flex items-center -ml-1">
-                      <Check className="w-4 h-4 text-blue-600" />
+                    <span title="Verified Company" className="inline-flex items-center -ml-0.5">
+                      <CheckCircle2 className="w-4 h-4 text-blue-600" />
                     </span>
                   )}
-                  <span>•</span>
+                  <span className="text-slate-300">•</span>
                   <span className="flex items-center gap-1 text-slate-500">
-                    <MapPin className="w-4 h-4" />
+                    <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                     <span>{job.location}</span>
                   </span>
-                  <span>•</span>
-                  <span className="text-slate-500">{job.workMode}</span>
+                  {job.workMode && !job.location.toLowerCase().includes(job.workMode.toLowerCase()) && (
+                    <>
+                      <span className="text-slate-300">•</span>
+                      <span className="text-slate-500">{job.workMode}</span>
+                    </>
+                  )}
                 </div>
 
-                {/* Badges */}
-                <div className="flex items-center gap-2 flex-wrap mt-3.5">
+                {/* 3. Employment type · Experience · Salary + 4. Posted date */}
+                <div className="flex items-center gap-2 flex-wrap pt-2">
                   <Badge variant="neutral" size="sm" className="bg-slate-100 text-slate-700 font-medium">
                     {job.employmentType}
                   </Badge>
@@ -232,11 +231,15 @@ export default function JobDetailPage() {
                     {job.experienceLevel}
                   </Badge>
                   {job.salary && (
-                    <Badge variant="brand" size="sm" className="bg-emerald-50 text-emerald-700 border-emerald-200 font-semibold">
+                    <Badge
+                      variant="brand"
+                      size="sm"
+                      className="bg-emerald-50 text-emerald-800 border-emerald-300 font-bold px-2.5 py-0.5 shadow-2xs"
+                    >
                       {job.salary.formatted}
                     </Badge>
                   )}
-                  <span className="text-xs text-slate-400 pl-1">
+                  <span className="text-[11px] text-slate-400 pl-1">
                     Posted on {formatPostedDate(job.postedAt)}
                   </span>
                 </div>

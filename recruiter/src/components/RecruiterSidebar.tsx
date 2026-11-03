@@ -87,13 +87,31 @@ export const RecruiterSidebar: React.FC<RecruiterSidebarProps> = ({ isOpen, onCl
                 <span className="text-[10px] text-slate-500 truncate">
                   {recruiterData.recruiter.designation}
                 </span>
+                {recruiterData.companyRole && (
+                  <span className="inline-block mt-1 text-[9px] font-bold px-1.5 py-0.2 rounded bg-blue-100/80 text-blue-800 w-fit tracking-wide">
+                    {recruiterData.companyRole.replace(/_/g, ' ')}
+                  </span>
+                )}
               </div>
             </div>
           )}
 
           {/* Navigation Links */}
           <nav className="px-3 py-2 space-y-1">
-            {NAV_ITEMS.map((item) => {
+            {NAV_ITEMS.filter((item) => {
+              if (!recruiterData?.permissions) return true;
+              const perms = recruiterData.permissions;
+              if (item.href === '/jobs') return perms.includes('jobs:view');
+              if (item.href === '/candidates') return perms.includes('candidates:view_all') || perms.includes('candidates:view_assigned');
+              if (item.href === '/applications') return perms.includes('applications:view_all') || perms.includes('applications:view_assigned');
+              if (item.href === '/assessments') return perms.includes('assessments:view');
+              if (item.href === '/interviews') return perms.includes('interviews:view_all') || perms.includes('interviews:view_assigned');
+              if (item.href === '/offers') return perms.includes('offers:view');
+              if (item.href === '/company') return perms.includes('company:view');
+              if (item.href === '/team') return perms.includes('team:view');
+              if (item.href === '/settings') return perms.includes('company:manage');
+              return true;
+            }).map((item) => {
               const isActive =
                 pathname === item.href ||
                 (item.href !== '/dashboard' && pathname.startsWith(`${item.href}/`));

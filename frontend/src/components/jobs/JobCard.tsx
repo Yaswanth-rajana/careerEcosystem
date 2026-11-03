@@ -124,12 +124,12 @@ export const JobCard: React.FC<JobCardProps> = ({
                 >
                   {job.title}
                 </Link>
-                {job.jobVerified && (
+                {(job.isExpired || job.status === 'EXPIRED') && (
                   <span
-                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/80"
-                    title="Verified Opportunity"
+                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200"
+                    title="Expired Opportunity"
                   >
-                    <ShieldCheck className="w-3 h-3 text-emerald-600" /> Verified
+                    Expired
                   </span>
                 )}
               </div>
@@ -137,8 +137,8 @@ export const JobCard: React.FC<JobCardProps> = ({
               <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600 mt-0.5 flex-wrap">
                 <span className="font-semibold text-slate-800">{job.company}</span>
                 {job.companyVerified && (
-                  <span title="Verified Company" className="inline-flex items-center -ml-1">
-                    <Check className="w-3.5 h-3.5 text-blue-600" />
+                  <span title="Verified Company" className="inline-flex items-center -ml-0.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
                   </span>
                 )}
                 <span>•</span>
@@ -169,9 +169,11 @@ export const JobCard: React.FC<JobCardProps> = ({
 
         {/* Badges: Work Mode, Employment Type, Experience Level */}
         <div className="flex items-center gap-2 flex-wrap mt-3.5">
-          <Badge variant="neutral" size="sm" className="font-medium bg-slate-100 text-slate-700">
-            {job.workMode}
-          </Badge>
+          {job.workMode && !job.location.toLowerCase().includes(job.workMode.toLowerCase()) && (
+            <Badge variant="neutral" size="sm" className="font-medium bg-slate-100 text-slate-700">
+              {job.workMode}
+            </Badge>
+          )}
           <Badge variant="neutral" size="sm" className="font-medium bg-slate-100 text-slate-700">
             {job.employmentType}
           </Badge>
@@ -179,7 +181,7 @@ export const JobCard: React.FC<JobCardProps> = ({
             {job.experienceLevel}
           </Badge>
           {job.salary && (
-            <Badge variant="brand" size="sm" className="font-semibold bg-emerald-50 text-emerald-700 border-emerald-200">
+            <Badge variant="brand" size="sm" className="font-bold bg-emerald-50 text-emerald-800 border-emerald-300">
               {job.salary.formatted}
             </Badge>
           )}
@@ -219,15 +221,21 @@ export const JobCard: React.FC<JobCardProps> = ({
             </span>
           ) : null}
 
-          <Link href={`/jobs/${job.id}`}>
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-xs font-semibold hover:border-blue-600 hover:text-blue-600 py-1.5 px-3"
-            >
-              View Job
-            </Button>
-          </Link>
+          {job.isExpired || job.status === 'EXPIRED' ? (
+            <span className="inline-flex items-center text-xs font-semibold text-slate-400 py-1.5 px-3 bg-slate-100 border border-slate-200 rounded-lg cursor-not-allowed">
+              Expired
+            </span>
+          ) : (
+            <Link href={`/jobs/${job.id}`}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-xs font-semibold hover:border-blue-600 hover:text-blue-600 py-1.5 px-3"
+              >
+                View Job
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </div>

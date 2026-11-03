@@ -57,7 +57,7 @@ export const ResumeUploadBanner: React.FC<ResumeUploadBannerProps> = ({
         type="file"
         ref={fileInputRef}
         onChange={handleFileChange}
-        accept=".pdf,.doc,.docx,.txt"
+        accept=".pdf,.docx,.txt"
         className="hidden"
       />
 
@@ -73,7 +73,7 @@ export const ResumeUploadBanner: React.FC<ResumeUploadBannerProps> = ({
             </span>
           </div>
           <p className="text-[11px] text-slate-500 truncate">
-            Upload PDF/DOCX to extract education, experience & skills for your review.
+            Upload PDF, DOCX, or TXT to extract education, experience & skills for your review.
           </p>
         </div>
       </div>

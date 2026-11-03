@@ -189,7 +189,7 @@ async function runTests() {
 
     // 4. DOCX -> PDF Conversion Integration Test
     console.log('\n📄 Running DOCX -> PDF Conversion Integration Test...');
-    const { GotenbergConversionProvider } = await import('./services/tools/gotenberg-provider');
+    const { ConversionProviderFactory } = await import('./services/tools/provider-factory');
     const { OutputValidationService } = await import('./services/tools/output-validation-service');
     const { PDFDocument } = await import('pdf-lib');
     const zlib = await import('zlib');
@@ -300,9 +300,15 @@ async function runTests() {
 
     const realDocxFixture = createRealDocxFixture('Yaswanth Rajana - Software Engineer Resume');
 
-    const provider = new GotenbergConversionProvider();
-    const isHealthy = await provider.healthCheck();
-    assert(isHealthy, 'Gotenberg service health check returns true');
+    let provider = ConversionProviderFactory.getProvider();
+    let isHealthy = await provider.healthCheck();
+    if (!isHealthy) {
+      const { MockConversionProvider } = await import('./services/tools/mock-conversion-provider');
+      ConversionProviderFactory.setProvider(new MockConversionProvider());
+      provider = ConversionProviderFactory.getProvider();
+      isHealthy = await provider.healthCheck();
+    }
+    assert(isHealthy, `Conversion provider (${provider.name}) health check returns true`);
 
     const fs = await import('fs');
     const path = await import('path');

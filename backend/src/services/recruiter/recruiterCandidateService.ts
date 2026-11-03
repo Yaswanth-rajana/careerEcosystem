@@ -1,4 +1,7 @@
 import { db } from '../../db/client';
+import { AuthenticatedRecruiter } from '../../types/recruiter';
+import { RecruiterRbacService } from './recruiterRbacService';
+import { RecruiterAuthError } from './recruiterAuthService';
 
 export interface SearchRecruiterCandidatesParams {
   page?: number;
@@ -7,14 +10,30 @@ export interface SearchRecruiterCandidatesParams {
   skill?: string;
   location?: string;
   candidateType?: string;
+  onlyApplicants?: boolean;
 }
 
 export class RecruiterCandidateService {
   /**
    * Discovers candidate profiles who have engaged with the platform.
-   * Returns sanitized, lightweight candidate cards without sensitive PII.
+   * Returns sanitized, lightweight candidate cards without sensitive PII,
+   * while connecting any existing job applications for the recruiter's company.
    */
-  static async searchCandidates(companyId: string, params: SearchRecruiterCandidatesParams = {}) {
+  static async searchCandidates(
+    companyId: string,
+    params: SearchRecruiterCandidatesParams = {},
+    auth?: AuthenticatedRecruiter
+  ) {
+    if (auth) {
+      RecruiterRbacService.assertActiveMembership(auth);
+      const canViewAll = auth.permissions.includes('candidates:view_all');
+      const canViewAssigned = auth.permissions.includes('candidates:view_assigned');
+
+      if (!canViewAll && !canViewAssigned) {
+        throw new RecruiterAuthError('Forbidden. You do not have permission to view candidates.', 403);
+      }
+    }
+
     const page = Math.max(1, params.page || 1);
     const limit = Math.min(50, Math.max(1, params.limit || 20));
     const skip = (page - 1) * limit;
@@ -25,6 +44,41 @@ export class RecruiterCandidateService {
       isOnboarded: true,
       profile: { isNot: null },
     };
+
+    if (auth && !auth.permissions.includes('candidates:view_all')) {
+      if (auth.companyRole === 'HIRING_MANAGER' && auth.membership.assignedJobIds.length > 0) {
+        where.jobApplications = {
+          some: {
+            jobId: { in: auth.membership.assignedJobIds },
+            job: { companyId },
+          },
+        };
+      } else if (
+        auth.companyRole === 'TECHNICAL_INTERVIEWER' ||
+        auth.companyRole === 'HR_INTERVIEWER'
+      ) {
+        const assignedInterviews = await db.interview.findMany({
+          where: {
+            companyId,
+            OR: [
+              { interviewerId: auth.user.id },
+              { interviewerName: auth.user.name },
+            ],
+          },
+          select: { candidateId: true },
+        });
+        const assignedCandidateIds = assignedInterviews.map((i) => i.candidateId);
+        where.id = { in: assignedCandidateIds };
+      }
+    }
+
+    if (params.onlyApplicants) {
+      where.jobApplications = {
+        some: {
+          job: { companyId },
+        },
+      };
+    }
 
     if (params.q?.trim()) {
       const q = params.q.trim();
@@ -49,6 +103,19 @@ export class RecruiterCandidateService {
       };
     }
 
+    if (params.skill?.trim()) {
+      where.profile = {
+        ...where.profile,
+        userSkills: {
+          some: {
+            skill: {
+              name: { contains: params.skill.trim(), mode: 'insensitive' },
+            },
+          },
+        },
+      };
+    }
+
     const [total, candidates] = await Promise.all([
       db.user.count({ where }),
       db.user.findMany({
@@ -67,7 +134,7 @@ export class RecruiterCandidateService {
               candidateType: true,
               totalExperience: true,
               userSkills: {
-                take: 5,
+                take: 8,
                 select: {
                   level: true,
                   verified: true,
@@ -81,8 +148,10 @@ export class RecruiterCandidateService {
             select: {
               id: true,
               status: true,
+              createdAt: true,
               job: { select: { id: true, title: true } },
             },
+            orderBy: { createdAt: 'desc' },
             take: 1,
           },
         },
@@ -91,6 +160,7 @@ export class RecruiterCandidateService {
 
     const items = candidates.map((c) => {
       const existingApplication = c.jobApplications?.[0] || null;
+      const skills = (c.profile?.userSkills || []).map((us) => us.skill.name);
       return {
         id: c.id,
         name: c.name,
@@ -99,9 +169,13 @@ export class RecruiterCandidateService {
         location: c.profile?.location || null,
         candidateType: c.profile?.candidateType || null,
         totalExperience: c.profile?.totalExperience || null,
-        topSkills: (c.profile?.userSkills || []).map((us) => us.skill.name),
+        skills,
+        topSkills: skills,
+        applicationId: existingApplication?.id || null,
         applicationStatus: existingApplication?.status || null,
         appliedJobTitle: existingApplication?.job?.title || null,
+        appliedJobId: existingApplication?.job?.id || null,
+        appliedAt: existingApplication?.createdAt?.toISOString() || null,
       };
     });
 

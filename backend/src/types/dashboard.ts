@@ -1,7 +1,6 @@
 export type CareerJourneyStage =
   | 'DISCOVER'
   | 'LEARN'
-  | 'BUILD'
   | 'MENTOR'
   | 'PREPARE'
   | 'APPLY'
@@ -88,17 +87,30 @@ export interface DashboardOpportunitiesDTO {
   };
 }
 
+export interface DashboardMentorshipSessionDTO {
+  id: string;
+  bookingId?: string;
+  mentorId?: string;
+  mentorName: string;
+  mentorRole: string;
+  mentorAvatar?: string;
+  mentorCompany?: string;
+  sessionTitle?: string;
+  sessionType: string;
+  scheduledAt: string;
+  scheduledStart?: string;
+  scheduledEnd?: string;
+  timezone?: string;
+  sessionHref: string;
+  meetingUrl?: string | null;
+  status?: string;
+  canJoin?: boolean;
+  isOngoing?: boolean;
+}
+
 export interface DashboardMentorshipDTO {
   hasSession: boolean;
-  upcomingSession: {
-    id: string;
-    mentorName: string;
-    mentorRole: string;
-    mentorAvatar?: string;
-    sessionType: string;
-    scheduledAt: string;
-    sessionHref: string;
-  } | null;
+  upcomingSession: DashboardMentorshipSessionDTO | null;
   emptyState: {
     title: string;
     description: string;

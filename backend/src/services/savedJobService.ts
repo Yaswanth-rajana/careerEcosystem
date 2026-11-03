@@ -5,6 +5,7 @@ import {
   formatSalary,
   ApplicationStatus,
 } from '../types/jobs';
+import { JobExpirationService } from './jobExpirationService';
 
 export class SavedJobService {
   /**
@@ -85,22 +86,35 @@ export class SavedJobService {
 
   /**
    * Retrieves paginated list of jobs saved by the user.
+   * If `onlyActive` is set, filters out expired jobs at the database level.
+   * Otherwise preserves the saved relationship while explicitly tagging expired status.
    */
   static async getSavedJobs(
     userId: string,
     page: number = 1,
-    limit: number = 20
+    limit: number = 20,
+    options?: { onlyActive?: boolean }
   ): Promise<PaginatedResult<JobCardDTO>> {
     const validPage = Math.max(1, page);
     const validLimit = Math.min(50, Math.max(1, limit));
     const skip = (validPage - 1) * validLimit;
 
+    const expirationThreshold = JobExpirationService.getExpirationThreshold();
+    const where: any = { userId };
+
+    if (options?.onlyActive) {
+      where.job = {
+        status: 'PUBLISHED',
+        publishedAt: { gt: expirationThreshold },
+      };
+    }
+
     const [total, savedRecords] = await Promise.all([
       db.savedJob.count({
-        where: { userId },
+        where,
       }),
       db.savedJob.findMany({
-        where: { userId },
+        where,
         include: {
           job: {
             select: {
@@ -118,7 +132,9 @@ export class SavedJobService {
               salaryCurrency: true,
               salaryPeriod: true,
               publishedAt: true,
+              expiresAt: true,
               createdAt: true,
+              status: true,
               jobVerified: true,
               companyVerified: true,
               featured: true,
@@ -152,6 +168,7 @@ export class SavedJobService {
         job.salaryPeriod || 'YEAR'
       );
       const appStatus = applicationsMap.get(job.id) || null;
+      const isExpired = JobExpirationService.isJobExpired(job);
 
       return {
         id: job.id,
@@ -179,6 +196,13 @@ export class SavedJobService {
         jobVerified: job.jobVerified,
         companyVerified: job.companyVerified,
         featured: job.featured,
+        status: isExpired ? 'EXPIRED' : job.status,
+        isExpired,
+        expiresAt: job.expiresAt
+          ? job.expiresAt.toISOString()
+          : job.publishedAt
+          ? JobExpirationService.calculateExpiresAt(job.publishedAt).toISOString()
+          : null,
       };
     });
 

@@ -1,6 +1,26 @@
 import { db } from '../../db/client';
 import { IEmailProvider, EMAIL_TEMPLATES } from './types';
 import { ZeptoMailProvider } from './zeptoMailProvider';
+import {
+  renderWelcomeEmail,
+  renderDynamicReminderEmail,
+  renderProfileCompletedEmail,
+  renderJobApplicationConfirmationEmail,
+  renderRecruiterTeamInvitationEmail,
+  resolveAppUrl,
+  renderBookingConfirmedStudentEmail,
+  renderBookingConfirmedMentorEmail,
+  renderRescheduleRequestedMentorEmail,
+  renderRescheduleApprovedStudentEmail,
+  renderBookingCancelledByMentorEmail,
+  renderBookingCancelledByCandidateEmail,
+  renderRescheduleRejectedStudentEmail,
+  BookingConfirmedEmailParams,
+  RescheduleRequestedEmailParams,
+  RescheduleApprovedEmailParams,
+  BookingCancelledEmailParams,
+  RescheduleRejectedEmailParams,
+} from './templates';
 
 export class EmailService {
   private static provider: IEmailProvider = new ZeptoMailProvider();
@@ -642,5 +662,1086 @@ export class EmailService {
 
     return { success: sendResult.success, deliveryId: delivery?.id };
   }
+
+  /**
+   * Dispatches a professional welcome email immediately after successful candidate account creation.
+   * Idempotent: Skips if ONBOARDING_WELCOME has already been successfully recorded.
+   */
+  static async sendWelcomeEmail(params: {
+    userId: string;
+    name: string;
+    email: string;
+    appUrl?: string;
+  }): Promise<{ success: boolean; alreadySent?: boolean; deliveryId?: string; error?: string }> {
+    const eventType = 'ONBOARDING_WELCOME';
+
+    // 1. Idempotency Check: Do not duplicate if already sent or simulated
+    const existing = await (db as any).emailDelivery.findFirst({
+      where: {
+        referenceId: params.userId,
+        eventType,
+        status: { in: ['SENT', 'SIMULATED'] },
+      },
+    });
+
+    if (existing) {
+      return { success: true, alreadySent: true, deliveryId: existing.id };
+    }
+
+    const { subject, html, text } = renderWelcomeEmail({
+      firstName: params.name,
+      email: params.email,
+      appUrl: params.appUrl,
+    });
+
+    const sendResult = await this.provider.sendEmail({
+      to: params.email,
+      toName: params.name,
+      subject,
+      templateKey: EMAIL_TEMPLATES.ONBOARDING_WELCOME,
+      mergeInfo: {
+        name: params.name,
+        onboarding_url: `${resolveAppUrl(params.appUrl)}/onboarding`,
+      },
+      htmlBody: html,
+      textBody: text,
+    });
+
+    const delivery = await (db as any).emailDelivery.create({
+      data: {
+        eventType,
+        recipient: params.email.toLowerCase(),
+        referenceType: 'USER',
+        referenceId: params.userId,
+        provider: 'ZEPTOMAIL',
+        status: sendResult.success ? (sendResult.simulated ? 'SIMULATED' : 'SENT') : 'FAILED',
+        providerMessageId: sendResult.messageId || null,
+        lastError: sendResult.error || null,
+        sentAt: sendResult.success ? new Date() : null,
+      },
+    }).catch((err: any) => {
+      console.error('[EmailService] Failed to record welcome EmailDelivery:', err);
+      return null;
+    });
+
+    return {
+      success: sendResult.success,
+      deliveryId: delivery?.id,
+      error: sendResult.error,
+    };
+  }
+
+  /**
+   * Dispatches unified, dynamic onboarding reminders (Reminder 1: 24h, Reminder 2: 72h, Reminder 3: 7 days).
+   * Uses single dynamic template with progress tiers and server-confirmed steps.
+   */
+  static async sendOnboardingReminderEmail(params: {
+    userId: string;
+    name: string;
+    email: string;
+    reminderNumber: 1 | 2 | 3;
+    currentStep: number;
+    currentStepTitle: string;
+    completedStepsCount: number;
+    totalSteps?: number;
+    completedStepTitles: string[];
+    nextStepTitle?: string;
+    targetRole?: string | null;
+    appUrl?: string;
+  }): Promise<{ success: boolean; alreadySent?: boolean; deliveryId?: string; error?: string }> {
+    const eventType = `ONBOARDING_REMINDER_${params.reminderNumber}`;
+
+    // 1. Idempotency Check: Do not duplicate this specific reminder event if already recorded
+    const existing = await (db as any).emailDelivery.findFirst({
+      where: {
+        referenceId: params.userId,
+        eventType,
+        status: { in: ['SENT', 'SIMULATED'] },
+      },
+    });
+
+    if (existing) {
+      return { success: true, alreadySent: true, deliveryId: existing.id };
+    }
+
+    const totalSteps = params.totalSteps || 8;
+    const completedStepsArr = Array.from({ length: params.completedStepsCount }, (_, i) => i + 1);
+
+    const { subject, html, text } = renderDynamicReminderEmail({
+      firstName: params.name,
+      completedSteps: completedStepsArr,
+      totalSteps,
+      currentStepNumber: params.currentStep,
+      currentStepName: params.currentStepTitle,
+      completedStepNames: params.completedStepTitles,
+      reminderNumber: params.reminderNumber,
+      targetRole: params.targetRole,
+      appUrl: params.appUrl,
+    });
+
+    const sendResult = await this.provider.sendEmail({
+      to: params.email,
+      toName: params.name,
+      subject,
+      templateKey: (EMAIL_TEMPLATES as any)[eventType] || EMAIL_TEMPLATES.ONBOARDING_REMINDER_1,
+      mergeInfo: {
+        name: params.name,
+        current_step: params.currentStep,
+        current_step_title: params.currentStepTitle,
+        completed_steps_count: params.completedStepsCount,
+        onboarding_url: `${resolveAppUrl(params.appUrl)}/onboarding`,
+      },
+      htmlBody: html,
+      textBody: text,
+    });
+
+    const delivery = await (db as any).emailDelivery.create({
+      data: {
+        eventType,
+        recipient: params.email.toLowerCase(),
+        referenceType: 'USER',
+        referenceId: params.userId,
+        provider: 'ZEPTOMAIL',
+        status: sendResult.success ? (sendResult.simulated ? 'SIMULATED' : 'SENT') : 'FAILED',
+        providerMessageId: sendResult.messageId || null,
+        lastError: sendResult.error || null,
+        sentAt: sendResult.success ? new Date() : null,
+      },
+    }).catch((err: any) => {
+      console.error(`[EmailService] Failed to record ${eventType} EmailDelivery:`, err);
+      return null;
+    });
+
+    return {
+      success: sendResult.success,
+      deliveryId: delivery?.id,
+      error: sendResult.error,
+    };
+  }
+
+  /**
+   * Dispatches a celebratory completion email when the user finishes onboarding.
+   * Invites the candidate to explore their freshly unlocked personalized career roadmap.
+   */
+  static async sendProfileCompletedEmail(params: {
+    userId: string;
+    name: string;
+    email: string;
+    targetRole?: string | null;
+    appUrl?: string;
+  }): Promise<{ success: boolean; alreadySent?: boolean; deliveryId?: string; error?: string }> {
+    const eventType = 'ONBOARDING_COMPLETED';
+
+    // 1. Idempotency Check
+    const existing = await (db as any).emailDelivery.findFirst({
+      where: {
+        referenceId: params.userId,
+        eventType,
+        status: { in: ['SENT', 'SIMULATED'] },
+      },
+    });
+
+    if (existing) {
+      return { success: true, alreadySent: true, deliveryId: existing.id };
+    }
+
+    const { subject, html, text } = renderProfileCompletedEmail({
+      firstName: params.name,
+      email: params.email,
+      targetRole: params.targetRole,
+      appUrl: params.appUrl,
+    });
+
+    const sendResult = await this.provider.sendEmail({
+      to: params.email,
+      toName: params.name,
+      subject,
+      templateKey: EMAIL_TEMPLATES.ONBOARDING_COMPLETED,
+      mergeInfo: {
+        name: params.name,
+        target_role: params.targetRole || '',
+        path_url: `${resolveAppUrl(params.appUrl)}/my-path`,
+      },
+      htmlBody: html,
+      textBody: text,
+    });
+
+    const delivery = await (db as any).emailDelivery.create({
+      data: {
+        eventType,
+        recipient: params.email.toLowerCase(),
+        referenceType: 'USER',
+        referenceId: params.userId,
+        provider: 'ZEPTOMAIL',
+        status: sendResult.success ? (sendResult.simulated ? 'SIMULATED' : 'SENT') : 'FAILED',
+        providerMessageId: sendResult.messageId || null,
+        lastError: sendResult.error || null,
+        sentAt: sendResult.success ? new Date() : null,
+      },
+    }).catch((err: any) => {
+      console.error('[EmailService] Failed to record completion EmailDelivery:', err);
+      return null;
+    });
+
+    return {
+      success: sendResult.success,
+      deliveryId: delivery?.id,
+      error: sendResult.error,
+    };
+  }
+
+  /**
+   * Dispatches confirmation email to candidate when they apply to a job.
+   * Idempotency guarantee: Never sends duplicate confirmation for the same applicationId.
+   */
+  static async sendCandidateApplicationConfirmationEmail(params: {
+    candidateEmail: string;
+    candidateName: string;
+    jobTitle: string;
+    companyName: string;
+    applicationId: string;
+    appliedDate?: Date | string;
+    applicationStatus?: string;
+    applicationsUrl?: string;
+  }): Promise<{ success: boolean; simulated?: boolean; messageId?: string; error?: string }> {
+    try {
+      if (!params.candidateEmail || !params.applicationId) {
+        return { success: false, error: 'Missing candidate email or application ID' };
+      }
+
+      // Idempotency check: Do not send duplicate confirmation emails for the same application ID
+      const existingDelivery = await (db as any).emailDelivery.findFirst({
+        where: {
+          eventType: 'JOB_APPLICATION_CONFIRMATION',
+          referenceId: params.applicationId,
+          status: { in: ['SENT', 'SIMULATED'] },
+        },
+      }).catch(() => null);
+
+      if (existingDelivery) {
+        console.log(`[EmailService] Confirmation email already sent for application ${params.applicationId}. Skipping duplicate.`);
+        return {
+          success: true,
+          simulated: existingDelivery.status === 'SIMULATED',
+          messageId: existingDelivery.providerMessageId || undefined,
+        };
+      }
+
+      const { subject, html, text } = renderJobApplicationConfirmationEmail({
+        candidateEmail: params.candidateEmail,
+        candidateName: params.candidateName,
+        jobTitle: params.jobTitle,
+        companyName: params.companyName,
+        applicationId: params.applicationId,
+        appliedDate: params.appliedDate,
+        applicationStatus: params.applicationStatus,
+        applicationsUrl: params.applicationsUrl,
+      });
+
+      const sendResult = await this.provider.sendEmail({
+        to: params.candidateEmail,
+        toName: params.candidateName,
+        subject,
+        templateKey: EMAIL_TEMPLATES.JOB_APPLICATION_CONFIRMATION,
+        htmlBody: html,
+        textBody: text,
+      });
+
+      // Record email delivery attempt in DB for observability and audit
+      await (db as any).emailDelivery.create({
+        data: {
+          eventType: 'JOB_APPLICATION_CONFIRMATION',
+          recipient: params.candidateEmail.toLowerCase(),
+          referenceType: 'JOB_APPLICATION',
+          referenceId: params.applicationId,
+          provider: 'ZEPTOMAIL',
+          status: sendResult.success ? (sendResult.simulated ? 'SIMULATED' : 'SENT') : 'FAILED',
+          providerMessageId: sendResult.messageId || null,
+          lastError: sendResult.error || null,
+          sentAt: sendResult.success ? new Date() : null,
+        },
+      }).catch((err: any) => {
+        console.error('[EmailService] Failed to record EmailDelivery for application confirmation:', err);
+      });
+
+      return {
+        success: sendResult.success,
+        simulated: sendResult.simulated,
+        messageId: sendResult.messageId,
+        error: sendResult.error,
+      };
+    } catch (err: any) {
+      console.error('[EmailService] Failed to send candidate application email:', err);
+      return { success: false, error: err.message };
+    }
+  }
+
+  /**
+   * Backward-compatible alias for sendCandidateApplicationConfirmationEmail
+   */
+  static async sendCandidateApplicationReceivedEmail(params: {
+    candidateEmail: string;
+    candidateName: string;
+    jobTitle: string;
+    companyName: string;
+    applicationId: string;
+    appliedDate?: Date | string;
+    applicationStatus?: string;
+    applicationsUrl?: string;
+  }): Promise<{ success: boolean; simulated?: boolean; messageId?: string; error?: string }> {
+    return this.sendCandidateApplicationConfirmationEmail(params);
+  }
+
+  /**
+   * Dispatches alert email to recruiters when a candidate applies to their job.
+   */
+  static async sendRecruiterApplicationNotificationEmail(params: {
+    recruiterEmail: string;
+    recruiterName: string;
+    candidateName: string;
+    jobTitle: string;
+    companyName: string;
+    applicationId: string;
+  }): Promise<{ success: boolean; error?: string }> {
+    try {
+      const subject = `New Applicant: ${params.candidateName} for ${params.jobTitle}`;
+      const html = `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px 24px; color: #1e293b; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; line-height: 1.6;">
+          <div style="margin-bottom: 24px;">
+            <span style="font-size: 20px; font-weight: 800; color: #0f172a; letter-spacing: -0.5px;">PATHWAY<span style="color: #2563eb;">.ECO</span></span>
+          </div>
+          <p style="font-size: 15px; margin-top: 0;">Hi ${params.recruiterName},</p>
+          <p style="font-size: 14px; color: #334155;">A new candidate, <strong>${params.candidateName}</strong>, just applied for <strong>${params.jobTitle}</strong> at <strong>${params.companyName}</strong>.</p>
+          <div style="margin: 20px 0; padding: 16px; background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 13px;">
+            <p style="margin: 0 0 8px 0;"><strong>Candidate:</strong> ${params.candidateName}</p>
+            <p style="margin: 0 0 8px 0;"><strong>Role:</strong> ${params.jobTitle}</p>
+            <p style="margin: 0;"><strong>Application ID:</strong> ${params.applicationId}</p>
+          </div>
+          <p style="font-size: 13px; color: #64748b;">You can evaluate this candidate and manage your pipeline in the PATHWAY.ECO Recruiter Portal.</p>
+          <p style="font-size: 13px; color: #64748b; margin-top: 24px;">Best regards,<br/>PATHWAY.ECO Team</p>
+        </div>
+      `;
+
+      const sendResult = await this.provider.sendEmail({
+        to: params.recruiterEmail,
+        toName: params.recruiterName,
+        subject,
+        htmlBody: html,
+        textBody: `Hi ${params.recruiterName},\n\nNew candidate ${params.candidateName} has applied for ${params.jobTitle}.\nApplication ID: ${params.applicationId}\n\nReview in the Recruiter Portal.`,
+      });
+
+      return { success: sendResult.success, error: sendResult.error };
+    } catch (err: any) {
+      console.error('[EmailService] Failed to send recruiter notification email:', err);
+      return { success: false, error: err.message };
+    }
+  }
+
+  /**
+   * Dispatches status update notification email to candidate.
+   */
+  static async sendCandidateStatusUpdatedEmail(params: {
+    candidateEmail: string;
+    candidateName: string;
+    jobTitle: string;
+    companyName: string;
+    status: string;
+    feedback?: string | null;
+  }): Promise<{ success: boolean; error?: string }> {
+    try {
+      const formattedStatus = params.status.replace(/_/g, ' ');
+      const subject = `Update on your application for ${params.jobTitle} at ${params.companyName}`;
+      const html = `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px 24px; color: #1e293b; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; line-height: 1.6;">
+          <div style="margin-bottom: 24px;">
+            <span style="font-size: 20px; font-weight: 800; color: #0f172a; letter-spacing: -0.5px;">PATHWAY<span style="color: #2563eb;">.ECO</span></span>
+          </div>
+          <p style="font-size: 15px; margin-top: 0;">Hi ${params.candidateName},</p>
+          <p style="font-size: 14px; color: #334155;">The hiring team at <strong>${params.companyName}</strong> has updated your application status for <strong>${params.jobTitle}</strong> to <strong>${formattedStatus}</strong>.</p>
+          ${params.feedback ? `<div style="margin: 20px 0; padding: 16px; background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 13px;"><p style="margin: 0; color: #334155;"><strong>Message from hiring team:</strong> ${params.feedback}</p></div>` : ''}
+          <p style="font-size: 13px; color: #64748b;">Visit your PATHWAY.ECO Applications portal for any next steps or interview schedules.</p>
+          <p style="font-size: 13px; color: #64748b; margin-top: 24px;">Best regards,<br/>PATHWAY.ECO Team</p>
+        </div>
+      `;
+
+      const sendResult = await this.provider.sendEmail({
+        to: params.candidateEmail,
+        toName: params.candidateName,
+        subject,
+        htmlBody: html,
+        textBody: `Hi ${params.candidateName},\n\nYour application status for ${params.jobTitle} at ${params.companyName} has been updated to: ${formattedStatus}.${params.feedback ? `\n\nFeedback: ${params.feedback}` : ''}\n\nCheck your Applications tab for details.`,
+      });
+
+      return { success: sendResult.success, error: sendResult.error };
+    } catch (err: any) {
+      console.error('[EmailService] Failed to send status update email:', err);
+      return { success: false, error: err.message };
+    }
+  }
+
+  /**
+   * Sends an invitation to join a company recruiting workspace.
+   */
+  static async sendRecruiterInvitationEmail(params: {
+    to: string;
+    toName?: string | null;
+    companyName: string;
+    invitedByName?: string | null;
+    role: string;
+    acceptUrl: string;
+    expiresInDays?: number;
+    message?: string | null;
+  }): Promise<{ success: boolean; error?: string }> {
+    try {
+      const { subject, html, text } = renderRecruiterTeamInvitationEmail({
+        toEmail: params.to,
+        inviteeName: params.toName,
+        companyName: params.companyName,
+        inviterName: params.invitedByName,
+        role: params.role,
+        acceptUrl: params.acceptUrl,
+        expiresInDays: params.expiresInDays || 7,
+        message: params.message,
+      });
+
+      const sendResult = await this.provider.sendEmail({
+        to: params.to,
+        toName: params.toName || undefined,
+        subject,
+        htmlBody: html,
+        textBody: text,
+      });
+
+      return { success: sendResult.success, error: sendResult.error };
+    } catch (err: any) {
+      console.error('[EmailService] Failed to send recruiter invitation email:', err);
+      return { success: false, error: err.message };
+    }
+  }
+
+  /**
+   * Notifies an interviewer of a new or updated interview assignment.
+   */
+  static async sendInterviewerAssignmentNotificationEmail(params: {
+    interviewerEmail: string;
+    interviewerName: string;
+    candidateName: string;
+    jobTitle: string;
+    interviewType: string;
+    scheduledAt: string;
+    durationMinutes: number;
+    meetingUrl?: string | null;
+    companyName: string;
+  }): Promise<{ success: boolean; error?: string }> {
+    try {
+      const subject = `Interview Assignment: ${params.candidateName} (${params.interviewType}) - ${params.jobTitle}`;
+      const formattedDate = new Date(params.scheduledAt).toLocaleString([], {
+        dateStyle: 'full',
+        timeStyle: 'short',
+      });
+
+      const html = `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px 24px; color: #1e293b; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; line-height: 1.6;">
+          <div style="margin-bottom: 24px;">
+            <span style="font-size: 20px; font-weight: 800; color: #0f172a; letter-spacing: -0.5px;">PATHWAY<span style="color: #2563eb;">.ECO</span></span>
+          </div>
+          <h2 style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0 0 16px 0;">New Interview Scheduled</h2>
+          <p style="font-size: 14px; color: #334155; margin: 0 0 16px 0;">Hi ${params.interviewerName},</p>
+          <p style="font-size: 14px; color: #334155; margin: 0 0 16px 0;">You have been assigned to conduct an interview for <strong>${params.companyName}</strong>.</p>
+          <div style="margin: 20px 0; padding: 16px; background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 13px;">
+            <p style="margin: 0 0 8px 0;"><strong>Candidate:</strong> ${params.candidateName}</p>
+            <p style="margin: 0 0 8px 0;"><strong>Role:</strong> ${params.jobTitle}</p>
+            <p style="margin: 0 0 8px 0;"><strong>Interview Type:</strong> ${params.interviewType}</p>
+            <p style="margin: 0 0 8px 0;"><strong>Date & Time:</strong> ${formattedDate} (${params.durationMinutes} mins)</p>
+            ${params.meetingUrl ? `<p style="margin: 0;"><strong>Meeting Link:</strong> <a href="${params.meetingUrl}" style="color: #2563eb;">${params.meetingUrl}</a></p>` : ''}
+          </div>
+          <p style="font-size: 13px; color: #64748b;">Please review the candidate's profile and submit your evaluation notes in the Recruiter Portal after completing the session.</p>
+          <p style="font-size: 13px; color: #64748b; margin-top: 24px;">Best regards,<br/>PATHWAY.ECO Team</p>
+        </div>
+      `;
+
+      const sendResult = await this.provider.sendEmail({
+        to: params.interviewerEmail,
+        toName: params.interviewerName,
+        subject,
+        htmlBody: html,
+        textBody: `Hi ${params.interviewerName},\n\nYou have been assigned to interview ${params.candidateName} for ${params.jobTitle} (${params.interviewType}) on ${formattedDate}.\n\nMeeting link: ${params.meetingUrl || 'TBA'}\n\nReview candidate in the Recruiter Portal.`,
+      });
+
+      return { success: sendResult.success, error: sendResult.error };
+    } catch (err: any) {
+      console.error('[EmailService] Failed to send interviewer assignment notification:', err);
+      return { success: false, error: err.message };
+    }
+  }
+
+  // ==========================================
+  // MENTORSHIP BOOKING NOTIFICATION LIFECYCLE
+  // ==========================================
+
+  /**
+   * Dispatches mentorship booking confirmation email to the student.
+   * Idempotent: Skips if confirmation was already sent for this booking ID.
+   */
+  static async sendMentorshipBookingConfirmedStudentEmail(
+    params: BookingConfirmedEmailParams
+  ): Promise<{ success: boolean; alreadySent?: boolean; messageId?: string; deliveryId?: string; error?: string }> {
+    try {
+      if (!params.bookingId || !params.studentEmail) {
+        return { success: false, error: 'Missing booking ID or student email' };
+      }
+
+      const eventType = 'MENTORSHIP_BOOKING_CONFIRMED_STUDENT';
+      const referenceId = params.bookingId;
+      const recipient = params.studentEmail.toLowerCase();
+
+      // Idempotency check: Do not resend confirmation if already recorded as SENT or SIMULATED
+      const existing = await (db as any).emailDelivery.findFirst({
+        where: {
+          eventType,
+          referenceId,
+          recipient,
+          status: { in: ['SENT', 'SIMULATED'] },
+        },
+      }).catch(() => null);
+
+      if (existing) {
+        console.log(`[EmailService] ${eventType} already dispatched for booking ${referenceId}. Skipping duplicate.`);
+        return {
+          success: true,
+          alreadySent: true,
+          deliveryId: existing.id,
+          messageId: existing.providerMessageId || undefined,
+        };
+      }
+
+      const { subject, html, text } = renderBookingConfirmedStudentEmail(params);
+
+      const sendResult = await this.provider.sendEmail({
+        to: params.studentEmail,
+        toName: params.studentName,
+        subject,
+        templateKey: EMAIL_TEMPLATES.MENTORSHIP_BOOKING_CONFIRMED_STUDENT,
+        htmlBody: html,
+        textBody: text,
+      });
+
+      const delivery = await (db as any).emailDelivery.create({
+        data: {
+          eventType,
+          recipient,
+          referenceType: 'BOOKING',
+          referenceId,
+          provider: 'ZEPTOMAIL',
+          status: sendResult.success ? (sendResult.simulated ? 'SIMULATED' : 'SENT') : 'FAILED',
+          providerMessageId: sendResult.messageId || null,
+          lastError: sendResult.error || null,
+          sentAt: sendResult.success ? new Date() : null,
+        },
+      }).catch((err: any) => {
+        console.error(`[EmailService] Failed to record ${eventType} EmailDelivery:`, err);
+        return null;
+      });
+
+      return {
+        success: sendResult.success,
+        deliveryId: delivery?.id,
+        messageId: sendResult.messageId,
+        error: sendResult.error,
+      };
+    } catch (err: any) {
+      console.error(`[EmailService] Error dispatching student booking confirmation:`, err.message);
+      return { success: false, error: err.message };
+    }
+  }
+
+  /**
+   * Dispatches new mentorship booking email to the mentor.
+   * Idempotent: Skips if notification was already sent for this booking ID.
+   */
+  static async sendMentorshipBookingConfirmedMentorEmail(
+    params: BookingConfirmedEmailParams
+  ): Promise<{ success: boolean; alreadySent?: boolean; messageId?: string; deliveryId?: string; error?: string }> {
+    try {
+      if (!params.bookingId || !params.mentorEmail) {
+        return { success: false, error: 'Missing booking ID or mentor email' };
+      }
+
+      const eventType = 'MENTORSHIP_BOOKING_CONFIRMED_MENTOR';
+      const referenceId = params.bookingId;
+      const recipient = params.mentorEmail.toLowerCase();
+
+      // Idempotency check: Do not resend confirmation if already recorded as SENT or SIMULATED
+      const existing = await (db as any).emailDelivery.findFirst({
+        where: {
+          eventType,
+          referenceId,
+          recipient,
+          status: { in: ['SENT', 'SIMULATED'] },
+        },
+      }).catch(() => null);
+
+      if (existing) {
+        console.log(`[EmailService] ${eventType} already dispatched for booking ${referenceId}. Skipping duplicate.`);
+        return {
+          success: true,
+          alreadySent: true,
+          deliveryId: existing.id,
+          messageId: existing.providerMessageId || undefined,
+        };
+      }
+
+      const { subject, html, text } = renderBookingConfirmedMentorEmail(params);
+
+      const sendResult = await this.provider.sendEmail({
+        to: params.mentorEmail,
+        toName: params.mentorName,
+        subject,
+        templateKey: EMAIL_TEMPLATES.MENTORSHIP_BOOKING_CONFIRMED_MENTOR,
+        htmlBody: html,
+        textBody: text,
+      });
+
+      const delivery = await (db as any).emailDelivery.create({
+        data: {
+          eventType,
+          recipient,
+          referenceType: 'BOOKING',
+          referenceId,
+          provider: 'ZEPTOMAIL',
+          status: sendResult.success ? (sendResult.simulated ? 'SIMULATED' : 'SENT') : 'FAILED',
+          providerMessageId: sendResult.messageId || null,
+          lastError: sendResult.error || null,
+          sentAt: sendResult.success ? new Date() : null,
+        },
+      }).catch((err: any) => {
+        console.error(`[EmailService] Failed to record ${eventType} EmailDelivery:`, err);
+        return null;
+      });
+
+      return {
+        success: sendResult.success,
+        deliveryId: delivery?.id,
+        messageId: sendResult.messageId,
+        error: sendResult.error,
+      };
+    } catch (err: any) {
+      console.error(`[EmailService] Error dispatching mentor booking notification:`, err.message);
+      return { success: false, error: err.message };
+    }
+  }
+
+  /**
+   * Dispatches both student confirmation and mentor notification when a session is booked.
+   * Safe execution: Never throws and ensures failures do not affect callers.
+   */
+  static async sendMentorshipBookingCreatedNotifications(
+    params: BookingConfirmedEmailParams
+  ): Promise<{ student: { success: boolean; error?: string }; mentor: { success: boolean; error?: string } }> {
+    const [studentResult, mentorResult] = await Promise.allSettled([
+      this.sendMentorshipBookingConfirmedStudentEmail(params),
+      this.sendMentorshipBookingConfirmedMentorEmail(params),
+    ]);
+
+    const student =
+      studentResult.status === 'fulfilled'
+        ? studentResult.value
+        : { success: false, error: (studentResult as any).reason?.message || 'Failed to dispatch student email' };
+
+    const mentor =
+      mentorResult.status === 'fulfilled'
+        ? mentorResult.value
+        : { success: false, error: (mentorResult as any).reason?.message || 'Failed to dispatch mentor email' };
+
+    if (!student.success) {
+      console.error(`[EmailService] Student booking confirmation failed for booking ${params.bookingId}:`, student.error);
+    }
+    if (!mentor.success) {
+      console.error(`[EmailService] Mentor booking notification failed for booking ${params.bookingId}:`, mentor.error);
+    }
+
+    return { student, mentor };
+  }
+
+  /**
+   * Dispatches reschedule request notification email to the mentor.
+   * Idempotency guarantee: Keyed by bookingId and requested replacement start time.
+   */
+  static async sendMentorshipRescheduleRequestedEmail(
+    params: RescheduleRequestedEmailParams
+  ): Promise<{ success: boolean; alreadySent?: boolean; messageId?: string; deliveryId?: string; error?: string }> {
+    try {
+      if (!params.bookingId || !params.mentorEmail) {
+        return { success: false, error: 'Missing booking ID or mentor email' };
+      }
+
+      const eventType = 'MENTORSHIP_BOOKING_RESCHEDULE_REQUESTED';
+      const replacementIso = new Date(params.proposedStart).toISOString();
+      const referenceId = `${params.bookingId}:${replacementIso}`;
+      const recipient = params.mentorEmail.toLowerCase();
+
+      // Idempotency check: Do not resend this reschedule request if already recorded
+      const existing = await (db as any).emailDelivery.findFirst({
+        where: {
+          eventType,
+          referenceId,
+          recipient,
+          status: { in: ['SENT', 'SIMULATED'] },
+        },
+      }).catch(() => null);
+
+      if (existing) {
+        console.log(`[EmailService] ${eventType} already dispatched for reference ${referenceId}. Skipping duplicate.`);
+        return {
+          success: true,
+          alreadySent: true,
+          deliveryId: existing.id,
+          messageId: existing.providerMessageId || undefined,
+        };
+      }
+
+      const { subject, html, text } = renderRescheduleRequestedMentorEmail(params);
+
+      const sendResult = await this.provider.sendEmail({
+        to: params.mentorEmail,
+        toName: params.mentorName,
+        subject,
+        templateKey: EMAIL_TEMPLATES.MENTORSHIP_BOOKING_RESCHEDULE_REQUESTED,
+        htmlBody: html,
+        textBody: text,
+      });
+
+      const delivery = await (db as any).emailDelivery.create({
+        data: {
+          eventType,
+          recipient,
+          referenceType: 'BOOKING',
+          referenceId,
+          provider: 'ZEPTOMAIL',
+          status: sendResult.success ? (sendResult.simulated ? 'SIMULATED' : 'SENT') : 'FAILED',
+          providerMessageId: sendResult.messageId || null,
+          lastError: sendResult.error || null,
+          sentAt: sendResult.success ? new Date() : null,
+        },
+      }).catch((err: any) => {
+        console.error(`[EmailService] Failed to record ${eventType} EmailDelivery:`, err);
+        return null;
+      });
+
+      return {
+        success: sendResult.success,
+        deliveryId: delivery?.id,
+        messageId: sendResult.messageId,
+        error: sendResult.error,
+      };
+    } catch (err: any) {
+      console.error(`[EmailService] Error dispatching reschedule request email:`, err.message);
+      return { success: false, error: err.message };
+    }
+  }
+
+  /**
+   * Dispatches reschedule approval confirmation email to the student with the newly confirmed schedule.
+   * Idempotency guarantee: Keyed by bookingId and new confirmed start time.
+   */
+  static async sendMentorshipRescheduleApprovedEmail(
+    params: RescheduleApprovedEmailParams
+  ): Promise<{ success: boolean; alreadySent?: boolean; messageId?: string; deliveryId?: string; error?: string }> {
+    try {
+      if (!params.bookingId || !params.studentEmail) {
+        return { success: false, error: 'Missing booking ID or student email' };
+      }
+
+      const eventType = 'MENTORSHIP_BOOKING_RESCHEDULE_APPROVED';
+      const newStartIso = new Date(params.newStart).toISOString();
+      const referenceId = `${params.bookingId}:${newStartIso}`;
+      const recipient = params.studentEmail.toLowerCase();
+
+      // Idempotency check: Do not resend this reschedule approval if already recorded
+      const existing = await (db as any).emailDelivery.findFirst({
+        where: {
+          eventType,
+          referenceId,
+          recipient,
+          status: { in: ['SENT', 'SIMULATED'] },
+        },
+      }).catch(() => null);
+
+      if (existing) {
+        console.log(`[EmailService] ${eventType} already dispatched for reference ${referenceId}. Skipping duplicate.`);
+        return {
+          success: true,
+          alreadySent: true,
+          deliveryId: existing.id,
+          messageId: existing.providerMessageId || undefined,
+        };
+      }
+
+      const { subject, html, text } = renderRescheduleApprovedStudentEmail(params);
+
+      const sendResult = await this.provider.sendEmail({
+        to: params.studentEmail,
+        toName: params.studentName,
+        subject,
+        templateKey: EMAIL_TEMPLATES.MENTORSHIP_BOOKING_RESCHEDULE_APPROVED,
+        htmlBody: html,
+        textBody: text,
+      });
+
+      const delivery = await (db as any).emailDelivery.create({
+        data: {
+          eventType,
+          recipient,
+          referenceType: 'BOOKING',
+          referenceId,
+          provider: 'ZEPTOMAIL',
+          status: sendResult.success ? (sendResult.simulated ? 'SIMULATED' : 'SENT') : 'FAILED',
+          providerMessageId: sendResult.messageId || null,
+          lastError: sendResult.error || null,
+          sentAt: sendResult.success ? new Date() : null,
+        },
+      }).catch((err: any) => {
+        console.error(`[EmailService] Failed to record ${eventType} EmailDelivery:`, err);
+        return null;
+      });
+
+      return {
+        success: sendResult.success,
+        deliveryId: delivery?.id,
+        messageId: sendResult.messageId,
+        error: sendResult.error,
+      };
+    } catch (err: any) {
+      console.error(`[EmailService] Error dispatching reschedule approved email:`, err.message);
+      return { success: false, error: err.message };
+    }
+  }
+
+  /**
+   * Dispatches cancellation notice email to the student when cancelled by mentor.
+   * Includes the exact persisted mentor cancellation reason safely escaped.
+   */
+  static async sendMentorshipBookingCancelledByMentorEmail(
+    params: BookingCancelledEmailParams
+  ): Promise<{ success: boolean; alreadySent?: boolean; messageId?: string; deliveryId?: string; error?: string }> {
+    try {
+      if (!params.bookingId || !params.studentEmail) {
+        return { success: false, error: 'Missing booking ID or student email' };
+      }
+
+      const eventType = 'MENTORSHIP_BOOKING_CANCELLED_BY_MENTOR';
+      const referenceId = params.bookingId;
+      const recipient = params.studentEmail.toLowerCase();
+
+      // Idempotency check: A booking can only be cancelled once
+      const existing = await (db as any).emailDelivery.findFirst({
+        where: {
+          eventType,
+          referenceId,
+          recipient,
+          status: { in: ['SENT', 'SIMULATED'] },
+        },
+      }).catch(() => null);
+
+      if (existing) {
+        console.log(`[EmailService] ${eventType} already dispatched for booking ${referenceId}. Skipping duplicate.`);
+        return {
+          success: true,
+          alreadySent: true,
+          deliveryId: existing.id,
+          messageId: existing.providerMessageId || undefined,
+        };
+      }
+
+      const { subject, html, text } = renderBookingCancelledByMentorEmail(params);
+
+      const sendResult = await this.provider.sendEmail({
+        to: params.studentEmail,
+        toName: params.studentName,
+        subject,
+        templateKey: EMAIL_TEMPLATES.MENTORSHIP_BOOKING_CANCELLED_BY_MENTOR,
+        htmlBody: html,
+        textBody: text,
+      });
+
+      const delivery = await (db as any).emailDelivery.create({
+        data: {
+          eventType,
+          recipient,
+          referenceType: 'BOOKING',
+          referenceId,
+          provider: 'ZEPTOMAIL',
+          status: sendResult.success ? (sendResult.simulated ? 'SIMULATED' : 'SENT') : 'FAILED',
+          providerMessageId: sendResult.messageId || null,
+          lastError: sendResult.error || null,
+          sentAt: sendResult.success ? new Date() : null,
+        },
+      }).catch((err: any) => {
+        console.error(`[EmailService] Failed to record ${eventType} EmailDelivery:`, err);
+        return null;
+      });
+
+      return {
+        success: sendResult.success,
+        deliveryId: delivery?.id,
+        messageId: sendResult.messageId,
+        error: sendResult.error,
+      };
+    } catch (err: any) {
+      console.error(`[EmailService] Error dispatching mentor cancellation email:`, err.message);
+      return { success: false, error: err.message };
+    }
+  }
+
+  /**
+   * Dispatches reschedule rejection email to the student when mentor declines a reschedule.
+   * Explains that the original confirmed schedule remains in effect.
+   */
+  static async sendMentorshipRescheduleRejectedEmail(
+    params: RescheduleRejectedEmailParams
+  ): Promise<{ success: boolean; alreadySent?: boolean; messageId?: string; deliveryId?: string; error?: string }> {
+    try {
+      if (!params.bookingId || !params.studentEmail) {
+        return { success: false, error: 'Missing booking ID or student email' };
+      }
+
+      const eventType = 'MENTORSHIP_BOOKING_RESCHEDULE_REJECTED';
+      const origStartIso = new Date(params.originalStart).toISOString();
+      const referenceId = `${params.bookingId}:${origStartIso}`;
+      const recipient = params.studentEmail.toLowerCase();
+
+      const existing = await (db as any).emailDelivery.findFirst({
+        where: {
+          eventType,
+          referenceId,
+          recipient,
+          status: { in: ['SENT', 'SIMULATED'] },
+        },
+      }).catch(() => null);
+
+      if (existing) {
+        console.log(`[EmailService] ${eventType} already dispatched for reference ${referenceId}. Skipping duplicate.`);
+        return {
+          success: true,
+          alreadySent: true,
+          deliveryId: existing.id,
+          messageId: existing.providerMessageId || undefined,
+        };
+      }
+
+      const { subject, html, text } = renderRescheduleRejectedStudentEmail(params);
+
+      const sendResult = await this.provider.sendEmail({
+        to: params.studentEmail,
+        toName: params.studentName,
+        subject,
+        templateKey: EMAIL_TEMPLATES.MENTORSHIP_BOOKING_RESCHEDULE_REJECTED,
+        htmlBody: html,
+        textBody: text,
+      });
+
+      const delivery = await (db as any).emailDelivery.create({
+        data: {
+          eventType,
+          recipient,
+          referenceType: 'BOOKING',
+          referenceId,
+          provider: 'ZEPTOMAIL',
+          status: sendResult.success ? (sendResult.simulated ? 'SIMULATED' : 'SENT') : 'FAILED',
+          providerMessageId: sendResult.messageId || null,
+          lastError: sendResult.error || null,
+          sentAt: sendResult.success ? new Date() : null,
+        },
+      }).catch((err: any) => {
+        console.error(`[EmailService] Failed to record ${eventType} EmailDelivery:`, err);
+        return null;
+      });
+
+      return {
+        success: sendResult.success,
+        deliveryId: delivery?.id,
+        messageId: sendResult.messageId,
+        error: sendResult.error,
+      };
+    } catch (err: any) {
+      console.error(`[EmailService] Error dispatching reschedule rejected email:`, err.message);
+      return { success: false, error: err.message };
+    }
+  }
+
+  /**
+   * Dispatches cancellation notice email to the mentor when student cancels their booking.
+   */
+  static async sendMentorshipBookingCancelledByCandidateEmail(
+    params: BookingCancelledEmailParams
+  ): Promise<{ success: boolean; alreadySent?: boolean; messageId?: string; deliveryId?: string; error?: string }> {
+    try {
+      if (!params.bookingId || !params.mentorEmail) {
+        return { success: false, error: 'Missing booking ID or mentor email' };
+      }
+
+      const eventType = 'MENTORSHIP_BOOKING_CANCELLED_BY_CANDIDATE';
+      const referenceId = params.bookingId;
+      const recipient = params.mentorEmail.toLowerCase();
+
+      const existing = await (db as any).emailDelivery.findFirst({
+        where: {
+          eventType,
+          referenceId,
+          recipient,
+          status: { in: ['SENT', 'SIMULATED'] },
+        },
+      }).catch(() => null);
+
+      if (existing) {
+        console.log(`[EmailService] ${eventType} already dispatched for booking ${referenceId}. Skipping duplicate.`);
+        return {
+          success: true,
+          alreadySent: true,
+          deliveryId: existing.id,
+          messageId: existing.providerMessageId || undefined,
+        };
+      }
+
+      const { subject, html, text } = renderBookingCancelledByCandidateEmail(params);
+
+      const sendResult = await this.provider.sendEmail({
+        to: params.mentorEmail,
+        toName: params.mentorName,
+        subject,
+        templateKey: EMAIL_TEMPLATES.MENTORSHIP_BOOKING_CANCELLED_BY_CANDIDATE,
+        htmlBody: html,
+        textBody: text,
+      });
+
+      const delivery = await (db as any).emailDelivery.create({
+        data: {
+          eventType,
+          recipient,
+          referenceType: 'BOOKING',
+          referenceId,
+          provider: 'ZEPTOMAIL',
+          status: sendResult.success ? (sendResult.simulated ? 'SIMULATED' : 'SENT') : 'FAILED',
+          providerMessageId: sendResult.messageId || null,
+          lastError: sendResult.error || null,
+          sentAt: sendResult.success ? new Date() : null,
+        },
+      }).catch((err: any) => {
+        console.error(`[EmailService] Failed to record ${eventType} EmailDelivery:`, err);
+        return null;
+      });
+
+      return {
+        success: sendResult.success,
+        deliveryId: delivery?.id,
+        messageId: sendResult.messageId,
+        error: sendResult.error,
+      };
+    } catch (err: any) {
+      console.error(`[EmailService] Error dispatching candidate cancellation email:`, err.message);
+      return { success: false, error: err.message };
+    }
+  }
 }
+
 

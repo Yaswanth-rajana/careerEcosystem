@@ -5,10 +5,17 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
-    const authHeader = request.headers.get('authorization');
     const cronSecret = process.env.CRON_SECRET;
+    if (!cronSecret || cronSecret.trim().length === 0) {
+      console.error('[ToolCleanupAPI] CRON_SECRET is not configured');
+      return NextResponse.json(
+        { success: false, error: 'Cleanup service configuration error' },
+        { status: 500 }
+      );
+    }
 
-    if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader || authHeader !== `Bearer ${cronSecret}`) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized cleanup request' },
         { status: 401 }
@@ -22,10 +29,11 @@ export async function POST(request: Request) {
       data: result,
     });
   } catch (error: any) {
+    console.error('[ToolCleanupAPI] Cleanup cycle error:', error);
     return NextResponse.json(
       {
         success: false,
-        error: error.message || 'Cleanup cycle failed',
+        error: 'Cleanup cycle failed',
       },
       { status: 500 }
     );

@@ -76,11 +76,25 @@ export default function DocumentConverterPage() {
     }
   };
 
+  const pollIntervalRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  React.useEffect(() => {
+    return () => {
+      if (pollIntervalRef.current) {
+        clearInterval(pollIntervalRef.current);
+      }
+    };
+  }, []);
+
   const pollStatus = async (jobId: string, guestToken?: string) => {
     let attempts = 0;
-    const maxAttempts = 30;
+    const maxAttempts = 35;
 
-    const interval = setInterval(async () => {
+    if (pollIntervalRef.current) {
+      clearInterval(pollIntervalRef.current);
+    }
+
+    pollIntervalRef.current = setInterval(async () => {
       attempts++;
       try {
         const url = `/api/tools/conversions/${jobId}${guestToken ? `?guestToken=${encodeURIComponent(guestToken)}` : ''}`;
@@ -91,7 +105,7 @@ export default function DocumentConverterPage() {
           const status = json.data.status;
 
           if (status === 'COMPLETED') {
-            clearInterval(interval);
+            if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
             setConversionState('COMPLETED');
             setJobResult({
               jobId,
@@ -103,7 +117,7 @@ export default function DocumentConverterPage() {
           }
 
           if (status === 'FAILED') {
-            clearInterval(interval);
+            if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
             setConversionState('FAILED');
             setErrorMessage(json.data.errorMessage || 'We couldn’t convert this document.');
             return;
@@ -111,13 +125,13 @@ export default function DocumentConverterPage() {
         }
 
         if (attempts >= maxAttempts) {
-          clearInterval(interval);
+          if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
           setConversionState('FAILED');
           setErrorMessage('Conversion timed out. Please try again with a smaller document.');
         }
       } catch {
         if (attempts >= maxAttempts) {
-          clearInterval(interval);
+          if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
           setConversionState('FAILED');
           setErrorMessage('Failed to fetch conversion status.');
         }
@@ -126,6 +140,9 @@ export default function DocumentConverterPage() {
   };
 
   const handleReset = () => {
+    if (pollIntervalRef.current) {
+      clearInterval(pollIntervalRef.current);
+    }
     setSelectedFile(null);
     setConversionState('IDLE');
     setErrorMessage(null);
@@ -237,6 +254,8 @@ export default function DocumentConverterPage() {
                 state={conversionState}
                 filename={selectedFile.name}
                 errorMessage={errorMessage || undefined}
+                onRetry={handleStartConversion}
+                onReset={handleReset}
               />
             )}
 

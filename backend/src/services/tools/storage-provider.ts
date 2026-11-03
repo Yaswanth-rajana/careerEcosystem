@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
+import crypto from 'crypto';
 import { STORAGE_PROVIDER_TYPE } from './constants';
 import { ToolError } from './errors';
 
@@ -10,12 +11,40 @@ export interface StorageMetadata {
   updatedAt?: Date;
 }
 
+export interface PresignedUploadData {
+  url: string;
+  fields?: Record<string, string>;
+  key: string;
+  expiresInSeconds: number;
+}
+
 export interface StorageProvider {
   upload(key: string, data: Buffer, contentType?: string): Promise<string>;
   download(key: string): Promise<Buffer>;
   exists(key: string): Promise<boolean>;
   delete(key: string): Promise<void>;
   getMetadata(key: string): Promise<StorageMetadata | null>;
+  getSignedUploadUrl?(key: string, contentType: string, expiresInSeconds?: number): Promise<PresignedUploadData | null>;
+  getSignedDownloadUrl?(key: string, expiresInSeconds?: number): Promise<string | null>;
+}
+
+export class StorageKeyGenerator {
+  /**
+   * Generates a secure, unpredictable private storage key for input files.
+   */
+  public static generateInputKey(jobId: string, extension: string): string {
+    const randomHex = crypto.randomBytes(8).toString('hex');
+    const safeExt = extension.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() || 'bin';
+    return `conversions/${jobId}/input_${randomHex}.${safeExt}`;
+  }
+
+  /**
+   * Generates a secure, unpredictable private storage key for output PDF files.
+   */
+  public static generateOutputKey(jobId: string): string {
+    const randomHex = crypto.randomBytes(8).toString('hex');
+    return `conversions/${jobId}/output_${randomHex}.pdf`;
+  }
 }
 
 export class LocalStorageProvider implements StorageProvider {
@@ -110,18 +139,21 @@ export class LocalStorageProvider implements StorageProvider {
  * Storage Provider Factory for local vs production object storage.
  */
 export class StorageFactory {
-  private static instance: StorageProvider;
+  private static instance: StorageProvider | null = null;
 
   public static getProvider(): StorageProvider {
     if (!this.instance) {
-      if (STORAGE_PROVIDER_TYPE === 'object') {
-        // Placeholder / shell for AWS S3 / Cloudflare R2 / MinIO in production
-        // Falls back safely to LocalStorageProvider if credentials not set
+      if (STORAGE_PROVIDER_TYPE === 's3' || STORAGE_PROVIDER_TYPE === 'object') {
+        // Falls back safely to LocalStorageProvider if S3 credentials not provided
         this.instance = new LocalStorageProvider();
       } else {
         this.instance = new LocalStorageProvider();
       }
     }
     return this.instance;
+  }
+
+  public static setProvider(provider: StorageProvider | null): void {
+    this.instance = provider;
   }
 }

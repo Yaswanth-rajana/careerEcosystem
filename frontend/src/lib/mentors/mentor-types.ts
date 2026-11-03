@@ -71,9 +71,21 @@ export interface Mentor {
   }>;
   reviews?: MentorReview[];
   sessionOptions?: MentorSessionOption[];
+  matchingService?: {
+    id: string;
+    title: string;
+    description: string;
+    category: string;
+    categoryLabel: string;
+    duration: number;
+    price: number;
+    currency: string;
+    active: boolean;
+  } | null;
 }
 
 export interface MentorFilterParams {
+  preference?: string;
   search?: string;
   expertise?: MentorExpertise[];
   experience?: MentorExperienceRange[];
@@ -92,6 +104,7 @@ export interface MentorPaginatedResult {
   limit: number;
   totalPages: number;
   hasMore: boolean;
+  selectedPreference?: string | null;
 }
 
 export interface MentorMatchScore {
@@ -110,4 +123,46 @@ export interface CandidateContext {
   skills?: string[];
   mentorshipNeeds?: string[];
   totalExperience?: string;
+}
+
+export interface AvailableSlot {
+  start: string; // ISO string in UTC
+  end: string;   // ISO string in UTC
+  displayTime: string; // formatted in mentor local timezone e.g. "09:00 - 09:45"
+  date: string;  // YYYY-MM-DD
+}
+
+export interface CandidateBooking {
+  id: string;
+  mentorId: string;
+  mentor: {
+    id: string;
+    name: string;
+    avatar: string;
+    headline: string;
+    company?: string | null;
+  };
+  service: {
+    id: string;
+    title: string;
+    category: string;
+    duration: number;
+    price: number;
+    currency: string;
+  };
+  scheduledStart: string; // ISO string in UTC
+  scheduledEnd: string;   // ISO string in UTC
+  rescheduledStart?: string | null;
+  rescheduledEnd?: string | null;
+  timezone: string;
+  status: string;
+  studentNotes?: string | null;
+  cancellationReason?: string | null;
+  createdAt: string;
+  hasSession: boolean;
+  sessionId?: string | null;
+  sessionStatus?: string | null;
+  meetingUrl?: string | null;
+  canCancel: boolean;
+  canReschedule?: boolean;
 }

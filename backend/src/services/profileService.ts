@@ -31,13 +31,16 @@ export class ProfileService {
   /**
    * Helper: Ensures a Profile record exists for a user and returns it.
    */
-  private static async getOrCreateProfile(userId: string) {
-    let profile = await db.profile.findUnique({
+  /**
+   * Helper: Ensures a Profile record exists for a user and returns it.
+   */
+  static async getOrCreateProfile(userId: string, tx: any = db) {
+    let profile = await tx.profile.findUnique({
       where: { userId },
     });
 
     if (!profile) {
-      profile = await db.profile.create({
+      profile = await tx.profile.create({
         data: {
           userId,
           candidateType: 'STUDENT',
@@ -183,26 +186,24 @@ export class ProfileService {
   // PERSONAL PROFILE
   // =========================================================================
 
-  static async updatePersonal(userId: string, data: any): Promise<PersonalProfileDTO> {
+  static async updatePersonal(userId: string, data: any, tx: any = db): Promise<PersonalProfileDTO> {
     const validated = Step1AboutYouSchema.parse(data);
-    const profile = await this.getOrCreateProfile(userId);
+    const profile = await this.getOrCreateProfile(userId, tx);
 
-    const [updatedUser, updatedProfile] = await db.$transaction([
-      db.user.update({
-        where: { id: userId },
-        data: { name: validated.name },
-      }),
-      db.profile.update({
-        where: { id: profile.id },
-        data: {
-          phone: validated.phone || null,
-          location: validated.location || null,
-          headline: validated.headline || null,
-          bio: validated.bio || null,
-          candidateType: validated.candidateType,
-        },
-      }),
-    ]);
+    const updatedUser = await tx.user.update({
+      where: { id: userId },
+      data: { name: validated.name },
+    });
+    const updatedProfile = await tx.profile.update({
+      where: { id: profile.id },
+      data: {
+        phone: validated.phone || null,
+        location: validated.location || null,
+        headline: validated.headline || null,
+        bio: validated.bio || null,
+        candidateType: validated.candidateType,
+      },
+    });
 
     return {
       name: updatedUser.name,
@@ -220,14 +221,14 @@ export class ProfileService {
   // EDUCATION
   // =========================================================================
 
-  static async getEducation(userId: string): Promise<EducationDTO[]> {
-    const profile = await this.getOrCreateProfile(userId);
-    const list = await db.education.findMany({
+  static async getEducation(userId: string, tx: any = db): Promise<EducationDTO[]> {
+    const profile = await this.getOrCreateProfile(userId, tx);
+    const list = await tx.education.findMany({
       where: { profileId: profile.id },
       orderBy: { startYear: 'desc' },
     });
 
-    return list.map((e) => ({
+    return list.map((e: any) => ({
       id: e.id,
       institution: e.institution,
       degree: e.degree,
@@ -241,6 +242,34 @@ export class ProfileService {
       achievements: e.achievements,
       source: e.source,
     }));
+  }
+
+  static async syncEducation(userId: string, educationList: any[], tx: any = db): Promise<EducationDTO[]> {
+    const profile = await this.getOrCreateProfile(userId, tx);
+    const validated = (educationList || []).map((e) => EducationItemSchema.parse(e));
+
+    await tx.education.deleteMany({ where: { profileId: profile.id } });
+
+    if (validated.length > 0) {
+      await tx.education.createMany({
+        data: validated.map((item) => ({
+          profileId: profile.id,
+          institution: item.institution,
+          degree: item.degree,
+          fieldOfStudy: item.fieldOfStudy,
+          location: item.location || null,
+          startYear: item.startYear,
+          endYear: item.endYear ?? null,
+          isCurrent: Boolean(item.isCurrent),
+          gpa: item.gpa || null,
+          coursework: item.coursework || null,
+          achievements: item.achievements || null,
+          source: item.source || 'USER',
+        })),
+      });
+    }
+
+    return await this.getEducation(userId, tx);
   }
 
   static async createEducation(userId: string, data: any): Promise<EducationDTO> {
@@ -333,14 +362,14 @@ export class ProfileService {
   // EXPERIENCE
   // =========================================================================
 
-  static async getExperience(userId: string): Promise<ExperienceDTO[]> {
-    const profile = await this.getOrCreateProfile(userId);
-    const list = await db.experience.findMany({
+  static async getExperience(userId: string, tx: any = db): Promise<ExperienceDTO[]> {
+    const profile = await this.getOrCreateProfile(userId, tx);
+    const list = await tx.experience.findMany({
       where: { profileId: profile.id },
       orderBy: { startDate: 'desc' },
     });
 
-    return list.map((ex) => ({
+    return list.map((ex: any) => ({
       id: ex.id,
       company: ex.company,
       roleTitle: ex.roleTitle,
@@ -354,6 +383,34 @@ export class ProfileService {
       achievements: ex.achievements,
       source: ex.source,
     }));
+  }
+
+  static async syncExperience(userId: string, experienceList: any[], tx: any = db): Promise<ExperienceDTO[]> {
+    const profile = await this.getOrCreateProfile(userId, tx);
+    const validated = (experienceList || []).map((ex) => ExperienceItemSchema.parse(ex));
+
+    await tx.experience.deleteMany({ where: { profileId: profile.id } });
+
+    if (validated.length > 0) {
+      await tx.experience.createMany({
+        data: validated.map((item) => ({
+          profileId: profile.id,
+          company: item.company,
+          roleTitle: item.roleTitle,
+          employmentType: item.employmentType || null,
+          location: item.location || null,
+          startDate: item.startDate,
+          endDate: item.endDate ?? null,
+          isCurrent: Boolean(item.isCurrent),
+          description: item.description || null,
+          responsibilities: item.responsibilities || null,
+          achievements: item.achievements || null,
+          source: item.source || 'USER',
+        })),
+      });
+    }
+
+    return await this.getExperience(userId, tx);
   }
 
   static async createExperience(userId: string, data: any): Promise<ExperienceDTO> {
@@ -446,14 +503,14 @@ export class ProfileService {
   // SKILLS
   // =========================================================================
 
-  static async getSkills(userId: string): Promise<SkillDTO[]> {
-    const profile = await this.getOrCreateProfile(userId);
-    const userSkills = await db.userSkill.findMany({
+  static async getSkills(userId: string, tx: any = db): Promise<SkillDTO[]> {
+    const profile = await this.getOrCreateProfile(userId, tx);
+    const userSkills = await tx.userSkill.findMany({
       where: { profileId: profile.id },
       include: { skill: true },
     });
 
-    return userSkills.map((us) => ({
+    return userSkills.map((us: any) => ({
       id: us.id,
       name: us.skill.name,
       category: us.skill.category,
@@ -463,36 +520,35 @@ export class ProfileService {
     }));
   }
 
-  static async updateSkills(userId: string, skills: any[]): Promise<SkillDTO[]> {
-    const profile = await this.getOrCreateProfile(userId);
+  static async updateSkills(userId: string, skills: any[], tx: any = db): Promise<SkillDTO[]> {
+    const executeSkillsSync = async (activeTx: any) => {
+      const profile = await this.getOrCreateProfile(userId, activeTx);
 
-    // Validate array
-    const validatedSkills = skills.map((s) => UserSkillSchema.parse(s));
+      // Validate array
+      const validatedSkills = (skills || []).map((s) => UserSkillSchema.parse(s));
 
-    // Resolve skills in database
-    const resolvedSkills: Array<{ skillId: string; level: string; source: string; verified: boolean }> = [];
-    for (const item of validatedSkills) {
-      const trimmed = item.name.trim();
-      if (!trimmed) continue;
-      let skillEntity = await db.skill.findUnique({ where: { name: trimmed } });
-      if (!skillEntity) {
-        skillEntity = await db.skill.create({
-          data: { name: trimmed, category: item.category || 'General' },
+      // Resolve skills in database
+      const resolvedSkills: Array<{ skillId: string; level: string; source: string; verified: boolean }> = [];
+      for (const item of validatedSkills) {
+        const trimmed = item.name.trim();
+        if (!trimmed) continue;
+        let skillEntity = await activeTx.skill.findUnique({ where: { name: trimmed } });
+        if (!skillEntity) {
+          skillEntity = await activeTx.skill.create({
+            data: { name: trimmed, category: item.category || 'General' },
+          });
+        }
+        resolvedSkills.push({
+          skillId: skillEntity.id,
+          level: item.level || 'INTERMEDIATE',
+          source: item.source || 'USER',
+          verified: Boolean(item.verified),
         });
       }
-      resolvedSkills.push({
-        skillId: skillEntity.id,
-        level: item.level || 'INTERMEDIATE',
-        source: item.source || 'USER',
-        verified: Boolean(item.verified),
-      });
-    }
 
-    // Atomic replacement of user skills
-    await db.$transaction(async (tx) => {
-      await tx.userSkill.deleteMany({ where: { profileId: profile.id } });
+      await activeTx.userSkill.deleteMany({ where: { profileId: profile.id } });
       for (const item of resolvedSkills) {
-        await tx.userSkill.create({
+        await activeTx.userSkill.create({
           data: {
             profileId: profile.id,
             skillId: item.skillId,
@@ -502,23 +558,29 @@ export class ProfileService {
           },
         });
       }
-    });
 
-    return await this.getSkills(userId);
+      return await this.getSkills(userId, activeTx);
+    };
+
+    if (tx === db) {
+      return await db.$transaction(executeSkillsSync);
+    } else {
+      return await executeSkillsSync(tx);
+    }
   }
 
   // =========================================================================
   // PROJECTS
   // =========================================================================
 
-  static async getProjects(userId: string): Promise<ProjectDTO[]> {
-    const profile = await this.getOrCreateProfile(userId);
-    const list = await db.project.findMany({
+  static async getProjects(userId: string, tx: any = db): Promise<ProjectDTO[]> {
+    const profile = await this.getOrCreateProfile(userId, tx);
+    const list = await tx.project.findMany({
       where: { profileId: profile.id },
       orderBy: { startDate: 'desc' },
     });
 
-    return list.map((p) => ({
+    return list.map((p: any) => ({
       id: p.id,
       title: p.title,
       description: p.description,
@@ -533,6 +595,35 @@ export class ProfileService {
       achievements: p.achievements,
       source: p.source,
     }));
+  }
+
+  static async syncProjects(userId: string, projectList: any[], tx: any = db): Promise<ProjectDTO[]> {
+    const profile = await this.getOrCreateProfile(userId, tx);
+    const validated = (projectList || []).map((p) => ProjectItemSchema.parse(p));
+
+    await tx.project.deleteMany({ where: { profileId: profile.id } });
+
+    if (validated.length > 0) {
+      await tx.project.createMany({
+        data: validated.map((item) => ({
+          profileId: profile.id,
+          title: item.title,
+          description: item.description || null,
+          role: item.role || null,
+          technologies: item.technologies || [],
+          projectType: item.projectType || null,
+          startDate: item.startDate || null,
+          endDate: item.endDate || null,
+          projectUrl: item.projectUrl || null,
+          githubUrl: item.githubUrl || null,
+          demoUrl: item.demoUrl || null,
+          achievements: item.achievements || null,
+          source: item.source || 'USER',
+        })),
+      });
+    }
+
+    return await this.getProjects(userId, tx);
   }
 
   static async createProject(userId: string, data: any): Promise<ProjectDTO> {
@@ -629,11 +720,11 @@ export class ProfileService {
   // CAREER DIRECTION
   // =========================================================================
 
-  static async updateCareerDirection(userId: string, data: any): Promise<CareerGoalDTO> {
+  static async updateCareerDirection(userId: string, data: any, tx: any = db): Promise<CareerGoalDTO> {
     const validated = Step6CareerDirectionSchema.parse(data);
-    const profile = await this.getOrCreateProfile(userId);
+    const profile = await this.getOrCreateProfile(userId, tx);
 
-    const goal = await db.careerGoal.upsert({
+    const goal = await tx.careerGoal.upsert({
       where: { profileId: profile.id },
       create: {
         profileId: profile.id,
@@ -668,12 +759,13 @@ export class ProfileService {
   // JOB PREFERENCES
   // =========================================================================
 
-  static async updateJobPreferences(userId: string, data: any): Promise<JobPreferenceDTO> {
+  static async updateJobPreferences(userId: string, data: any, tx: any = db): Promise<JobPreferenceDTO> {
     const validated = Step7PreferencesSchema.parse(data);
-    const profile = await this.getOrCreateProfile(userId);
 
-    const [preference, updatedProfile] = await db.$transaction([
-      db.jobPreference.upsert({
+    const executePrefUpdate = async (activeTx: any) => {
+      const profile = await this.getOrCreateProfile(userId, activeTx);
+
+      const preference = await activeTx.jobPreference.upsert({
         where: { profileId: profile.id },
         create: {
           profileId: profile.id,
@@ -700,46 +792,53 @@ export class ProfileService {
           noticePeriod: validated.noticePeriod || null,
           availability: validated.availability || null,
         },
-      }),
-      db.profile.update({
+      });
+
+      const updatedProfile = await activeTx.profile.update({
         where: { id: profile.id },
         data: {
           learningStyle: validated.learningStyle || [],
           availableHoursPerWeek: validated.availableHoursPerWeek || null,
           mentorshipNeeds: validated.mentorshipNeeds || [],
         },
-      }),
-    ]);
+      });
 
-    return {
-      preferredJobType: preference.preferredJobType,
-      preferredLocation: preference.preferredLocation,
-      workEnvironment: preference.workEnvironment,
-      willingToRelocate: preference.willingToRelocate,
-      preferredIndustries: preference.preferredIndustries,
-      preferredCompanySize: preference.preferredCompanySize,
-      minExpectedSalary: preference.minExpectedSalary,
-      preferredSalaryRange: preference.preferredSalaryRange,
-      noticePeriod: preference.noticePeriod,
-      availability: preference.availability,
-      learningStyle: updatedProfile.learningStyle,
-      availableHoursPerWeek: updatedProfile.availableHoursPerWeek,
-      mentorshipNeeds: updatedProfile.mentorshipNeeds,
+      return {
+        preferredJobType: preference.preferredJobType,
+        preferredLocation: preference.preferredLocation,
+        workEnvironment: preference.workEnvironment,
+        willingToRelocate: preference.willingToRelocate,
+        preferredIndustries: preference.preferredIndustries,
+        preferredCompanySize: preference.preferredCompanySize,
+        minExpectedSalary: preference.minExpectedSalary,
+        preferredSalaryRange: preference.preferredSalaryRange,
+        noticePeriod: preference.noticePeriod,
+        availability: preference.availability,
+        learningStyle: updatedProfile.learningStyle,
+        availableHoursPerWeek: updatedProfile.availableHoursPerWeek,
+        mentorshipNeeds: updatedProfile.mentorshipNeeds,
+      };
     };
+
+    if (tx === db) {
+      return await db.$transaction(executePrefUpdate);
+    } else {
+      return await executePrefUpdate(tx);
+    }
   }
 
   // =========================================================================
   // CERTIFICATIONS
   // =========================================================================
 
-  static async getCertifications(userId: string): Promise<CertificationDTO[]> {
-    const profile = await this.getOrCreateProfile(userId);
-    const list = await db.certification.findMany({
+  static async getCertifications(userId: string, tx: any = db): Promise<CertificationDTO[]> {
+    const profile = await this.getOrCreateProfile(userId, tx);
+    const list = await tx.certification.findMany({
       where: { profileId: profile.id },
       orderBy: { issueDate: 'desc' },
     });
 
-    return list.map((c) => ({
+    return list.map((c: any) => ({
       id: c.id,
       name: c.name,
       issuingOrganization: c.issuingOrganization,
@@ -749,6 +848,30 @@ export class ProfileService {
       credentialUrl: c.credentialUrl,
       source: c.source,
     }));
+  }
+
+  static async syncCertifications(userId: string, certList: any[], tx: any = db): Promise<CertificationDTO[]> {
+    const profile = await this.getOrCreateProfile(userId, tx);
+    const validated = (certList || []).map((c) => CertificationItemSchema.parse(c));
+
+    await tx.certification.deleteMany({ where: { profileId: profile.id } });
+
+    if (validated.length > 0) {
+      await tx.certification.createMany({
+        data: validated.map((item) => ({
+          profileId: profile.id,
+          name: item.name,
+          issuingOrganization: item.issuingOrganization,
+          issueDate: item.issueDate || null,
+          expiryDate: item.expiryDate || null,
+          credentialId: item.credentialId || null,
+          credentialUrl: item.credentialUrl || null,
+          source: item.source || 'USER',
+        })),
+      });
+    }
+
+    return await this.getCertifications(userId, tx);
   }
 
   static async createCertification(userId: string, data: any): Promise<CertificationDTO> {
@@ -825,14 +948,14 @@ export class ProfileService {
   // ACHIEVEMENTS
   // =========================================================================
 
-  static async getAchievements(userId: string): Promise<AchievementDTO[]> {
-    const profile = await this.getOrCreateProfile(userId);
-    const list = await db.achievement.findMany({
+  static async getAchievements(userId: string, tx: any = db): Promise<AchievementDTO[]> {
+    const profile = await this.getOrCreateProfile(userId, tx);
+    const list = await tx.achievement.findMany({
       where: { profileId: profile.id },
       orderBy: { date: 'desc' },
     });
 
-    return list.map((a) => ({
+    return list.map((a: any) => ({
       id: a.id,
       title: a.title,
       description: a.description,
@@ -841,6 +964,29 @@ export class ProfileService {
       url: a.url,
       source: a.source,
     }));
+  }
+
+  static async syncAchievements(userId: string, achList: any[], tx: any = db): Promise<AchievementDTO[]> {
+    const profile = await this.getOrCreateProfile(userId, tx);
+    const validated = (achList || []).map((a) => AchievementItemSchema.parse(a));
+
+    await tx.achievement.deleteMany({ where: { profileId: profile.id } });
+
+    if (validated.length > 0) {
+      await tx.achievement.createMany({
+        data: validated.map((item) => ({
+          profileId: profile.id,
+          title: item.title,
+          description: item.description || null,
+          organization: item.organization || null,
+          date: item.date || null,
+          url: item.url || null,
+          source: item.source || 'USER',
+        })),
+      });
+    }
+
+    return await this.getAchievements(userId, tx);
   }
 
   static async createAchievement(userId: string, data: any): Promise<AchievementDTO> {
@@ -913,17 +1059,36 @@ export class ProfileService {
   // PROFESSIONAL LINKS
   // =========================================================================
 
-  static async getLinks(userId: string): Promise<ProfessionalLinkDTO[]> {
-    const profile = await this.getOrCreateProfile(userId);
-    const list = await db.professionalLink.findMany({
+  static async getLinks(userId: string, tx: any = db): Promise<ProfessionalLinkDTO[]> {
+    const profile = await this.getOrCreateProfile(userId, tx);
+    const list = await tx.professionalLink.findMany({
       where: { profileId: profile.id },
     });
 
-    return list.map((l) => ({
+    return list.map((l: any) => ({
       id: l.id,
       platform: l.platform,
       url: l.url,
     }));
+  }
+
+  static async syncLinks(userId: string, linkList: any[], tx: any = db): Promise<ProfessionalLinkDTO[]> {
+    const profile = await this.getOrCreateProfile(userId, tx);
+    const validated = (linkList || []).map((l) => ProfessionalLinkItemSchema.parse(l));
+
+    await tx.professionalLink.deleteMany({ where: { profileId: profile.id } });
+
+    if (validated.length > 0) {
+      await tx.professionalLink.createMany({
+        data: validated.map((item) => ({
+          profileId: profile.id,
+          platform: item.platform,
+          url: item.url,
+        })),
+      });
+    }
+
+    return await this.getLinks(userId, tx);
   }
 
   static async createLink(userId: string, data: any): Promise<ProfessionalLinkDTO> {

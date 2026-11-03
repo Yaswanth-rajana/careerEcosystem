@@ -27,7 +27,7 @@ import {
   Step7PreferencesInput,
 } from '@backend/validations/onboardingSchemas';
 import { ParsedResumeData } from '@backend/services/resumeParserService';
-import { ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Loader2, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { findCareerSlugByTitle, getCareerPathBySlug, setSavedTargetRole } from '@/lib/careers/career-repository';
 
@@ -263,9 +263,11 @@ export const OnboardingShell: React.FC = () => {
           headline: approved.personalInfo.headline || prev.aboutYou.headline,
         },
         education: approved.education.length > 0 ? (approved.education as any) : prev.education,
+        hasNoExperience: approved.experience.length > 0 ? false : prev.hasNoExperience,
         experience: approved.experience.length > 0 ? (approved.experience as any) : prev.experience,
         skills: approved.skills.length > 0 ? (approved.skills as any) : prev.skills,
         projects: approved.projects.length > 0 ? (approved.projects as any) : prev.projects,
+        certifications: approved.certifications && approved.certifications.length > 0 ? (approved.certifications as any) : prev.certifications,
         professionalLinks: approved.professionalLinks.length > 0 ? (approved.professionalLinks as any) : prev.professionalLinks,
       };
       triggerAutoSave(updated, currentStep);
@@ -328,10 +330,15 @@ export const OnboardingShell: React.FC = () => {
   const handleNextStep = async () => {
     if (!validateStep(currentStep)) return;
 
-    // Save step data to backend
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+
     setSaveStatus('saving');
+    setErrors({});
+
     try {
-      await fetch('/api/onboarding/step', {
+      const res = await fetch('/api/onboarding/step', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -340,6 +347,7 @@ export const OnboardingShell: React.FC = () => {
             aboutYou: payload.aboutYou,
             education: payload.education,
             experience: payload.experience,
+            hasNoExperience: payload.hasNoExperience,
             skills: payload.skills,
             projects: payload.projects,
             careerDirection: payload.careerDirection,
@@ -349,16 +357,32 @@ export const OnboardingShell: React.FC = () => {
           },
         }),
       });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Failed to save step progress.');
+      }
+
       setSaveStatus('saved');
-    } catch {
-      setSaveStatus('error');
-    }
 
-    setCompletedSteps((prev) => Array.from(new Set([...prev, currentStep])));
+      // Update completedSteps from authoritative server response
+      if (data.progress?.completedSteps) {
+        setCompletedSteps(data.progress.completedSteps);
+      } else {
+        setCompletedSteps((prev) => Array.from(new Set([...prev, currentStep])));
+      }
 
-    if (currentStep < 7) {
-      setCurrentStep((prev) => prev + 1);
+      // Advance step
+      const targetNextStep = data.nextStep ?? (currentStep < 7 ? currentStep + 1 : currentStep);
+      setCurrentStep(targetNextStep);
       scrollToRightPaneTop();
+    } catch (err: any) {
+      setSaveStatus('error');
+      setErrors({
+        general: err.message || 'A network error occurred while saving your progress. Please try again.',
+      });
+      // CRITICAL: Do NOT mark step completed, do NOT advance currentStep on failure!
     }
   };
 
@@ -374,6 +398,10 @@ export const OnboardingShell: React.FC = () => {
     if (!validateStep(1) || !validateStep(4) || !validateStep(6)) {
       setErrors({ general: 'Please make sure all required fields are completed.' });
       return;
+    }
+
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
     }
 
     setIsSubmitting(true);
@@ -464,6 +492,12 @@ export const OnboardingShell: React.FC = () => {
 
             {/* Main Active Form Container */}
             <div className="w-full relative">
+              {errors.general && currentStep < 7 && (
+                <div className="mb-4 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+                  <span>{errors.general}</span>
+                </div>
+              )}
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentStep}

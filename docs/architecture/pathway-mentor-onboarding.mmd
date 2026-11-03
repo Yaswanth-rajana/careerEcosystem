@@ -1,0 +1,47 @@
+sequenceDiagram
+    autonumber
+    %% PATHWAY.ECO — Workflow 3: Mentor Application, Admin Approval & Account Activation
+    
+    actor Applicant as Mentor Applicant (:3000)
+    actor Admin as Platform Admin (:3003)
+    actor Mentor as Activated Mentor (:3001)
+    participant MW as Edge Middleware
+    participant Service as MentorApplicationService
+    participant TokenService as PasswordSetupTokenService
+    participant DB as Prisma / MongoDB
+    participant Zepto as ZeptoMail API
+
+    Applicant->>MW: POST /api/mentor-applications (Public form)
+    MW->>Service: MentorApplicationSubmissionSchema.parse(payload)
+    Service->>Service: Generate human-readable referenceId (PM-2026-XXXXX)
+    Service->>DB: db.mentorApplication.create({ status: 'PENDING', referenceId, ... })
+    DB-->>Service: Application staged (No User created yet)
+    Service-)Zepto: Non-blocking sendMentorApplicationReceivedEmail()
+    Service-->>Applicant: HTTP 201 Created { referenceId, status: 'PENDING' }
+
+    Admin->>MW: POST /api/admin/mentors/applications/:id/status (Cookie: pathway_admin_session)
+    MW->>Service: Verify Admin session & role == 'ADMIN'
+    Service->>DB: Check if applicant already exists in db.user
+    alt User Exists (Candidate Account)
+        Service->>DB: Safely elevate user: role = 'MENTOR' (Preserve candidate history)
+    else New Applicant
+        Service->>DB: db.user.create({ role: 'MENTOR', mustChangePassword: true })
+    end
+    Service->>DB: db.mentor.upsert({ status: 'APPROVED', publicProfileEnabled: true })
+    Service->>DB: db.mentorApplication.update({ status: 'APPROVED', reviewedBy: admin.name })
+    
+    Service->>TokenService: createSetupToken(userId)
+    TokenService->>TokenService: crypto.randomBytes(32).toString('hex')
+    TokenService->>DB: Invalidate prior tokens (usedAt = now)
+    TokenService->>DB: db.passwordSetupToken.create({ tokenHash = sha256(rawToken), expiresAt: now + 24h })
+    Service-)Zepto: sendMentorApplicationApprovedEmail({ setupUrl: /setup-password?token=rawToken })
+    Service-->>Admin: HTTP 200 OK (Application approved, mentor record created)
+
+    Mentor->>MW: POST /api/auth/setup-password { token: rawToken, password: newPassword }
+    MW->>TokenService: consumeSetupToken(rawToken, newPassword)
+    TokenService->>DB: Verify sha256(rawToken) match & not expired & not used
+    TokenService->>DB: Update user: passwordHash = bcrypt(newPassword, 12), mustChangePassword = false
+    TokenService->>DB: Mark token.usedAt = now (Single-use consumed)
+    TokenService->>DB: AuditLog MENTOR_PASSWORD_SETUP_COMPLETED
+    TokenService-->>Mentor: HTTP 200 OK (Issued active career_mentor_session)
+    Note over Mentor, DB: Mentor profile is now active on public marketplace for candidate bookings

@@ -1,24 +1,30 @@
 'use client';
 
 import React from 'react';
-import { CareerPath, CandidateCareerContext } from '@/lib/careers/career-types';
+import { CareerPath, CandidateCareerContext, CareerLevelId, CareerLevelDefinition } from '@/lib/careers/career-types';
 import { calculateCareerProgress } from '@/lib/careers/career-repository';
-import { Activity, BookOpen, FolderGit2, Dumbbell, UserCheck, Users } from 'lucide-react';
+import { Activity, BookOpen, FolderGit2, Dumbbell, UserCheck, Users, Cpu, ShieldCheck } from 'lucide-react';
 
 export interface PersonalizedProgressSectionProps {
   career: CareerPath;
   candidate: CandidateCareerContext | null;
+  selectedLevel?: CareerLevelId;
+  levelData?: CareerLevelDefinition;
 }
 
 export const PersonalizedProgressSection: React.FC<PersonalizedProgressSectionProps> = ({
   career,
   candidate,
+  selectedLevel,
+  levelData,
 }) => {
-  const metrics = calculateCareerProgress(candidate, career.slug);
+  const metrics = calculateCareerProgress(candidate, career.slug, selectedLevel);
+  const practicalLabel = levelData?.practicalWorkTitle || (career.domainType === 'hardware' ? 'Labs & Circuits' : 'Practical Work');
+  const PracticalIcon = career.domainType === 'hardware' ? Cpu : FolderGit2;
 
   const bars = [
     { label: 'Learning', percent: metrics.learningPercent, icon: BookOpen, color: 'bg-blue-600' },
-    { label: 'Projects', percent: metrics.projectsPercent, icon: FolderGit2, color: 'bg-blue-500' },
+    { label: practicalLabel, percent: metrics.projectsPercent, icon: PracticalIcon, color: 'bg-blue-500' },
     { label: 'Practice', percent: metrics.practicePercent, icon: Dumbbell, color: 'bg-sky-500' },
     { label: 'Mentorship', percent: metrics.mentorshipPercent, icon: Users, color: 'bg-slate-700' },
     { label: 'Profile', percent: metrics.profilePercent, icon: UserCheck, color: 'bg-emerald-600' },
@@ -33,9 +39,14 @@ export const PersonalizedProgressSection: React.FC<PersonalizedProgressSectionPr
             <h2 className="text-xl font-bold font-display text-slate-900">
               Your Preparation Progress
             </h2>
+            {levelData && (
+              <span className="text-[11px] font-mono font-bold text-blue-700 bg-blue-50 border border-blue-200/80 px-2.5 py-0.5 rounded-full ml-1">
+                Target: {levelData.label}
+              </span>
+            )}
           </div>
           <p className="text-xs text-slate-600 mt-1">
-            How much of your PATHWAY preparation have you completed for {career.title}?
+            How much of your PATHWAY preparation have you completed for {career.title} {levelData ? `at ${levelData.label} level` : ''}?
           </p>
         </div>
 
@@ -73,6 +84,13 @@ export const PersonalizedProgressSection: React.FC<PersonalizedProgressSectionPr
             </div>
           );
         })}
+      </div>
+
+      <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+        <span className="flex items-center gap-1.5">
+          <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
+          <span>Calculated from your verified profile activities. Target level adjustments personalize milestone criteria without overwriting completed work.</span>
+        </span>
       </div>
     </div>
   );

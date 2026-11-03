@@ -3,6 +3,7 @@ import { ConversionProvider, ConversionOptions, ConversionResult } from './conve
 import { ToolError } from './errors';
 
 export class GotenbergConversionProvider implements ConversionProvider {
+  public readonly name = 'gotenberg';
   private readonly baseUrl: string;
 
   constructor(baseUrl?: string) {

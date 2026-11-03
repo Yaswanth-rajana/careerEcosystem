@@ -25,6 +25,13 @@ export async function POST(request: Request) {
 
     return NextResponse.json(result);
   } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'Failed to complete onboarding' }, { status: 400 });
+    return NextResponse.json(
+      {
+        success: false,
+        error: error.message || 'Failed to complete onboarding',
+        missingRequirements: error.missingRequirements || undefined,
+      },
+      { status: 400 }
+    );
   }
 }

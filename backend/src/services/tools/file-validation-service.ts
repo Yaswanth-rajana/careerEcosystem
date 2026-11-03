@@ -59,7 +59,7 @@ export class FileValidationService {
   }
 
   /**
-   * Validates file size.
+   * Validates file size against general tool conversion limit.
    */
   public static validateFileSize(sizeBytes: number): void {
     if (!sizeBytes || sizeBytes <= 0) {
@@ -67,6 +67,18 @@ export class FileValidationService {
     }
     if (sizeBytes > MAX_UPLOAD_SIZE_BYTES) {
       throw new ToolError('FILE_TOO_LARGE');
+    }
+  }
+
+  /**
+   * Validates resume upload file size (enforces configured 10MB limit).
+   */
+  public static validateResumeFileSize(sizeBytes: number, limitBytes: number = 10 * 1024 * 1024): void {
+    if (!sizeBytes || sizeBytes <= 0) {
+      throw new ToolError('EMPTY_FILE');
+    }
+    if (sizeBytes > limitBytes) {
+      throw new ToolError('FILE_TOO_LARGE', `File size exceeds ${Math.round(limitBytes / (1024 * 1024))}MB limit`);
     }
   }
 
@@ -93,13 +105,52 @@ export class FileValidationService {
 
     const ext = extension.toLowerCase();
 
-    // PDF check: %PDF-
+    // PDF check: %PDF- (standard allows within first 1024 bytes per ISO 32000-1)
     if (ext === 'pdf') {
-      const header = buffer.slice(0, 5).toString('ascii');
-      if (header !== '%PDF-') {
+      const headerHex = buffer.subarray(0, 4).toString('hex').toUpperCase();
+      // Block known executables and archives immediately (MZ, ELF, Mach-O, ZIP)
+      if (
+        headerHex.startsWith('4D5A') || // Windows PE (EXE/DLL)
+        headerHex.startsWith('7F454C46') || // Linux ELF
+        headerHex.startsWith('CAFEBA') || // Mach-O fat / Java class
+        headerHex.startsWith('CFFAED') || // Mach-O 64-bit
+        headerHex.startsWith('504B0304') // ZIP
+      ) {
         throw new ToolError('INVALID_FILE_SIGNATURE', 'Invalid PDF signature');
       }
+
+      const sample = buffer.subarray(0, Math.min(buffer.length, 1024));
+      const pdfIndex = sample.indexOf(Buffer.from('%PDF-'));
+      if (pdfIndex === -1) {
+        throw new ToolError('INVALID_FILE_SIGNATURE', 'Invalid PDF signature');
+      }
+
+      // If %PDF- does not start at index 0, preamble must only be BOM, whitespace, or %
+      if (pdfIndex > 0) {
+        const preamble = sample.subarray(0, pdfIndex);
+        const isBOMOrWhitespace = preamble.every(
+          (b) =>
+            b === 0x20 || b === 0x09 || b === 0x0A || b === 0x0D ||
+            b === 0xEF || b === 0xBB || b === 0xBF ||
+            b === 0x25
+        );
+        if (!isBOMOrWhitespace) {
+          throw new ToolError('INVALID_FILE_SIGNATURE', 'Invalid PDF signature');
+        }
+      }
       return;
+    }
+
+    // Check for password-protected / encrypted Office files:
+    // Office encrypts OpenXML files (.docx, .xlsx, .pptx) by wrapping them inside an OLE compound document with "EncryptedPackage"
+    if (['docx', 'xlsx', 'pptx'].includes(ext)) {
+      const headerHex = buffer.slice(0, 8).toString('hex').toUpperCase();
+      if (headerHex.startsWith('D0CF11E0')) {
+        const sample = buffer.subarray(0, Math.min(buffer.length, 8192));
+        if (sample.includes(Buffer.from('EncryptedPackage')) || sample.includes(Buffer.from('EncryptionInfo'))) {
+          throw new ToolError('PASSWORD_PROTECTED_FILE', `Password-protected .${ext} files are not supported`);
+        }
+      }
     }
 
     // ZIP based formats: DOCX, XLSX, PPTX, ODT, ODS, ODP
@@ -108,6 +159,16 @@ export class FileValidationService {
       // ZIP magic numbers: PK\x03\x04 (504B0304) or PK\x05\x06 (504B0506) or PK\x07\x08 (504B0708)
       if (!['504B0304', '504B0506', '504B0708'].includes(headerHex)) {
         throw new ToolError('INVALID_FILE_SIGNATURE', `Invalid file signature for .${ext}`);
+      }
+
+      // Check minimum sensible size for an Office container
+      if (buffer.length < 120) {
+        throw new ToolError('CORRUPTED_FILE', `The .${ext} package is incomplete or corrupted`);
+      }
+
+      // Check for macros (vbaProject.bin) in standard office files
+      if (buffer.includes(Buffer.from('vbaProject.bin'))) {
+        throw new ToolError('INVALID_FILE_TYPE', 'Macro-enabled office files (.docm/.xlsm/.pptm) are not permitted');
       }
 
       // Structural check: Ensure it is an Office/OpenDocument package by checking for core XML markers
@@ -132,6 +193,16 @@ export class FileValidationService {
       // OLE header: D0CF11E0A1B11AE1
       if (!headerHex.startsWith('D0CF11E0')) {
         throw new ToolError('INVALID_FILE_SIGNATURE', `Invalid binary Office signature for .${ext}`);
+      }
+
+      // Check for encrypted OLE stream
+      const sample = buffer.subarray(0, Math.min(buffer.length, 8192));
+      if (sample.includes(Buffer.from('EncryptedPackage')) || sample.includes(Buffer.from('EncryptionInfo'))) {
+        throw new ToolError('PASSWORD_PROTECTED_FILE', `Password-protected .${ext} files are not supported`);
+      }
+
+      if (buffer.length < 512) {
+        throw new ToolError('CORRUPTED_FILE', `Binary .${ext} file is truncated or corrupted`);
       }
       return;
     }

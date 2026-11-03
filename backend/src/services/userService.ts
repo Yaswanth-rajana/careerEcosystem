@@ -1,6 +1,7 @@
 import { db } from '../db/client';
 import { hashPassword, comparePassword, generateSecureToken, getSessionExpirationDate } from '../auth/security';
 import { SignUpSchema, LoginSchema } from '../validations/schemas';
+import { OnboardingLifecycleService } from './onboardingLifecycleService';
 
 export class UserService {
   /**
@@ -24,7 +25,7 @@ export class UserService {
         name: validated.name,
         email: validated.email.toLowerCase(),
         passwordHash,
-        role: validated.role || 'CANDIDATE',
+        role: 'CANDIDATE', // Public registration is strictly CANDIDATE
         isOnboarded: false,
         profile: {
           create: {
@@ -38,6 +39,16 @@ export class UserService {
     });
 
     const token = await this.createSession(user.id);
+
+    // Initialize onboarding lifecycle & dispatch professional welcome email
+    await OnboardingLifecycleService.handleUserRegistered({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+    }).catch((err) => {
+      console.error('[UserService] Failed to initialize onboarding lifecycle on registration:', err);
+    });
 
     return {
       user: {
@@ -98,6 +109,8 @@ export class UserService {
     emailVerified: boolean;
     name: string;
     avatarUrl?: string | null;
+    linkPassword?: string;
+    currentUserId?: string;
   }) {
     if (!data.emailVerified) {
       throw new Error('Google email is not verified.');
@@ -141,6 +154,39 @@ export class UserService {
         throw new Error('This email address is already linked to a different Google account.');
       }
 
+      // If user is returning with the same googleId (already linked)
+      if (existingByEmail.googleId === data.googleId) {
+        const token = await this.createSession(existingByEmail.id);
+        return {
+          user: {
+            id: existingByEmail.id,
+            email: existingByEmail.email,
+            name: existingByEmail.name,
+            role: existingByEmail.role,
+            isOnboarded: existingByEmail.isOnboarded,
+            avatarUrl: existingByEmail.avatarUrl,
+          },
+          token,
+        };
+      }
+
+      // Existing local account with a password that is NOT yet linked to Google:
+      // Require proof of ownership (valid password or authenticated session) to prevent pre-registration attacks
+      if (existingByEmail.passwordHash) {
+        const isAuthenticatedSession = data.currentUserId && data.currentUserId === existingByEmail.id;
+        const isPasswordVerified =
+          data.linkPassword && (await comparePassword(data.linkPassword, existingByEmail.passwordHash));
+
+        if (!isAuthenticatedSession && !isPasswordVerified) {
+          if (data.linkPassword) {
+            throw new Error('Invalid account password for account linking.');
+          }
+          throw new Error(
+            'An account with this email address already exists. Please verify ownership by providing your account password to link your Google account.'
+          );
+        }
+      }
+
       // Link Google account without modifying passwordHash
       user = await db.user.update({
         where: { id: existingByEmail.id },
@@ -169,6 +215,16 @@ export class UserService {
         include: {
           profile: true,
         },
+      });
+
+      // Brand new registration via Google -> dispatch welcome email & track onboarding lifecycle
+      await OnboardingLifecycleService.handleUserRegistered({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      }).catch((err) => {
+        console.error('[UserService] Failed to initialize onboarding lifecycle on Google registration:', err);
       });
     }
 
@@ -243,5 +299,28 @@ export class UserService {
   static async logoutSession(token: string) {
     if (!token) return;
     await db.session.deleteMany({ where: { token } }).catch(() => {});
+  }
+
+  /**
+   * Validates a user's password without creating a new session.
+   * Accepts either userId (24-hex ObjectID) or email.
+   */
+  static async validatePassword(userIdOrEmail: string, password: string): Promise<boolean> {
+    if (!userIdOrEmail || !password) return false;
+    const isEmail = userIdOrEmail.includes('@');
+    const isMongoId = /^[0-9a-fA-F]{24}$/.test(userIdOrEmail);
+
+    if (!isEmail && !isMongoId) {
+      return false;
+    }
+
+    const user = await db.user.findFirst({
+      where: isEmail
+        ? { email: userIdOrEmail.toLowerCase().trim() }
+        : { id: userIdOrEmail },
+      select: { passwordHash: true },
+    });
+    if (!user || !user.passwordHash) return false;
+    return await comparePassword(password, user.passwordHash);
   }
 }

@@ -14,11 +14,14 @@ import {
   ExternalLink,
   Save,
   Tag,
+  Eye,
 } from 'lucide-react';
+import { PublicMentorProfileModal } from '@/components/PublicMentorProfileModal';
 
 export default function MentorProfilePage() {
   const [profile, setProfile] = useState<MentorProfileDTO | null>(null);
   const [activeTab, setActiveTab] = useState<'public' | 'private'>('public');
+  const [isPublicModalOpen, setIsPublicModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -117,15 +120,14 @@ export default function MentorProfilePage() {
           </div>
 
           {profile && (
-            <a
-              href={`http://localhost:3000/mentors/${profile.id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-xl transition"
+            <button
+              type="button"
+              onClick={() => setIsPublicModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-xl transition cursor-pointer"
             >
+              <Eye className="w-3.5 h-3.5" />
               <span>View Public Profile</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
+            </button>
           )}
         </div>
 
@@ -333,6 +335,10 @@ export default function MentorProfilePage() {
             </div>
           )
         ) : null}
+        <PublicMentorProfileModal
+          isOpen={isPublicModalOpen}
+          onClose={() => setIsPublicModalOpen(false)}
+        />
       </div>
     </MentorShell>
   );

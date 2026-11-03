@@ -8,18 +8,38 @@
     "db:generate": "prisma generate",
     "db:studio": "prisma studio",
     "build": "tsc",
-    "test": "npx ts-node src/testRunner.ts"
+    "test": "npx ts-node src/testRunner.ts",
+    "test:conversion": "npx ts-node src/__tests__/documentConversionSuite.test.ts",
+    "test:lifecycle": "npx ts-node src/scripts/testOnboardingLifecycle.ts",
+    "test:expiration": "npx ts-node src/__tests__/jobExpiration.test.ts",
+    "test:pipeline": "npx ts-node src/__tests__/recruiterPipelineFlow.test.ts",
+    "test:candidate-details": "npx ts-node src/__tests__/recruiterCandidateApplicationDetails.test.ts",
+    "test:resume-flow": "npx ts-node src/__tests__/jobApplicationResumeFlow.test.ts",
+    "test:confirmation-email": "npx ts-node src/__tests__/jobApplicationConfirmationEmail.test.ts",
+    "test:rbac": "npx ts-node src/__tests__/recruiterRbac.test.ts",
+    "test:team-invitation-email": "npx tsx src/__tests__/recruiterTeamInvitationEmail.test.ts",
+    "test:resume-immutability": "npx tsx src/__tests__/recruiterResumeImmutability.test.ts",
+    "test:mentor-auth-security": "npx tsx src/__tests__/mentorAuthSecurity.test.ts",
+    "test:mentor-availability": "npx tsx src/__tests__/mentorAvailabilityBookingValidation.test.ts",
+    "test:mentor-concurrency": "npx tsx src/__tests__/mentorBookingConcurrency.test.ts",
+    "test:candidate-slots": "npx tsx src/__tests__/candidateMentorSlotDiscovery.test.ts",
+    "test:candidate-bookings": "npx tsx src/__tests__/candidateBookingHistoryCancellation.test.ts",
+    "test:candidate-reschedule": "npx tsx src/__tests__/candidateBookingReschedule.test.ts",
+    "test:mentor-email": "npx tsx src/__tests__/mentorshipBookingEmailNotifications.test.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "bcryptjs": "^2.4.3",
     "jose": "^5.9.3",
+    "mammoth": "^1.13.0",
     "pdf-lib": "^1.17.1",
+    "pdf-parse": "^2.4.5",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.16.11",
+    "@types/pdf-parse": "^1.1.5",
     "prisma": "5.22.0",
     "typescript": "^5.6.3"
   }

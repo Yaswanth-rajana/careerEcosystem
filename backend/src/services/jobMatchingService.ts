@@ -1,5 +1,6 @@
 import { db } from '../db/client';
 import { JobCardDTO, formatSalary, ApplicationStatus } from '../types/jobs';
+import { JobExpirationService } from './jobExpirationService';
 
 export class JobMatchingService {
   /**
@@ -42,10 +43,12 @@ export class JobMatchingService {
     const preferredWorkMode = profile.jobPreference?.workEnvironment?.toLowerCase();
     const preferredLocation = profile.jobPreference?.preferredLocation?.toLowerCase().trim();
 
-    // 2. Fetch active published jobs
+    // 2. Fetch active published jobs strictly within the 30-day window
+    const expirationThreshold = JobExpirationService.getExpirationThreshold();
     const activeJobs = await db.job.findMany({
       where: {
         status: 'PUBLISHED',
+        publishedAt: { gt: expirationThreshold },
       },
       select: {
         id: true,
@@ -62,7 +65,9 @@ export class JobMatchingService {
         salaryCurrency: true,
         salaryPeriod: true,
         publishedAt: true,
+        expiresAt: true,
         createdAt: true,
+        status: true,
         jobVerified: true,
         companyVerified: true,
         featured: true,
@@ -175,6 +180,13 @@ export class JobMatchingService {
         jobVerified: job.jobVerified,
         companyVerified: job.companyVerified,
         featured: job.featured,
+        status: job.status,
+        isExpired: false,
+        expiresAt: job.expiresAt
+          ? job.expiresAt.toISOString()
+          : job.publishedAt
+          ? JobExpirationService.calculateExpiresAt(job.publishedAt).toISOString()
+          : null,
         matchReason: reason,
       };
     });
@@ -187,8 +199,12 @@ export class JobMatchingService {
     limit: number,
     userId?: string | null
   ): Promise<JobCardDTO[]> {
+    const expirationThreshold = JobExpirationService.getExpirationThreshold();
     const rawJobs = await db.job.findMany({
-      where: { status: 'PUBLISHED' },
+      where: {
+        status: 'PUBLISHED',
+        publishedAt: { gt: expirationThreshold },
+      },
       select: {
         id: true,
         title: true,
@@ -204,7 +220,9 @@ export class JobMatchingService {
         salaryCurrency: true,
         salaryPeriod: true,
         publishedAt: true,
+        expiresAt: true,
         createdAt: true,
+        status: true,
         jobVerified: true,
         companyVerified: true,
         featured: true,
@@ -264,6 +282,13 @@ export class JobMatchingService {
         jobVerified: job.jobVerified,
         companyVerified: job.companyVerified,
         featured: job.featured,
+        status: job.status,
+        isExpired: false,
+        expiresAt: job.expiresAt
+          ? job.expiresAt.toISOString()
+          : job.publishedAt
+          ? JobExpirationService.calculateExpiresAt(job.publishedAt).toISOString()
+          : null,
         matchReason: job.featured ? 'Featured Opportunity' : 'Recently Posted',
       };
     });

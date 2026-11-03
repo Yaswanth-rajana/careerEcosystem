@@ -22,7 +22,6 @@ const JOURNEY_STAGES: Array<{
 }> = [
   { key: 'DISCOVER', label: 'Discover Direction', shortLabel: 'Discover', description: 'Explore career paths, understand industry demands, and set your target role.' },
   { key: 'LEARN', label: 'Structured Learning', shortLabel: 'Learn', description: 'Master foundational concepts and modern frameworks through structured roadmaps.' },
-  { key: 'BUILD', label: 'Build Real Projects', shortLabel: 'Build', description: 'Apply your skills by designing, building, and publishing verifiable projects.' },
   { key: 'MENTOR', label: 'Get Mentored', shortLabel: 'Mentor', description: 'Receive 1-on-1 industry feedback, architecture reviews, and career guidance.' },
   { key: 'PREPARE', label: 'Interview & Resume Prep', shortLabel: 'Prepare', description: 'Sharpen technical problem-solving, behavioral answers, and portfolio presentation.' },
   { key: 'APPLY', label: 'Apply to Roles', shortLabel: 'Apply', description: 'Submit verified applications to matched roles with high confidence.' },
@@ -131,9 +130,9 @@ export class DashboardService {
 
     // Compute Readiness
     let readiness: CareerReadiness = 'GETTING_STARTED';
-    if (completion.percentage >= 80 && counts.projects > 0 && counts.userSkills >= 3) {
+    if (completion.percentage >= 80 && counts.userSkills >= 3 && (counts.projects > 0 || counts.experience > 0 || counts.education > 0 || completion.percentage >= 80)) {
       readiness = 'JOB_READY';
-    } else if (targetRole && (counts.userSkills > 0 || counts.projects > 0 || completion.percentage >= 45)) {
+    } else if (targetRole && (counts.userSkills > 0 || counts.projects > 0 || counts.experience > 0 || completion.percentage >= 45)) {
       readiness = 'IN_PROGRESS';
     }
 
@@ -197,10 +196,98 @@ export class DashboardService {
       },
     };
 
-    // Mentorship Preview (Real session or graceful empty state)
+    // Mentorship Preview (Real eligible confirmed session or graceful empty state)
+    let upcomingSession = null;
+    try {
+      const now = new Date();
+      const nearestBooking = await db.booking.findFirst({
+        where: {
+          candidateId: userId,
+          status: 'CONFIRMED',
+          scheduledEnd: { gt: now },
+        },
+        include: {
+          mentor: {
+            select: {
+              id: true,
+              name: true,
+              avatar: true,
+              headline: true,
+              company: true,
+            },
+          },
+          service: {
+            select: {
+              id: true,
+              title: true,
+              duration: true,
+            },
+          },
+          session: {
+            select: {
+              id: true,
+              status: true,
+              meetingUrl: true,
+            },
+          },
+        },
+        orderBy: {
+          scheduledStart: 'asc',
+        },
+      });
+
+      if (nearestBooking) {
+        const isPast = nearestBooking.scheduledEnd.getTime() <= Date.now();
+        const hasValidSession = Boolean(
+          nearestBooking.session && nearestBooking.session.status !== 'CANCELLED'
+        );
+        const canJoin = Boolean(hasValidSession && nearestBooking.session?.meetingUrl && !isPast);
+        const isOngoing = nearestBooking.scheduledStart.getTime() <= Date.now() && !isPast;
+        const timezone = nearestBooking.timezone || 'Asia/Kolkata';
+
+        const start = nearestBooking.scheduledStart;
+        const formattedDate = start.toLocaleDateString('en-US', {
+          timeZone: timezone,
+          weekday: 'short',
+          month: 'short',
+          day: 'numeric',
+        });
+        const formattedTime = start.toLocaleTimeString('en-US', {
+          timeZone: timezone,
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true,
+        });
+
+        upcomingSession = {
+          id: nearestBooking.id,
+          bookingId: nearestBooking.id,
+          mentorId: nearestBooking.mentorId,
+          mentorName: nearestBooking.mentor.name,
+          mentorRole: nearestBooking.mentor.headline,
+          mentorAvatar: nearestBooking.mentor.avatar || undefined,
+          mentorCompany: nearestBooking.mentor.company || undefined,
+          sessionTitle: nearestBooking.service?.title || 'Mentorship Session',
+          sessionType: nearestBooking.service?.title || '1-on-1 Mentorship',
+          scheduledAt: `${formattedDate} at ${formattedTime} (${timezone})`,
+          scheduledStart: nearestBooking.scheduledStart.toISOString(),
+          scheduledEnd: nearestBooking.scheduledEnd.toISOString(),
+          timezone,
+          sessionHref: '/mentors/bookings?tab=upcoming',
+          meetingUrl: canJoin ? nearestBooking.session?.meetingUrl || null : null,
+          status: nearestBooking.status,
+          canJoin,
+          isOngoing,
+        };
+      }
+    } catch (err) {
+      console.error('[DashboardService] Error retrieving nearest mentorship booking:', err);
+      // Fall through gracefully to empty state without displaying fabricated session details
+    }
+
     const mentorship: DashboardMentorshipDTO = {
-      hasSession: false,
-      upcomingSession: null,
+      hasSession: Boolean(upcomingSession),
+      upcomingSession,
       emptyState: {
         title: 'Find a Mentor',
         description: 'Get 1-on-1 guidance, resume feedback, and advice from professionals who have walked the path.',
@@ -255,29 +342,29 @@ export class DashboardService {
     readiness: CareerReadiness;
     completionPercentage: number;
   }): CareerJourneyStage {
-    const { targetRole, skillsCount, projectsCount, readiness, completionPercentage } = context;
+    const { targetRole, skillsCount, readiness, completionPercentage } = context;
 
     if (!targetRole || completionPercentage < 35) {
       return 'DISCOVER';
     }
 
-    if (skillsCount < 3 && projectsCount === 0) {
+    if (skillsCount < 3) {
       return 'LEARN';
-    }
-
-    if (projectsCount === 0) {
-      return 'BUILD';
     }
 
     if (readiness === 'JOB_READY') {
       return 'APPLY';
     }
 
-    if (skillsCount >= 3 && projectsCount >= 1 && completionPercentage >= 70) {
+    if (completionPercentage >= 70) {
       return 'PREPARE';
     }
 
-    return 'BUILD';
+    if (completionPercentage >= 50) {
+      return 'MENTOR';
+    }
+
+    return 'LEARN';
   }
 
   /**

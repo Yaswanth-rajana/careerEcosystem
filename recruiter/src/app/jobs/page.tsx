@@ -21,7 +21,7 @@ import { StatusBadge } from '@/components/StatusBadge';
 import { EmptyState } from '@/components/EmptyState';
 import { RecruiterJobListDTO } from '@backend/types/recruiter';
 
-const STATUS_TABS = ['All', 'PUBLISHED', 'DRAFT', 'PAUSED', 'CLOSED'];
+const STATUS_TABS = ['All', 'PUBLISHED', 'DRAFT', 'PAUSED', 'CLOSED', 'EXPIRED'];
 
 export default function RecruiterJobsPage() {
   const [jobs, setJobs] = useState<RecruiterJobListDTO[]>([]);

@@ -25,6 +25,8 @@ export const JobApplySchema = z.object({
   coverNote: z.string().max(2000, 'Cover note cannot exceed 2000 characters').optional(),
   answers: z.record(z.any()).optional(),
   resumeUrl: z.string().url('Invalid resume URL').optional().or(z.literal('')),
+  resumeId: z.string().optional(),
+  isNewUpload: z.boolean().optional(),
 });
 
 export const CreateJobSchema = z.object({
@@ -45,7 +47,7 @@ export const CreateJobSchema = z.object({
   requirements: z.array(z.string()).default([]),
   niceToHave: z.array(z.string()).default([]),
   benefits: z.array(z.string()).default([]),
-  status: z.enum(['DRAFT', 'PUBLISHED', 'PAUSED', 'CLOSED', 'ARCHIVED']).default('PUBLISHED'),
+  status: z.enum(['DRAFT', 'PUBLISHED', 'PAUSED', 'CLOSED', 'ARCHIVED', 'EXPIRED']).default('PUBLISHED'),
   jobVerified: z.boolean().default(false),
   companyVerified: z.boolean().default(false),
   featured: z.boolean().default(false),

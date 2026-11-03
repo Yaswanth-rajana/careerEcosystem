@@ -65,7 +65,7 @@ export const AdminMentorStatusSchema = z.object({
 });
 
 export const AdminJobModerateSchema = z.object({
-  status: z.enum(['DRAFT', 'PENDING_REVIEW', 'PUBLISHED', 'PAUSED', 'CLOSED', 'ARCHIVED']),
+  status: z.enum(['DRAFT', 'PENDING_REVIEW', 'PUBLISHED', 'PAUSED', 'CLOSED', 'ARCHIVED', 'EXPIRED']),
   featured: z.boolean().optional(),
   jobVerified: z.boolean().optional(),
   companyVerified: z.boolean().optional(),

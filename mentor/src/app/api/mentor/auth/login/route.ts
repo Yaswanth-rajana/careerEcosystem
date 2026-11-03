@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { UserService } from '@backend/services/userService';
 import { db } from '@backend/db/client';
-import { MENTOR_COOKIE_NAME } from '@/lib/serverAuth';
+import { MENTOR_COOKIE_NAME } from '../../../../../lib/serverAuth';
+import { AuditService } from '@backend/services/auditService';
 
 export const dynamic = 'force-dynamic';
 
@@ -50,36 +51,31 @@ export async function POST(request: Request) {
       );
     }
 
-    // Verify user account exists or authenticate
-    let authUser: any;
-    let token: string;
-
+    // Verify user account exists and has an activated password
     const existingUser = await db.user.findUnique({
       where: { email: normalizedEmail },
     });
 
-    if (existingUser && existingUser.passwordHash) {
-      const authResult = await UserService.authenticateUser({ email: normalizedEmail, password });
-      authUser = authResult.user;
-      token = authResult.token;
-    } else {
-      // If user doesn't exist yet or was seeded as mentor, allow registering or initializing the user record
-      if (!existingUser) {
-        const registered = await UserService.registerUser({
-          name: mentorRecord.name,
-          email: normalizedEmail,
-          password,
-          role: 'MENTOR',
-        });
-        authUser = registered.user;
-        token = registered.token;
-      } else {
-        // User exists without password (e.g. Google auth or seed), authenticate
-        const authResult = await UserService.authenticateUser({ email: normalizedEmail, password });
-        authUser = authResult.user;
-        token = authResult.token;
-      }
+    // An approved mentor without an activated User account or password must not be able to login or auto-register.
+    // They must use the secure account-activation link sent by email.
+    if (!existingUser || !existingUser.passwordHash) {
+      return NextResponse.json(
+        { error: 'Your account has not been activated yet. Please use the secure account-activation link sent to your email to set your password.' },
+        { status: 401 }
+      );
     }
+
+    if (existingUser.status && existingUser.status !== 'ACTIVE') {
+      return NextResponse.json(
+        { error: `Your account is currently ${existingUser.status.toLowerCase()}. Access denied.` },
+        { status: 403 }
+      );
+    }
+
+    // Authenticate user credentials
+    const authResult = await UserService.authenticateUser({ email: normalizedEmail, password });
+    const authUser = authResult.user;
+    const token = authResult.token;
 
     // Ensure mentor record is linked to this userId
     if (!mentorRecord.userId) {

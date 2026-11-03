@@ -1,4 +1,4 @@
-export type JobStatus = 'DRAFT' | 'PUBLISHED' | 'PAUSED' | 'CLOSED' | 'ARCHIVED';
+export type JobStatus = 'DRAFT' | 'PUBLISHED' | 'PAUSED' | 'CLOSED' | 'ARCHIVED' | 'EXPIRED';
 
 export type ApplicationStatus =
   | 'APPLIED'
@@ -44,6 +44,9 @@ export interface JobCardDTO {
   companyVerified?: boolean;
   featured?: boolean;
   matchReason?: string;
+  status?: JobStatus | string;
+  isExpired?: boolean;
+  expiresAt?: string | null;
 }
 
 export interface JobDetailDTO {
@@ -71,6 +74,28 @@ export interface JobDetailDTO {
   jobVerified?: boolean;
   companyVerified?: boolean;
   status: string;
+  isExpired?: boolean;
+  expiresAt?: string | null;
+}
+
+export interface CandidateInterviewDTO {
+  id: string;
+  title: string;
+  type: string;
+  scheduledAt: string;
+  durationMinutes: number;
+  meetingUrl?: string | null;
+  status: string;
+}
+
+export interface CandidateOfferDTO {
+  id: string;
+  positionTitle: string;
+  salaryOffered: number;
+  currency: string;
+  salaryPeriod: string;
+  startDate?: string | null;
+  status: string;
 }
 
 export interface ApplicationDTO {
@@ -89,6 +114,14 @@ export interface ApplicationDTO {
   feedback?: string | null;
   reviewedAt?: string | null;
   withdrawnAt?: string | null;
+  resumeUrl?: string | null;
+  resumeId?: string | null;
+  resumeFilename?: string | null;
+  resumeFileSize?: number | null;
+  resumeFileType?: string | null;
+  interviews?: CandidateInterviewDTO[];
+  offers?: CandidateOfferDTO[];
+  emailNotification?: { sent: boolean; simulated?: boolean; error?: string | null };
 }
 
 export interface JobSearchParams {

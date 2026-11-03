@@ -1,5 +1,43 @@
 import { JobStatus, ApplicationStatus } from './jobs';
 
+export type RecruiterRole =
+  | 'COMPANY_ADMIN'
+  | 'RECRUITER'
+  | 'TECHNICAL_INTERVIEWER'
+  | 'HR_INTERVIEWER'
+  | 'INTERVIEW_COORDINATOR'
+  | 'HIRING_MANAGER';
+
+export type RecruiterPermission =
+  | 'team:view'
+  | 'team:invite'
+  | 'team:manage_roles'
+  | 'team:remove_member'
+  | 'company:view'
+  | 'company:manage'
+  | 'jobs:view'
+  | 'jobs:create'
+  | 'jobs:edit'
+  | 'jobs:publish'
+  | 'jobs:close'
+  | 'applications:view_all'
+  | 'applications:view_assigned'
+  | 'candidates:view_all'
+  | 'candidates:view_assigned'
+  | 'pipeline:transition'
+  | 'interviews:view_all'
+  | 'interviews:view_assigned'
+  | 'interviews:schedule'
+  | 'interviews:assign'
+  | 'interviews:feedback_technical'
+  | 'interviews:feedback_hr'
+  | 'offers:manage'
+  | 'offers:view'
+  | 'assessments:view'
+  | 'assessments:manage'
+  | 'reports:view'
+  | 'dashboard:view';
+
 export interface AuthenticatedRecruiter {
   user: {
     id: string;
@@ -27,7 +65,17 @@ export interface AuthenticatedRecruiter {
     verified: boolean;
     status: string;
   };
-  companyRole: string; // COMPANY_ADMIN, RECRUITER, HIRING_MANAGER, INTERVIEWER
+  membership: {
+    id: string;
+    role: RecruiterRole;
+    title?: string | null;
+    department?: string | null;
+    assignedJobIds: string[];
+    interviewTypes: string[];
+    status: string;
+  };
+  companyRole: RecruiterRole;
+  permissions: RecruiterPermission[];
 }
 
 // ----------------------------------------------------
@@ -116,8 +164,28 @@ export interface RecruiterJobDetailDTO {
   createdAt: string;
   updatedAt: string;
   applicationsCount: number;
+  shortlistedCount: number;
+  interviewsCount: number;
   companyId: string;
   createdById?: string | null;
+}
+
+export interface RecruiterCandidateDTO {
+  id: string;
+  name: string;
+  avatarUrl?: string | null;
+  headline?: string | null;
+  location?: string | null;
+  candidateType?: string | null;
+  totalExperience?: string | null;
+  bio?: string | null;
+  skills: string[];
+  topSkills: string[];
+  applicationId?: string | null;
+  applicationStatus?: ApplicationStatus | null;
+  appliedJobTitle?: string | null;
+  appliedJobId?: string | null;
+  appliedAt?: string | null;
 }
 
 // ----------------------------------------------------
@@ -137,6 +205,7 @@ export interface RecruiterApplicationListDTO {
   appliedAt: string;
   hasResume: boolean;
   resumeUrl?: string | null;
+  resumeFilename?: string | null;
   latestScore?: number | null;
 }
 
@@ -147,7 +216,12 @@ export interface RecruiterApplicationDetailDTO {
   status: ApplicationStatus;
   coverNote?: string | null;
   answers?: string | null;
+  hasResume: boolean;
   resumeUrl?: string | null;
+  resumeId?: string | null;
+  resumeFilename?: string | null;
+  resumeFileSize?: number | null;
+  resumeFileType?: string | null;
   feedback?: string | null;
   reviewedAt?: string | null;
   withdrawnAt?: string | null;
@@ -169,25 +243,44 @@ export interface RecruiterApplicationDetailDTO {
       institution: string;
       degree: string;
       fieldOfStudy: string;
+      location?: string | null;
       startYear: number;
       endYear?: number | null;
+      isCurrent?: boolean;
+      gpa?: string | null;
+      coursework?: string | null;
+      achievements?: string | null;
     }>;
     experience: Array<{
       id: string;
       company: string;
       roleTitle: string;
+      employmentType?: string | null;
+      location?: string | null;
       startDate: string;
       endDate?: string | null;
       isCurrent: boolean;
       description?: string | null;
+      responsibilities?: string | null;
+      achievements?: string | null;
     }>;
     projects: Array<{
       id: string;
       title: string;
       description?: string | null;
+      role?: string | null;
       technologies: string[];
       projectUrl?: string | null;
       githubUrl?: string | null;
+      demoUrl?: string | null;
+    }>;
+    certifications: Array<{
+      id: string;
+      name: string;
+      issuingOrganization: string;
+      issueDate?: string | null;
+      expiryDate?: string | null;
+      credentialUrl?: string | null;
     }>;
     professionalLinks: Array<{ platform: string; url: string }>;
   };
@@ -248,13 +341,19 @@ export interface RecruiterInterviewDTO {
   candidateName: string;
   candidateEmail: string;
   candidateAvatar?: string | null;
+  interviewerId?: string | null;
+  interviewerName?: string | null;
+  interviewerEmail?: string | null;
   title: string;
   type: string;
   scheduledAt: string;
   durationMinutes: number;
   meetingUrl?: string | null;
-  interviewerName?: string | null;
   notes?: string | null;
+  feedback?: string | null;
+  rating?: number | null;
+  recommendation?: string | null;
+  feedbackSubmittedAt?: string | null;
   status: string;
   createdAt: string;
 }
@@ -307,8 +406,39 @@ export interface CompanyTeamMemberDTO {
   userId: string;
   name: string;
   email: string;
-  role: string;
+  role: RecruiterRole;
   title?: string | null;
+  department?: string | null;
+  assignedJobIds?: string[];
+  interviewTypes?: string[];
   status: string;
   joinedAt: string;
+}
+
+export interface CompanyInvitationDTO {
+  id: string;
+  companyId: string;
+  email: string;
+  name?: string | null;
+  role: RecruiterRole;
+  title?: string | null;
+  department?: string | null;
+  assignedJobIds: string[];
+  interviewTypes: string[];
+  message?: string | null;
+  status: 'PENDING' | 'ACCEPTED' | 'REVOKED' | 'EXPIRED' | 'FAILED';
+  invitedById: string;
+  invitedByName: string;
+  invitedByEmail: string;
+  expiresAt: string;
+  acceptedAt?: string | null;
+  revokedAt?: string | null;
+  lastSentAt: string;
+  createdAt: string;
+}
+
+export interface InterviewFeedbackSubmitDTO {
+  feedback: string;
+  rating?: number | null;
+  recommendation: 'STRONG_HIRE' | 'ADVANCE' | 'HOLD' | 'REJECT';
 }

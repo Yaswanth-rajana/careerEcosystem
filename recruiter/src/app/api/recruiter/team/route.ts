@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: NextRequest) {
   try {
     const auth = await getAuthenticatedRecruiter();
-    const members = await RecruiterTeamService.listTeamMembers(auth.company.id);
+    const members = await RecruiterTeamService.listTeamMembers(auth.company.id, auth);
 
     return NextResponse.json({ success: true, data: members });
   } catch (error: any) {

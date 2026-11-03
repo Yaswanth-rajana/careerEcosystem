@@ -3,10 +3,9 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { gsap } from 'gsap';
 import { Button } from '@/components/design-system/Button';
 import { Badge } from '@/components/design-system/Badge';
-import { Menu, X, Compass, ArrowRight, User, LogOut, LayoutDashboard, ChevronDown, ChevronRight } from 'lucide-react';
+import { Menu, X, Compass, ArrowRight, User, LogOut, LayoutDashboard, ChevronDown, ChevronRight, Calendar } from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { PillNav, type PillNavItem } from './PillNav';
 import { useAuth } from '@/lib/AuthContext';
@@ -15,16 +14,20 @@ import {
   getSavedTargetRoles,
   setSavedTargetRole,
   findCareerSlugByTitle,
-  getCareerPathBySlug,
+  getSavedRoleBySlug,
   type SavedRoleItem,
-} from '@/lib/careers/career-repository';
+} from '@/lib/careers/saved-roles';
+
+export type HeaderUser = Pick<AuthUser, 'id' | 'name' | 'email'> &
+  Partial<Pick<AuthUser, 'role' | 'isOnboarded' | 'avatarUrl'>>;
 
 export interface HeaderProps {
-  user?: AuthUser | null;
+  user?: HeaderUser | null;
+  targetRole?: string | null;
   onLogout?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ user: initialUser, onLogout }) => {
+export const Header: React.FC<HeaderProps> = ({ user: initialUser, targetRole, onLogout }) => {
   const pathname = usePathname();
   const router = useRouter();
   const { user: contextUser, isLoading, logout: contextLogout } = useAuth();
@@ -37,8 +40,6 @@ export const Header: React.FC<HeaderProps> = ({ user: initialUser, onLogout }) =
   const shouldReduceMotion = useReducedMotion();
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const logoImgRef = useRef<HTMLDivElement | null>(null);
-  const logoTweenRef = useRef<gsap.core.Tween | null>(null);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -51,7 +52,7 @@ export const Header: React.FC<HeaderProps> = ({ user: initialUser, onLogout }) =
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Listen to target roles changes and sync user profile if logged in
+  // Listen to target roles changes and sync provided targetRole if logged in
   useEffect(() => {
     const updateSavedRoles = () => {
       if (!currentUser) {
@@ -64,34 +65,26 @@ export const Header: React.FC<HeaderProps> = ({ user: initialUser, onLogout }) =
 
     updateSavedRoles();
 
-    // If logged in and no local saved roles exist (and user hasn't explicitly deselected them), try syncing from onboarding API profile
-    if (currentUser) {
+    // If logged in, a targetRole is provided, and no local saved roles exist (and user hasn't explicitly cleared them)
+    if (currentUser && targetRole) {
       const currentSaved = getSavedTargetRoles();
       const isUserExplicitlyCleared =
         typeof window !== 'undefined' &&
         localStorage.getItem('pathway_user_explicitly_cleared_roles') === 'true';
 
       if (currentSaved.length === 0 && !isUserExplicitlyCleared) {
-        fetch('/api/onboarding')
-          .then((res) => (res.ok ? res.json() : null))
-          .then((data) => {
-            const targetRoleTitle = data?.profile?.careerGoal?.targetRole;
-            if (targetRoleTitle) {
-              const matchedSlug = findCareerSlugByTitle(targetRoleTitle);
-              if (matchedSlug) {
-                const career = getCareerPathBySlug(matchedSlug);
-                if (career) {
-                  const updated = setSavedTargetRole({
-                    slug: career.slug,
-                    title: career.title,
-                    category: career.category,
-                  });
-                  setSavedRoles(updated);
-                }
-              }
-            }
-          })
-          .catch(() => {});
+        const matchedSlug = findCareerSlugByTitle(targetRole);
+        if (matchedSlug) {
+          const roleItem = getSavedRoleBySlug(matchedSlug);
+          if (roleItem) {
+            const updated = setSavedTargetRole({
+              slug: roleItem.slug,
+              title: roleItem.title,
+              category: roleItem.category,
+            });
+            setSavedRoles(updated);
+          }
+        }
       }
     }
 
@@ -101,7 +94,8 @@ export const Header: React.FC<HeaderProps> = ({ user: initialUser, onLogout }) =
       window.removeEventListener('pathway_selected_roles_changed', updateSavedRoles);
       window.removeEventListener('pathway_selected_role_changed', updateSavedRoles);
     };
-  }, [currentUser]);
+  }, [currentUser, targetRole]);
+
 
   const handleLogout = async () => {
     setUserDropdownOpen(false);
@@ -121,17 +115,6 @@ export const Header: React.FC<HeaderProps> = ({ user: initialUser, onLogout }) =
     }
   };
 
-  const handleLogoEnter = () => {
-    if (shouldReduceMotion || !logoImgRef.current) return;
-    logoTweenRef.current?.kill();
-    gsap.set(logoImgRef.current, { rotate: 0 });
-    logoTweenRef.current = gsap.to(logoImgRef.current, {
-      rotate: 360,
-      duration: 0.5,
-      ease: 'power2.out',
-      overwrite: 'auto',
-    });
-  };
 
   const primaryPathHref = savedRoles.length > 0
     ? `/careers/${savedRoles[savedRoles.length - 1].slug}`
@@ -164,15 +147,13 @@ export const Header: React.FC<HeaderProps> = ({ user: initialUser, onLogout }) =
     <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/90 backdrop-blur-xl transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         
-        {/* PATHWAY.ECO Brand Logo with GSAP 360° Spin Hover */}
+        {/* PATHWAY.ECO Brand Logo with CSS 360° Spin Hover */}
         <Link
           href={currentUser ? '/dashboard' : '/'}
-          onMouseEnter={handleLogoEnter}
-          className="flex items-center gap-2.5 group shrink-0"
+          className="flex items-center gap-2.5 group shrink-0 focus:outline-none"
         >
           <div
-            ref={logoImgRef}
-            className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform duration-200"
+            className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center shadow-sm group-hover:scale-105 group-hover:rotate-[360deg] group-focus-visible:scale-105 group-focus-visible:rotate-[360deg] transition-all duration-500 ease-out motion-reduce:transform-none motion-reduce:transition-none"
           >
             <Compass className="w-4.5 h-4.5 text-white" />
           </div>
@@ -249,6 +230,15 @@ export const Header: React.FC<HeaderProps> = ({ user: initialUser, onLogout }) =
                       >
                         <User className="w-4 h-4 text-blue-600" />
                         <span>Profile & Settings</span>
+                      </Link>
+
+                      <Link
+                        href="/mentors/bookings"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 transition-colors"
+                      >
+                        <Calendar className="w-4 h-4 text-blue-600" />
+                        <span>Mentorship Sessions</span>
                       </Link>
                     </div>
 

@@ -1,11 +1,13 @@
 import { z } from 'zod';
 
 export const MentorshipCategoryEnum = z.enum([
+  'CAREER_DIRECTION',
   'CAREER_GUIDANCE',
   'RESUME_REVIEW',
   'MOCK_INTERVIEW',
   'TECHNICAL_GUIDANCE',
   'CAREER_SWITCH',
+  'LEADERSHIP',
   'LONG_TERM_MENTORSHIP',
 ]);
 
@@ -73,8 +75,34 @@ export const UpdateBookingStatusSchema = z.object({
     'CANCELLED_BY_CANDIDATE',
     'COMPLETED',
     'NO_SHOW',
-  ]),
+  ]).optional(),
+  action: z.enum([
+    'APPROVE_RESCHEDULE',
+    'REJECT_RESCHEDULE',
+    'CONFIRM',
+    'CANCEL',
+    'COMPLETE',
+  ]).optional(),
   reason: z.string().max(500).optional().nullable(),
+}).refine((data) => data.status !== undefined || data.action !== undefined, {
+  message: 'Either status or action must be provided',
+});
+
+export const CandidateCancelBookingSchema = z.object({
+  reason: z.string().max(500, 'Cancellation reason cannot exceed 500 characters').optional().nullable(),
+});
+
+export const CandidateRescheduleBookingSchema = z.object({
+  scheduledStart: z.string().datetime({ message: 'scheduledStart must be a valid ISO datetime' }),
+  timezone: z.string().optional().default('Asia/Kolkata'),
+  studentNotes: z.string().max(1000, 'Notes cannot exceed 1000 characters').optional().nullable(),
+});
+
+export const CandidateListBookingsQuerySchema = z.object({
+  tab: z.enum(['upcoming', 'past', 'cancelled', 'all']).default('upcoming'),
+  status: z.string().optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(10),
 });
 
 export const UpdateSessionNotesSchema = z.object({
@@ -106,3 +134,26 @@ export const UpdateMentorProfileSchema = z.object({
   skillsList: z.array(z.string()).optional(),
   avatar: z.string().url().optional().nullable(),
 });
+
+export const MentorDiscoveryQuerySchema = z.object({
+  preference: z.string().optional(),
+  search: z.string().optional(),
+  expertise: z.union([z.string(), z.array(z.string())]).optional(),
+  experience: z.union([z.string(), z.array(z.string())]).optional(),
+  sessionTypes: z.union([z.string(), z.array(z.string())]).optional(),
+  priceRange: z.string().optional(),
+  availability: z.string().optional(),
+  sort: z.string().default('recommended'),
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(50).default(6),
+});
+
+export const CandidateSlotDiscoverySchema = z.object({
+  mentorId: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid mentor ID format'),
+  serviceId: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid service ID format'),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format').optional(),
+  startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'startDate must be in YYYY-MM-DD format').optional(),
+  endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'endDate must be in YYYY-MM-DD format').optional(),
+  timezone: z.string().optional(),
+});
+

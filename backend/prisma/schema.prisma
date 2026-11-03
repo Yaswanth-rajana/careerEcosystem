@@ -39,6 +39,8 @@ model User {
   interviewsAsCandidate Interview[]
   offersAsCandidate    Offer[]
   assessmentSubmissions AssessmentSubmission[]
+  assignedInterviews    Interview[]           @relation("AssignedInterviewer")
+  companyInvitationsSent CompanyInvitation[]  @relation("CompanyInvitationsSent")
 
   @@index([role])
   @@index([status])
@@ -56,16 +58,21 @@ model Session {
 }
 
 model OnboardingProgress {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId         String    @unique @db.ObjectId
-  status         String    @default("NOT_STARTED") // NOT_STARTED, IN_PROGRESS, COMPLETED
-  currentStep    Int       @default(1)
-  completedSteps Int[]     @default([])
-  lastSavedAt    DateTime  @default(now())
-  completedAt    DateTime?
-  draftData      String?   // JSON string for transient input drafts
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id                       String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId                   String    @unique @db.ObjectId
+  status                   String    @default("NOT_STARTED") // NOT_STARTED, IN_PROGRESS, COMPLETED
+  currentStep              Int       @default(1)
+  completedSteps           Int[]     @default([])
+  lastSavedAt              DateTime  @default(now())
+  completedAt              DateTime?
+  draftData                String?   // JSON string for transient input drafts
+  onboardingStartedAt      DateTime?
+  onboardingLastActivityAt DateTime?
+  reminder1SentAt          DateTime?
+  reminder2SentAt          DateTime?
+  reminder3SentAt          DateTime?
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -263,14 +270,17 @@ model Resume {
   updatedAt     DateTime @updatedAt
 
   profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  jobApplications JobApplication[]
 }
 
 enum ConversionStatus {
   QUEUED
+  UPLOADING
   PROCESSING
   COMPLETED
   FAILED
   EXPIRED
+  CANCELLED
 }
 
 model ConversionJob {
@@ -286,6 +296,8 @@ model ConversionJob {
   outputSize         Int?
   inputStorageKey    String
   outputStorageKey   String?
+  providerJobId      String?
+  retryCount         Int?             @default(0)
   status             ConversionStatus @default(QUEUED)
   errorCode          String?
   errorMessage       String?
@@ -298,6 +310,7 @@ model ConversionJob {
   @@index([expiresAt])
   @@index([userId])
   @@index([guestTokenHash])
+  @@index([providerJobId])
 }
 
 model Job {
@@ -367,6 +380,10 @@ model JobApplication {
   coverNote   String?
   answers     String?   // JSON string of candidate screening answers
   resumeUrl   String?
+  resumeId    String?   @db.ObjectId
+  resumeFilename String?
+  resumeFileSize Int?
+  resumeFileType String?
   feedback    String?   // Recruiter feedback
   reviewedAt  DateTime?
   withdrawnAt DateTime?
@@ -375,6 +392,7 @@ model JobApplication {
 
   candidate User @relation(fields: [candidateId], references: [id], onDelete: Cascade)
   job       Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  resume    Resume? @relation(fields: [resumeId], references: [id], onDelete: SetNull)
   assessmentSubmissions AssessmentSubmission[]
   interviews            Interview[]
   offers                Offer[]
@@ -460,6 +478,7 @@ model Mentor {
   rating          Float     @default(5.0)
   reviewCount     Int       @default(0)
   sessionCount    Int       @default(0)
+  bookingVersion  Int       @default(0)
   startingPrice   Int       @default(0)
   expertise       String[]  @default([])
   sessionTypes    String[]  @default([])
@@ -565,6 +584,8 @@ model Booking {
   serviceId          String              @db.ObjectId
   scheduledStart     DateTime
   scheduledEnd       DateTime
+  rescheduledStart   DateTime?
+  rescheduledEnd     DateTime?
   timezone           String              @default("Asia/Kolkata")
   status             String              @default("CONFIRMED") // PENDING, CONFIRMED, RESCHEDULE_REQUESTED, RESCHEDULED, CANCELLED_BY_CANDIDATE, CANCELLED_BY_MENTOR, COMPLETED, NO_SHOW
   studentNotes       String?
@@ -581,6 +602,7 @@ model Booking {
 
   @@index([mentorId, status])
   @@index([mentorId, scheduledStart])
+  @@index([mentorId, rescheduledStart])
   @@index([candidateId])
   @@index([serviceId])
   @@index([scheduledStart, scheduledEnd])
@@ -770,6 +792,7 @@ model Company {
   interviews      Interview[]
   offers          Offer[]
   applications    EmployerApplication[]
+  invitations     CompanyInvitation[]
 
   @@index([status])
   @@index([name])
@@ -779,8 +802,11 @@ model CompanyMember {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
   companyId       String    @db.ObjectId
   userId          String    @db.ObjectId
-  role            String    @default("RECRUITER") // COMPANY_ADMIN, RECRUITER, HIRING_MANAGER, INTERVIEWER
+  role            String    @default("RECRUITER") // COMPANY_ADMIN, RECRUITER, TECHNICAL_INTERVIEWER, HR_INTERVIEWER, INTERVIEW_COORDINATOR, HIRING_MANAGER
   title           String?
+  department      String?
+  assignedJobIds  String[]  @default([])
+  interviewTypes  String[]  @default([])
   status          String    @default("ACTIVE") // ACTIVE, INVITED, SUSPENDED
   joinedAt        DateTime  @default(now())
 
@@ -868,32 +894,68 @@ model AssessmentSubmission {
 }
 
 model Interview {
-  id              String         @id @default(auto()) @map("_id") @db.ObjectId
-  companyId       String         @db.ObjectId
-  jobId           String         @db.ObjectId
-  applicationId   String         @db.ObjectId
-  candidateId     String         @db.ObjectId
-  title           String
-  type            String         @default("TECHNICAL") // TECHNICAL, HR, MANAGERIAL, BEHAVIORAL
-  scheduledAt     DateTime
-  durationMinutes Int            @default(45)
-  meetingUrl      String?
-  interviewerName String?
-  notes           String?
-  status          String         @default("SCHEDULED") // SCHEDULED, COMPLETED, CANCELLED, NO_SHOW
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+  id                  String         @id @default(auto()) @map("_id") @db.ObjectId
+  companyId           String         @db.ObjectId
+  jobId               String         @db.ObjectId
+  applicationId       String         @db.ObjectId
+  candidateId         String         @db.ObjectId
+  interviewerId       String?        @db.ObjectId
+  title               String
+  type                String         @default("TECHNICAL") // TECHNICAL, HR, MANAGERIAL, BEHAVIORAL
+  scheduledAt         DateTime
+  durationMinutes     Int            @default(45)
+  meetingUrl          String?
+  interviewerName     String?
+  notes               String?
+  feedback            String?
+  rating              Int?
+  recommendation      String?        // ADVANCE, REJECT, HOLD, STRONG_HIRE
+  feedbackSubmittedAt DateTime?
+  status              String         @default("SCHEDULED") // SCHEDULED, COMPLETED, CANCELLED, NO_SHOW
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
 
   company         Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
   job             Job            @relation(fields: [jobId], references: [id], onDelete: Cascade)
   application     JobApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
   candidate       User           @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  interviewer     User?          @relation("AssignedInterviewer", fields: [interviewerId], references: [id], onDelete: SetNull)
 
   @@index([companyId, status])
   @@index([jobId])
   @@index([applicationId])
   @@index([candidateId])
+  @@index([interviewerId])
   @@index([scheduledAt])
+}
+
+model CompanyInvitation {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  companyId      String    @db.ObjectId
+  email          String
+  name           String?
+  role           String    @default("RECRUITER") // COMPANY_ADMIN, RECRUITER, TECHNICAL_INTERVIEWER, HR_INTERVIEWER, INTERVIEW_COORDINATOR, HIRING_MANAGER
+  title          String?
+  department     String?
+  assignedJobIds String[]  @default([])
+  interviewTypes String[]  @default([])
+  message        String?
+  tokenHash      String    @unique
+  previousTokenHashes String[] @default([])
+  status         String    @default("PENDING") // PENDING, ACCEPTED, REVOKED, EXPIRED, FAILED
+  invitedById    String    @db.ObjectId
+  expiresAt      DateTime
+  acceptedAt     DateTime?
+  revokedAt      DateTime?
+  lastSentAt     DateTime  @default(now())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  company        Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  invitedBy      User      @relation("CompanyInvitationsSent", fields: [invitedById], references: [id], onDelete: Cascade)
+
+  @@index([companyId, status])
+  @@index([email])
 }
 
 model Offer {

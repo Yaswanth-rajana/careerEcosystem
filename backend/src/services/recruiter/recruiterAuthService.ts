@@ -1,6 +1,7 @@
 import { db } from '../../db/client';
 import { UserService } from '../userService';
 import { AuthenticatedRecruiter } from '../../types/recruiter';
+import { RecruiterRbacService } from './recruiterRbacService';
 
 export class RecruiterAuthError extends Error {
   statusCode: number;
@@ -65,11 +66,12 @@ export class RecruiterAuthService {
       },
     });
 
-    // If no recruiter profile yet, check if there is an approved EmployerApplication for this email
+    // If no recruiter profile yet, check if there is an approved EmployerApplication explicitly linked to this user
     if (!recruiterProfile) {
       const approvedApp = await db.employerApplication.findFirst({
         where: {
           workEmail: fullUser.email.toLowerCase(),
+          userId: fullUser.id, // Require verified employer approval: must match the user created/linked by admin
           status: 'APPROVED',
           companyId: { not: null },
         },
@@ -128,7 +130,7 @@ export class RecruiterAuthService {
     }
 
     // Resolve company member role
-    const member = await db.companyMember.findUnique({
+    let member = await db.companyMember.findUnique({
       where: {
         companyId_userId: {
           companyId: company.id,
@@ -137,7 +139,22 @@ export class RecruiterAuthService {
       },
     });
 
-    const companyRole = member?.role || 'RECRUITER';
+    if (!member) {
+      throw new RecruiterAuthError(
+        'Forbidden. You are not an active member of this company workspace.',
+        403
+      );
+    }
+
+    if (member.status !== 'ACTIVE') {
+      throw new RecruiterAuthError(
+        `Your membership in ${company.name} is currently ${member.status.toLowerCase()}. Access denied.`,
+        403
+      );
+    }
+
+    const companyRole = RecruiterRbacService.normalizeRole(member.role);
+    const permissions = RecruiterRbacService.getRolePermissions(companyRole);
 
     return {
       user: {
@@ -166,7 +183,17 @@ export class RecruiterAuthService {
         verified: company.verified,
         status: company.status,
       },
+      membership: {
+        id: member.id,
+        role: companyRole,
+        title: member.title,
+        department: member.department,
+        assignedJobIds: member.assignedJobIds || [],
+        interviewTypes: member.interviewTypes || [],
+        status: member.status,
+      },
       companyRole,
+      permissions,
     };
   }
 

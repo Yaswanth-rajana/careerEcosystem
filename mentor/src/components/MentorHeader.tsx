@@ -1,13 +1,15 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Menu, LogOut, ExternalLink, Calendar, Briefcase } from 'lucide-react';
+import { Menu, LogOut, ExternalLink, Calendar, Briefcase, Eye } from 'lucide-react';
 import { useMentorAuth } from '@/lib/mentorAuthContext';
 import Link from 'next/link';
+import { PublicMentorProfileModal } from './PublicMentorProfileModal';
 
 export function MentorHeader({ onMenuClick }: { onMenuClick: () => void }) {
   const { mentor, user, logout } = useMentorAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isPublicModalOpen, setIsPublicModalOpen] = useState(false);
   const [greeting, setGreeting] = useState('Welcome');
   const [mounted, setMounted] = useState(false);
 
@@ -92,16 +94,22 @@ export function MentorHeader({ onMenuClick }: { onMenuClick: () => void }) {
                   Edit Profile
                 </Link>
 
-                <a
-                  href={`http://localhost:3000/mentors/${mentor?.id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setIsDropdownOpen(false)}
-                  className="flex items-center justify-between px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50"
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsDropdownOpen(false);
+                    setIsPublicModalOpen(true);
+                  }}
+                  className="w-full text-left flex items-center justify-between px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 cursor-pointer"
                 >
-                  <span>Public Profile</span>
-                  <ExternalLink className="w-3 h-3 text-slate-400" />
-                </a>
+                  <span className="flex items-center gap-2">
+                    <Eye className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Public Profile</span>
+                  </span>
+                  <span className="text-[10px] font-semibold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">
+                    Preview
+                  </span>
+                </button>
 
                 <div className="border-t border-slate-100 my-1" />
 
@@ -120,6 +128,12 @@ export function MentorHeader({ onMenuClick }: { onMenuClick: () => void }) {
           )}
         </div>
       </div>
+
+      {/* Public profile modal */}
+      <PublicMentorProfileModal
+        isOpen={isPublicModalOpen}
+        onClose={() => setIsPublicModalOpen(false)}
+      />
     </header>
   );
 }

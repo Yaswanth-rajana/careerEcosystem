@@ -8,7 +8,6 @@ export const CareerLoopSection: React.FC = () => {
   const steps = [
     'Career Goal',
     'Learn',
-    'Build',
     'Get Mentored',
     'Prepare',
     'Find Opportunities',

@@ -1,18 +1,25 @@
 'use client';
 
 import React from 'react';
-import { CareerPath, CandidateCareerContext } from '@/lib/careers/career-types';
+import { CareerPath, CandidateCareerContext, CareerLevelId, CareerLevelDefinition } from '@/lib/careers/career-types';
 import { analyzeSkillGap } from '@/lib/careers/career-repository';
-import { CheckCircle2, AlertCircle, ArrowRight, UserCheck, ShieldCheck, BookOpen } from 'lucide-react';
+import { CheckCircle2, AlertCircle, ArrowRight, UserCheck, ShieldCheck, BookOpen, Target } from 'lucide-react';
 import Link from 'next/link';
 
 export interface SkillGapSectionProps {
   career: CareerPath;
   candidate: CandidateCareerContext | null;
+  selectedLevel?: CareerLevelId;
+  levelData?: CareerLevelDefinition;
 }
 
-export const SkillGapSection: React.FC<SkillGapSectionProps> = ({ career, candidate }) => {
-  const gap = analyzeSkillGap(candidate, career.slug);
+export const SkillGapSection: React.FC<SkillGapSectionProps> = ({
+  career,
+  candidate,
+  selectedLevel,
+  levelData,
+}) => {
+  const gap = analyzeSkillGap(candidate, career.slug, selectedLevel);
 
   const scrollToLearning = () => {
     const el = document.getElementById('learning-roadmap');
@@ -23,16 +30,23 @@ export const SkillGapSection: React.FC<SkillGapSectionProps> = ({ career, candid
   if (!gap.hasEnoughData) {
     return (
       <div id="skill-gap" className="space-y-4 text-left">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-blue-600" />
             <h2 className="text-xl sm:text-2xl font-bold font-display text-slate-900">
               What do you need to learn? ⭐
             </h2>
           </div>
-          <span className="text-xs font-mono font-bold text-amber-600 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full">
-            PROFILE SKILL DATA NEEDED
-          </span>
+          <div className="flex items-center gap-2">
+            {levelData && (
+              <span className="text-xs font-mono font-medium text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full">
+                Target: {levelData.label}
+              </span>
+            )}
+            <span className="text-xs font-mono font-bold text-amber-600 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full">
+              PROFILE SKILL DATA NEEDED
+            </span>
+          </div>
         </div>
 
         <div className="p-8 rounded-2xl bg-white border border-slate-200/80 shadow-sm text-center space-y-4">
@@ -44,7 +58,7 @@ export const SkillGapSection: React.FC<SkillGapSectionProps> = ({ career, candid
               Personalize Your Skill Breakdown
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Add your current skills in your profile or onboarding to compare what you already know against the required skills for {career.title}.
+              Add your current skills in your profile or onboarding to compare what you already know against the required skills for {career.title} {levelData ? `at ${levelData.label} level` : ''}.
             </p>
           </div>
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -70,16 +84,23 @@ export const SkillGapSection: React.FC<SkillGapSectionProps> = ({ career, candid
 
   return (
     <div id="skill-gap" className="space-y-6 text-left">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <ShieldCheck className="w-5 h-5 text-blue-600" />
           <h2 className="text-xl sm:text-2xl font-bold font-display text-slate-900">
             What do you need to learn? ⭐
           </h2>
         </div>
-        <span className="text-xs font-mono font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
-          {gap.matchPercentage}% Skill Match
-        </span>
+        <div className="flex items-center gap-2">
+          {levelData && (
+            <span className="text-xs font-mono font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full">
+              Target: {levelData.label}
+            </span>
+          )}
+          <span className="text-xs font-mono font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
+            {gap.matchPercentage}% Skill Match
+          </span>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -122,7 +143,7 @@ export const SkillGapSection: React.FC<SkillGapSectionProps> = ({ career, candid
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-blue-600 flex items-center gap-2">
               <AlertCircle className="w-4 h-4" />
-              NEXT SKILLS TO BUILD ({gap.missingSkills.length + gap.developingSkills.length})
+              NEXT SKILLS TO BUILD {levelData ? `(${levelData.label.toUpperCase()})` : ''} ({gap.missingSkills.length + gap.developingSkills.length})
             </h3>
             <span className="text-[10px] font-mono text-slate-500">Target Gap</span>
           </div>

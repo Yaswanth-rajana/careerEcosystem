@@ -7,6 +7,7 @@ import {
 import { AdminJobModerateSchema } from '../validations/adminSchemas';
 import { AuditService } from './auditService';
 import { AuthenticatedAdmin } from './adminAuthService';
+import { JobExpirationService } from './jobExpirationService';
 
 export interface ListAdminJobsParams {
   page?: number;
@@ -151,7 +152,11 @@ export class AdminJobService {
       niceToHave: job.niceToHave,
       benefits: job.benefits,
       skills: job.skills,
-      expiresAt: job.expiresAt?.toISOString() || null,
+      expiresAt: job.expiresAt
+        ? job.expiresAt.toISOString()
+        : job.publishedAt
+        ? JobExpirationService.calculateExpiresAt(job.publishedAt).toISOString()
+        : null,
     };
   }
 
@@ -166,6 +171,10 @@ export class AdminJobService {
       throw new Error(`Job with ID ${jobId} not found`);
     }
 
+    const isNowPublished = validated.status === 'PUBLISHED';
+    const shouldSetPublishDate = isNowPublished && !existing.publishedAt;
+    const now = new Date();
+
     const updated = await db.job.update({
       where: { id: jobId },
       data: {
@@ -173,7 +182,7 @@ export class AdminJobService {
         ...(validated.featured !== undefined ? { featured: validated.featured } : {}),
         ...(validated.jobVerified !== undefined ? { jobVerified: validated.jobVerified } : {}),
         ...(validated.companyVerified !== undefined ? { companyVerified: validated.companyVerified } : {}),
-        ...(validated.status === 'PUBLISHED' && !existing.publishedAt ? { publishedAt: new Date() } : {}),
+        ...(shouldSetPublishDate ? { publishedAt: now, expiresAt: JobExpirationService.calculateExpiresAt(now) } : {}),
       },
     });
 

@@ -15,15 +15,21 @@ export async function GET(request: NextRequest) {
     const skill = searchParams.get('skill') || undefined;
     const location = searchParams.get('location') || undefined;
     const candidateType = searchParams.get('candidateType') || undefined;
+    const onlyApplicants = searchParams.get('onlyApplicants') === 'true';
 
-    const result = await RecruiterCandidateService.searchCandidates(auth.company.id, {
-      page,
-      limit,
-      q,
-      skill,
-      location,
-      candidateType,
-    });
+    const result = await RecruiterCandidateService.searchCandidates(
+      auth.company.id,
+      {
+        page,
+        limit,
+        q,
+        skill,
+        location,
+        candidateType,
+        onlyApplicants,
+      },
+      auth
+    );
 
     return NextResponse.json({ success: true, ...result });
   } catch (error: any) {

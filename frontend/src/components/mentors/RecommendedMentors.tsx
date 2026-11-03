@@ -9,7 +9,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { Button } from '@/components/design-system/Button';
 
 interface RecommendedMentorsProps {
-  onBookSession: (mentor: Mentor) => void;
+  onBookSession: (mentor: Mentor, serviceId?: string) => void;
 }
 
 export const RecommendedMentors: React.FC<RecommendedMentorsProps> = ({ onBookSession }) => {

@@ -5,11 +5,12 @@ import {
   ApplicationStatus,
 } from '../types/jobs';
 import { CreateJobSchema } from '../validations/jobSchemas';
+import { JobExpirationService } from './jobExpirationService';
 
 export class JobService {
   /**
    * Retrieves a single job by ID.
-   * If viewed by a candidate, only PUBLISHED jobs are accessible.
+   * If viewed by a candidate, only active PUBLISHED jobs are accessible (must not be expired).
    * Returns complete JobDetailDTO with full description, responsibilities, requirements, and user application status.
    */
   static async getJobById(
@@ -24,8 +25,8 @@ export class JobService {
 
     if (!job) return null;
 
-    // Candidates cannot see non-published jobs
-    if (job.status !== 'PUBLISHED') {
+    // Candidates cannot see non-published or expired jobs (defense in depth)
+    if (job.status !== 'PUBLISHED' || JobExpirationService.isJobExpired(job)) {
       return null;
     }
 
@@ -98,6 +99,12 @@ export class JobService {
       jobVerified: job.jobVerified,
       companyVerified: job.companyVerified,
       status: job.status,
+      isExpired: false,
+      expiresAt: job.expiresAt
+        ? job.expiresAt.toISOString()
+        : job.publishedAt
+        ? JobExpirationService.calculateExpiresAt(job.publishedAt).toISOString()
+        : null,
     };
   }
 
@@ -106,6 +113,11 @@ export class JobService {
    */
   static async createJob(input: any): Promise<any> {
     const validated = CreateJobSchema.parse(input);
+
+    const isPublished = validated.status === 'PUBLISHED';
+    const now = new Date();
+    const publishedAt = isPublished ? now : null;
+    const expiresAt = isPublished ? JobExpirationService.calculateExpiresAt(now) : null;
 
     const created = await db.job.create({
       data: {
@@ -130,7 +142,8 @@ export class JobService {
         jobVerified: validated.jobVerified,
         companyVerified: validated.companyVerified,
         featured: validated.featured,
-        publishedAt: validated.status === 'PUBLISHED' ? new Date() : null,
+        publishedAt,
+        expiresAt,
       },
     });
 
@@ -141,11 +154,13 @@ export class JobService {
    * Publishes a draft job.
    */
   static async publishJob(jobId: string): Promise<any> {
+    const now = new Date();
     return await db.job.update({
       where: { id: jobId },
       data: {
         status: 'PUBLISHED',
-        publishedAt: new Date(),
+        publishedAt: now,
+        expiresAt: JobExpirationService.calculateExpiresAt(now),
       },
     });
   }

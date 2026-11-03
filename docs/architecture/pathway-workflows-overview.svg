@@ -1,0 +1,744 @@
+<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" viewBox="0 0 3840 2160" width="3840" height="2160" style="background:#F8FAFC; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+
+    <!-- Lane 1 Indigo Gradients -->
+    <linearGradient id="gradIndigo" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4F46E5" />
+      <stop offset="100%" stop-color="#3730A3" />
+    </linearGradient>
+
+    <!-- Lane 2 Blue Gradients -->
+    <linearGradient id="gradBlue" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0284C7" />
+      <stop offset="100%" stop-color="#0369A1" />
+    </linearGradient>
+
+    <!-- Lane 3 Teal Gradients -->
+    <linearGradient id="gradTeal" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0D9488" />
+      <stop offset="100%" stop-color="#115E59" />
+    </linearGradient>
+
+    <!-- Lane 4 Red Gradients -->
+    <linearGradient id="gradRed" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E11D48" />
+      <stop offset="100%" stop-color="#9F1239" />
+    </linearGradient>
+
+    <!-- Card Shadow -->
+    <filter id="laneShadow" x="-2%" y="-3%" width="104%" height="108%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#0F172A" flood-opacity="0.06" />
+    </filter>
+    <filter id="stepShadow" x="-5%" y="-8%" width="110%" height="120%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#0F172A" flood-opacity="0.04" />
+    </filter>
+
+    <!-- Markers -->
+    <marker id="arrIndigo" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#4F46E5" />
+    </marker>
+    <marker id="arrBlue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#0284C7" />
+    </marker>
+    <marker id="arrTeal" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#0D9488" />
+    </marker>
+    <marker id="arrRed" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#E11D48" />
+    </marker>
+
+    <!-- Subtle Background Grid -->
+    <pattern id="bgGrid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#E2E8F0" stroke-width="0.8" opacity="0.6"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="3840" height="2160" fill="url(#bgGrid)" />
+
+  <!-- TOP HEADER -->
+  <g transform="translate(80, 50)">
+    <rect width="3680" height="110" rx="16" fill="url(#headerGrad)" filter="url(#laneShadow)" />
+    
+    <text x="45" y="65" fill="#FFFFFF" font-size="34" font-weight="900" letter-spacing="-0.5">PATHWAY<tspan fill="#60A5FA">.ECO</tspan></text>
+    <line x1="330" y1="35" x2="330" y2="78" stroke="#475569" stroke-width="2" />
+    <text x="360" y="52" fill="#FFFFFF" font-size="24" font-weight="800">Business Workflows Architecture &amp; Execution Overview</text>
+    <text x="360" y="80" fill="#94A3B8" font-size="16" font-weight="500">End-to-End Orchestration: Actor Responsibilities, Step-by-Step Processing, Database Persistence &amp; Verified Business Outcomes</text>
+
+    <!-- Status Badges -->
+    <rect x="2980" y="38" width="200" height="36" rx="8" fill="#1E293B" stroke="#334155" />
+    <circle cx="3000" cy="56" r="6" fill="#10B981" />
+    <text x="3016" y="62" fill="#E2E8F0" font-size="14" font-weight="700">CODEBASE VERIFIED</text>
+
+    <rect x="3200" y="38" width="220" height="36" rx="8" fill="#1E293B" stroke="#334155" />
+    <circle cx="3220" cy="56" r="6" fill="#60A5FA" />
+    <text x="3236" y="62" fill="#E2E8F0" font-size="14" font-weight="700">4 CORE WORKFLOWS</text>
+
+    <rect x="3440" y="38" width="200" height="36" rx="8" fill="#1E293B" stroke="#334155" />
+    <circle cx="3460" cy="56" r="6" fill="#F59E0B" />
+    <text x="3476" y="62" fill="#E2E8F0" font-size="14" font-weight="700">4K PRESENTATION</text>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- LANE 1: WORKFLOW 1 - CANDIDATE JOB APPLICATION (INDIGO)                   -->
+  <!-- ========================================================================= -->
+  <g transform="translate(80, 190)">
+    <!-- Lane Container -->
+    <rect width="3680" height="430" rx="16" fill="#FFFFFF" stroke="#C7D2FE" stroke-width="2" filter="url(#laneShadow)" />
+    
+    <!-- Header Banner -->
+    <path d="M 0 16 Q 0 0 16 0 L 3664 0 Q 3680 0 3680 16 L 3680 64 L 0 64 Z" fill="url(#gradIndigo)" />
+    <text x="30" y="41" fill="#FFFFFF" font-size="22" font-weight="800" letter-spacing="0.5">WORKFLOW 1: CANDIDATE JOB DISCOVERY, APPLICATION &amp; RECRUITER PIPELINE</text>
+    <rect x="3480" y="16" width="165" height="32" rx="6" fill="#312E81" />
+    <text x="3500" y="37" fill="#C7D2FE" font-size="14" font-weight="700">THEME: INDIGO</text>
+
+    <!-- Left Metadata Card: Actor, Persistence, Notification, Outcome -->
+    <g transform="translate(30, 85)">
+      <rect width="640" height="315" rx="12" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="1.5" />
+      
+      <!-- Actor -->
+      <rect x="25" y="22" width="90" height="28" rx="6" fill="#4F46E5" />
+      <text x="70" y="41" fill="#FFFFFF" font-size="14" font-weight="800" text-anchor="middle">ACTOR</text>
+      <text x="130" y="42" fill="#1E1B4B" font-size="18" font-weight="800">Job Candidate &amp; Hiring Team</text>
+      <text x="130" y="62" fill="#4B5563" font-size="14">Candidate Portal (:3000) &amp; Recruiter Portal (:3002)</text>
+
+      <line x1="25" y1="80" x2="615" y2="80" stroke="#E0E7FF" stroke-width="1.5" />
+
+      <!-- Persistence -->
+      <rect x="25" y="95" width="130" height="28" rx="6" fill="#312E81" />
+      <text x="90" y="114" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">PERSISTENCE</text>
+      <text x="170" y="115" fill="#1E1B4B" font-size="17" font-weight="800">db.jobApplication &amp; db.resume</text>
+      <text x="170" y="135" fill="#4B5563" font-size="14">Compound key (candidateId_jobId) + Frozen snapshot</text>
+
+      <line x1="25" y1="155" x2="615" y2="155" stroke="#E0E7FF" stroke-width="1.5" />
+
+      <!-- Notification -->
+      <rect x="25" y="170" width="130" height="28" rx="6" fill="#4338CA" />
+      <text x="90" y="189" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">INTEGRATION</text>
+      <text x="170" y="190" fill="#1E1B4B" font-size="17" font-weight="800">ZeptoMail Transactional REST API</text>
+      <text x="170" y="210" fill="#4B5563" font-size="14">Dual emails: Candidate confirmation + Recruiter alert</text>
+
+      <line x1="25" y1="230" x2="615" y2="230" stroke="#E0E7FF" stroke-width="1.5" />
+
+      <!-- Outcome -->
+      <rect x="25" y="245" width="105" height="28" rx="6" fill="#10B981" />
+      <text x="77" y="264" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">OUTCOME</text>
+      <text x="145" y="265" fill="#065F46" font-size="17" font-weight="800">Tamper-Proof Application Committed</text>
+      <text x="145" y="285" fill="#4B5563" font-size="14">Candidate moves through live recruiter review pipeline</text>
+    </g>
+
+    <!-- Right Side: 6 Sequential High-Level Steps -->
+    <!-- Width: 2950 px total -> 6 cards of 445px each with 55px gaps -->
+    <g transform="translate(700, 85)">
+      <!-- Step 1.1 -->
+      <g transform="translate(0, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#E0E7FF" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#EEF2FF" stroke="#4F46E5" stroke-width="2" />
+        <text x="42" y="42" fill="#4F46E5" font-size="16" font-weight="900" text-anchor="middle">1.1</text>
+        <text x="75" y="42" fill="#1E1B4B" font-size="18" font-weight="800">Discovery &amp; Guard</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Candidate searches jobs</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">GET /api/jobs (faceted search)</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Eligibility verified</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">Candidate status === ACTIVE</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Expiration guard checked</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">Job status PUBLISHED &amp; active</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Duplicate protection</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Blocks rapid re-submissions</text>
+      </g>
+      <line x1="452" y1="157" x2="495" y2="157" stroke="#4F46E5" stroke-width="3" marker-end="url(#arrIndigo)" />
+
+      <!-- Step 1.2 -->
+      <g transform="translate(500, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#E0E7FF" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#EEF2FF" stroke="#4F46E5" stroke-width="2" />
+        <text x="42" y="42" fill="#4F46E5" font-size="16" font-weight="900" text-anchor="middle">1.2</text>
+        <text x="75" y="42" fill="#1E1B4B" font-size="18" font-weight="800">Resume Selection</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Attach existing or upload</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">Select profile resume or upload</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Ownership verification</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">resume.profile.userId === candidate</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Security boundary</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">Blocks cross-user resume theft</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Auto-cleanup hook</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Deletes orphaned file on failure</text>
+      </g>
+      <line x1="952" y1="157" x2="995" y2="157" stroke="#4F46E5" stroke-width="3" marker-end="url(#arrIndigo)" />
+
+      <!-- Step 1.3 -->
+      <g transform="translate(1000, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#E0E7FF" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#EEF2FF" stroke="#4F46E5" stroke-width="2" />
+        <text x="42" y="42" fill="#4F46E5" font-size="16" font-weight="900" text-anchor="middle">1.3</text>
+        <text x="75" y="42" fill="#1E1B4B" font-size="18" font-weight="800">Snapshot &amp; Commit</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• ApplicationService.apply()</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">POST /api/jobs/[id]/apply</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Frozen snapshot storage</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">Captures filename, size &amp; type</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Persistence committed</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">db.jobApplication (status: APPLIED)</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Independent lifecycle</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Future profile edits don't alter it</text>
+      </g>
+      <line x1="1452" y1="157" x2="1495" y2="157" stroke="#4F46E5" stroke-width="3" marker-end="url(#arrIndigo)" />
+
+      <!-- Step 1.4 -->
+      <g transform="translate(1500, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#E0E7FF" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#EEF2FF" stroke="#4F46E5" stroke-width="2" />
+        <text x="42" y="42" fill="#4F46E5" font-size="16" font-weight="900" text-anchor="middle">1.4</text>
+        <text x="75" y="42" fill="#1E1B4B" font-size="18" font-weight="800">Email Notifications</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Candidate confirmation</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">sendCandidateAppConfirmation()</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Recruiter alert sent</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">sendRecruiterAppNotification()</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Delivery provider</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">ZeptoMail HTTPS REST API</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Non-blocking resilience</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Network drop never rolls back DB</text>
+      </g>
+      <line x1="1952" y1="157" x2="1995" y2="157" stroke="#4F46E5" stroke-width="3" marker-end="url(#arrIndigo)" />
+
+      <!-- Step 1.5 -->
+      <g transform="translate(2000, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#E0E7FF" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#EEF2FF" stroke="#4F46E5" stroke-width="2" />
+        <text x="42" y="42" fill="#4F46E5" font-size="16" font-weight="900" text-anchor="middle">1.5</text>
+        <text x="75" y="42" fill="#1E1B4B" font-size="18" font-weight="800">Recruiter Review</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Recruiter dashboard</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">Opens candidate card in pipeline</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Secure resume streaming</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">GET /api/recruiter/.../resume</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Scoped authorization</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">Verifies caller's companyId</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Inline preview stream</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Streams buffer with Content-Disp</text>
+      </g>
+      <line x1="2452" y1="157" x2="2495" y2="157" stroke="#4F46E5" stroke-width="3" marker-end="url(#arrIndigo)" />
+
+      <!-- Step 1.6 -->
+      <g transform="translate(2500, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#E0E7FF" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#EEF2FF" stroke="#4F46E5" stroke-width="2" />
+        <text x="42" y="42" fill="#4F46E5" font-size="16" font-weight="900" text-anchor="middle">1.6</text>
+        <text x="75" y="42" fill="#1E1B4B" font-size="18" font-weight="800">Pipeline Transitions</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Stage update</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">SHORTLISTED | INTERVIEW | OFFER</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• RBAC permission check</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">Asserts pipeline:transition</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Audit logging</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">RECRUITER_APP_STATUS_UPDATED</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Candidate visibility</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Candidate portal reflects stage</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- LANE 2: WORKFLOW 2 - JOB PUBLISHING & 30-DAY EXPIRATION (BLUE)            -->
+  <!-- ========================================================================= -->
+  <g transform="translate(80, 650)">
+    <!-- Lane Container -->
+    <rect width="3680" height="430" rx="16" fill="#FFFFFF" stroke="#BAE6FD" stroke-width="2" filter="url(#laneShadow)" />
+    
+    <!-- Header Banner -->
+    <path d="M 0 16 Q 0 0 16 0 L 3664 0 Q 3680 0 3680 16 L 3680 64 L 0 64 Z" fill="url(#gradBlue)" />
+    <text x="30" y="41" fill="#FFFFFF" font-size="22" font-weight="800" letter-spacing="0.5">WORKFLOW 2: RECRUITER JOB PUBLISHING, VISIBILITY RULES &amp; 30-DAY CRON EXPIRATION</text>
+    <rect x="3480" y="16" width="165" height="32" rx="6" fill="#0369A1" />
+    <text x="3508" y="37" fill="#E0F2FE" font-size="14" font-weight="700">THEME: BLUE</text>
+
+    <!-- Left Metadata Card -->
+    <g transform="translate(30, 85)">
+      <rect width="640" height="315" rx="12" fill="#F0F9FF" stroke="#BAE6FD" stroke-width="1.5" />
+      
+      <!-- Actor -->
+      <rect x="25" y="22" width="90" height="28" rx="6" fill="#0284C7" />
+      <text x="70" y="41" fill="#FFFFFF" font-size="14" font-weight="800" text-anchor="middle">ACTOR</text>
+      <text x="130" y="42" fill="#0C4A6E" font-size="18" font-weight="800">Recruiter &amp; Scheduled Cron</text>
+      <text x="130" y="62" fill="#4B5563" font-size="14">Recruiter Portal (:3002) &amp; HTTP Cron Runner</text>
+
+      <line x1="25" y1="80" x2="615" y2="80" stroke="#E0F2FE" stroke-width="1.5" />
+
+      <!-- Persistence -->
+      <rect x="25" y="95" width="130" height="28" rx="6" fill="#0369A1" />
+      <text x="90" y="114" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">PERSISTENCE</text>
+      <text x="170" y="115" fill="#0C4A6E" font-size="17" font-weight="800">db.job (Prisma / MongoDB)</text>
+      <text x="170" y="135" fill="#4B5563" font-size="14">status: PUBLISHED/EXPIRED, publishedAt, expiresAt</text>
+
+      <line x1="25" y1="155" x2="615" y2="155" stroke="#E0F2FE" stroke-width="1.5" />
+
+      <!-- Notification -->
+      <rect x="25" y="170" width="130" height="28" rx="6" fill="#0284C7" />
+      <text x="90" y="189" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">TRIGGER</text>
+      <text x="170" y="190" fill="#0C4A6E" font-size="17" font-weight="800">Scheduled HTTP Cron Endpoint</text>
+      <text x="170" y="210" fill="#4B5563" font-size="14">GET /api/jobs/cron/expire (Bearer CRON_SECRET)</text>
+
+      <line x1="25" y1="230" x2="615" y2="230" stroke="#E0F2FE" stroke-width="1.5" />
+
+      <!-- Outcome -->
+      <rect x="25" y="245" width="105" height="28" rx="6" fill="#10B981" />
+      <text x="77" y="264" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">OUTCOME</text>
+      <text x="145" y="265" fill="#065F46" font-size="17" font-weight="800">Automated 30-Day Stale Job Freeze</text>
+      <text x="145" y="285" fill="#4B5563" font-size="14">Stops new submissions while preserving applicant history</text>
+    </g>
+
+    <!-- Right Side: 6 Sequential Steps -->
+    <g transform="translate(700, 85)">
+      <!-- Step 2.1 -->
+      <g transform="translate(0, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#E0F2FE" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#F0F9FF" stroke="#0284C7" stroke-width="2" />
+        <text x="42" y="42" fill="#0284C7" font-size="16" font-weight="900" text-anchor="middle">2.1</text>
+        <text x="75" y="42" fill="#0C4A6E" font-size="18" font-weight="800">Drafting &amp; Scope</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Recruiter inputs job details</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">Title, skills, salary, workMode</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Company binding</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">Binds to auth.company.id &amp; name</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Tenant boundary enforced</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">Cannot post for other companies</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Zod schema validation</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">RecruiterJobCreateSchema</text>
+      </g>
+      <line x1="452" y1="157" x2="495" y2="157" stroke="#0284C7" stroke-width="3" marker-end="url(#arrBlue)" />
+
+      <!-- Step 2.2 -->
+      <g transform="translate(500, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#E0F2FE" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#F0F9FF" stroke="#0284C7" stroke-width="2" />
+        <text x="42" y="42" fill="#0284C7" font-size="16" font-weight="900" text-anchor="middle">2.2</text>
+        <text x="75" y="42" fill="#0C4A6E" font-size="18" font-weight="800">RBAC Authorization</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Privilege verification</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">assertPermission('jobs:create')</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Publishing permission</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">assertPermission('jobs:publish')</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Authorized roles</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">COMPANY_ADMIN &amp; RECRUITER</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Unauthorized rejection</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Fails fast with HTTP 403</text>
+      </g>
+      <line x1="952" y1="157" x2="995" y2="157" stroke="#0284C7" stroke-width="3" marker-end="url(#arrBlue)" />
+
+      <!-- Step 2.3 -->
+      <g transform="translate(1000, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#E0F2FE" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#F0F9FF" stroke="#0284C7" stroke-width="2" />
+        <text x="42" y="42" fill="#0284C7" font-size="16" font-weight="900" text-anchor="middle">2.3</text>
+        <text x="75" y="42" fill="#0C4A6E" font-size="18" font-weight="800">Publish &amp; Index</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Database commit</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">db.job.create({ status: PUBLISHED })</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Canonical timestamps</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">publishedAt = now</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Calculated expiration</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">expiresAt = publishedAt + 30 days</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Audit trail logged</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">AuditService JOB_PUBLISHED event</text>
+      </g>
+      <line x1="1452" y1="157" x2="1495" y2="157" stroke="#0284C7" stroke-width="3" marker-end="url(#arrBlue)" />
+
+      <!-- Step 2.4 -->
+      <g transform="translate(1500, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#E0E7FF" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#F0F9FF" stroke="#0284C7" stroke-width="2" />
+        <text x="42" y="42" fill="#0284C7" font-size="16" font-weight="900" text-anchor="middle">2.4</text>
+        <text x="75" y="42" fill="#0C4A6E" font-size="18" font-weight="800">Candidate Discovery</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Public job search</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">JobSearchService.search()</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Active query filter</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">publishedAt &gt; now - 30 days</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Candidate match scoring</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">JobMatchingService compares skills</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Applications permitted</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Qualified candidates submit</text>
+      </g>
+      <line x1="1952" y1="157" x2="1995" y2="157" stroke="#0284C7" stroke-width="3" marker-end="url(#arrBlue)" />
+
+      <!-- Step 2.5 -->
+      <g transform="translate(2000, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#E0E7FF" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#F0F9FF" stroke="#0284C7" stroke-width="2" />
+        <text x="42" y="42" fill="#0284C7" font-size="16" font-weight="900" text-anchor="middle">2.5</text>
+        <text x="75" y="42" fill="#0C4A6E" font-size="18" font-weight="800">30-Day Cron Trigger</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Scheduled HTTP trigger</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">GET /api/jobs/cron/expire</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Security token check</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">Bearer CRON_SECRET or Admin</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Batch status transition</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">publishedAt &lt;= now - 30d -&gt; EXPIRED</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Idempotent execution</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Safe to run multiple times daily</text>
+      </g>
+      <line x1="2452" y1="157" x2="2495" y2="157" stroke="#0284C7" stroke-width="3" marker-end="url(#arrBlue)" />
+
+      <!-- Step 2.6 -->
+      <g transform="translate(2500, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#E0E7FF" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#F0F9FF" stroke="#0284C7" stroke-width="2" />
+        <text x="42" y="42" fill="#0284C7" font-size="16" font-weight="900" text-anchor="middle">2.6</text>
+        <text x="75" y="42" fill="#0C4A6E" font-size="18" font-weight="800">Application Freeze</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Discovery removal</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">Omitted from candidate queries</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Submission blocked</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">Rejects new apply attempts (400)</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Application freeze</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">"Job is no longer accepting apps"</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• History preserved</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Recruiter retains full applicant data</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- LANE 3: WORKFLOW 3 - MENTOR ONBOARDING & ACTIVATION (TEAL)                -->
+  <!-- ========================================================================= -->
+  <g transform="translate(80, 1110)">
+    <!-- Lane Container -->
+    <rect width="3680" height="430" rx="16" fill="#FFFFFF" stroke="#99F6E4" stroke-width="2" filter="url(#laneShadow)" />
+    
+    <!-- Header Banner -->
+    <path d="M 0 16 Q 0 0 16 0 L 3664 0 Q 3680 0 3680 16 L 3680 64 L 0 64 Z" fill="url(#gradTeal)" />
+    <text x="30" y="41" fill="#FFFFFF" font-size="22" font-weight="800" letter-spacing="0.5">WORKFLOW 3: MENTOR APPLICATION, ADMIN APPROVAL &amp; SECURE ACCOUNT ACTIVATION</text>
+    <rect x="3480" y="16" width="165" height="32" rx="6" fill="#115E59" />
+    <text x="3508" y="37" fill="#CCFBF1" font-size="14" font-weight="700">THEME: TEAL</text>
+
+    <!-- Left Metadata Card -->
+    <g transform="translate(30, 85)">
+      <rect width="640" height="315" rx="12" fill="#F0FDFA" stroke="#99F6E4" stroke-width="1.5" />
+      
+      <!-- Actor -->
+      <rect x="25" y="22" width="90" height="28" rx="6" fill="#0D9488" />
+      <text x="70" y="41" fill="#FFFFFF" font-size="14" font-weight="800" text-anchor="middle">ACTOR</text>
+      <text x="130" y="42" fill="#134E4A" font-size="18" font-weight="800">Mentor Applicant &amp; Platform Admin</text>
+      <text x="130" y="62" fill="#4B5563" font-size="14">Candidate Portal (:3000), Admin (:3003) &amp; Mentor (:3001)</text>
+
+      <line x1="25" y1="80" x2="615" y2="80" stroke="#CCFBF1" stroke-width="1.5" />
+
+      <!-- Persistence -->
+      <rect x="25" y="95" width="130" height="28" rx="6" fill="#115E59" />
+      <text x="90" y="114" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">PERSISTENCE</text>
+      <text x="170" y="115" fill="#134E4A" font-size="17" font-weight="800">db.mentorApplication &amp; db.mentor</text>
+      <text x="170" y="135" fill="#4B5563" font-size="14">Elevates user to ROLE: MENTOR + SHA-256 setup token</text>
+
+      <line x1="25" y1="155" x2="615" y2="155" stroke="#CCFBF1" stroke-width="1.5" />
+
+      <!-- Notification -->
+      <rect x="25" y="170" width="130" height="28" rx="6" fill="#0D9488" />
+      <text x="90" y="189" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">INTEGRATION</text>
+      <text x="170" y="190" fill="#134E4A" font-size="17" font-weight="800">ZeptoMail Transactional Emails</text>
+      <text x="170" y="210" fill="#4B5563" font-size="14">Receipt confirmation + Secure 24h password setup link</text>
+
+      <line x1="25" y1="230" x2="615" y2="230" stroke="#CCFBF1" stroke-width="1.5" />
+
+      <!-- Outcome -->
+      <rect x="25" y="245" width="105" height="28" rx="6" fill="#10B981" />
+      <text x="77" y="264" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">OUTCOME</text>
+      <text x="145" y="265" fill="#065F46" font-size="17" font-weight="800">Mentor Profile Live &amp; Bookable</text>
+      <text x="145" y="285" fill="#4B5563" font-size="14">Unified user identity with elevated role &amp; public services</text>
+    </g>
+
+    <!-- Right Side: 6 Sequential Steps -->
+    <g transform="translate(700, 85)">
+      <!-- Step 3.1 -->
+      <g transform="translate(0, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#CCFBF1" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#F0FDFA" stroke="#0D9488" stroke-width="2" />
+        <text x="42" y="42" fill="#0D9488" font-size="16" font-weight="900" text-anchor="middle">3.1</text>
+        <text x="75" y="42" fill="#134E4A" font-size="18" font-weight="800">Public Application</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Candidate submits form</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">POST /api/mentor-applications</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Reference ID generated</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">Format: PM-2026-XXXXX</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Application staged</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">status: PENDING in MongoDB</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Zero premature credentials</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">No user account created yet</text>
+      </g>
+      <line x1="452" y1="157" x2="495" y2="157" stroke="#0D9488" stroke-width="3" marker-end="url(#arrTeal)" />
+
+      <!-- Step 3.2 -->
+      <g transform="translate(500, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#CCFBF1" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#F0FDFA" stroke="#0D9488" stroke-width="2" />
+        <text x="42" y="42" fill="#0D9488" font-size="16" font-weight="900" text-anchor="middle">3.2</text>
+        <text x="75" y="42" fill="#134E4A" font-size="18" font-weight="800">Acknowledgment</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Confirmation email sent</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">sendMentorAppReceivedEmail()</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Delivers tracking reference</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">Displays PM reference ID</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Status transparency</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">Explains review turnaround time</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Delivery log committed</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Logged in db.emailDelivery</text>
+      </g>
+      <line x1="952" y1="157" x2="995" y2="157" stroke="#0D9488" stroke-width="3" marker-end="url(#arrTeal)" />
+
+      <!-- Step 3.3 -->
+      <g transform="translate(1000, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#CCFBF1" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#F0FDFA" stroke="#0D9488" stroke-width="2" />
+        <text x="42" y="42" fill="#0D9488" font-size="16" font-weight="900" text-anchor="middle">3.3</text>
+        <text x="75" y="42" fill="#134E4A" font-size="18" font-weight="800">Admin Review</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Admin evaluation</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">Admin Portal reviews credentials</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Status update endpoint</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">POST /api/admin/mentors/.../status</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Approval decision</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">approveApplication() initiated</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Rejection alternative</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Sends rejection note if denied</text>
+      </g>
+      <line x1="1452" y1="157" x2="1495" y2="157" stroke="#0D9488" stroke-width="3" marker-end="url(#arrTeal)" />
+
+      <!-- Step 3.4 -->
+      <g transform="translate(1500, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#CCFBF1" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#F0FDFA" stroke="#0D9488" stroke-width="2" />
+        <text x="42" y="42" fill="#0D9488" font-size="16" font-weight="900" text-anchor="middle">3.4</text>
+        <text x="75" y="42" fill="#134E4A" font-size="18" font-weight="800">Identity Resolution</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Existing candidate check</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">Elevates role to MENTOR safely</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Preserves existing history</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">Candidate profile remains intact</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• New account provisioning</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">Creates User if none exists</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Mentor model upsert</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Populates skills, bio &amp; pricing</text>
+      </g>
+      <line x1="1952" y1="157" x2="1995" y2="157" stroke="#0D9488" stroke-width="3" marker-end="url(#arrTeal)" />
+
+      <!-- Step 3.5 -->
+      <g transform="translate(2000, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#CCFBF1" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#F0FDFA" stroke="#0D9488" stroke-width="2" />
+        <text x="42" y="42" fill="#0D9488" font-size="16" font-weight="900" text-anchor="middle">3.5</text>
+        <text x="75" y="42" fill="#134E4A" font-size="18" font-weight="800">24h Setup Token</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Cryptographic generation</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">crypto.randomBytes(32)</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• SHA-256 database hash</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">db.passwordSetupToken</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Single-use 24h validity</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">Prior unused tokens invalidated</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Welcome email dispatched</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Links to /setup-password?token=</text>
+      </g>
+      <line x1="2452" y1="157" x2="2495" y2="157" stroke="#0D9488" stroke-width="3" marker-end="url(#arrTeal)" />
+
+      <!-- Step 3.6 -->
+      <g transform="translate(2500, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#CCFBF1" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#F0FDFA" stroke="#0D9488" stroke-width="2" />
+        <text x="42" y="42" fill="#0D9488" font-size="16" font-weight="900" text-anchor="middle">3.6</text>
+        <text x="75" y="42" fill="#134E4A" font-size="18" font-weight="800">Password &amp; Activation</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Mentor sets password</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">Bcrypt hashed (12 salt rounds)</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Setup token consumed</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">token.usedAt = now</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Session created</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">career_mentor_session established</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Public discovery live</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Candidates can book sessions</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- LANE 4: WORKFLOW 4 - RECRUITER TEAM & RBAC (RED)                          -->
+  <!-- ========================================================================= -->
+  <g transform="translate(80, 1570)">
+    <!-- Lane Container -->
+    <rect width="3680" height="430" rx="16" fill="#FFFFFF" stroke="#FECDD3" stroke-width="2" filter="url(#laneShadow)" />
+    
+    <!-- Header Banner -->
+    <path d="M 0 16 Q 0 0 16 0 L 3664 0 Q 3680 0 3680 16 L 3680 64 L 0 64 Z" fill="url(#gradRed)" />
+    <text x="30" y="41" fill="#FFFFFF" font-size="22" font-weight="800" letter-spacing="0.5">WORKFLOW 4: RECRUITER TEAM MEMBER INVITATION, GRANULAR RBAC &amp; TENANT ISOLATION</text>
+    <rect x="3480" y="16" width="165" height="32" rx="6" fill="#9F1239" />
+    <text x="3512" y="37" fill="#FFE4E6" font-size="14" font-weight="700">THEME: RED</text>
+
+    <!-- Left Metadata Card -->
+    <g transform="translate(30, 85)">
+      <rect width="640" height="315" rx="12" fill="#FFF1F2" stroke="#FECDD3" stroke-width="1.5" />
+      
+      <!-- Actor -->
+      <rect x="25" y="22" width="90" height="28" rx="6" fill="#E11D48" />
+      <text x="70" y="41" fill="#FFFFFF" font-size="14" font-weight="800" text-anchor="middle">ACTOR</text>
+      <text x="130" y="42" fill="#881337" font-size="18" font-weight="800">Company Admin &amp; Invitee</text>
+      <text x="130" y="62" fill="#4B5563" font-size="14">Recruiter Portal (:3002) Team Management</text>
+
+      <line x1="25" y1="80" x2="615" y2="80" stroke="#FFE4E6" stroke-width="1.5" />
+
+      <!-- Persistence -->
+      <rect x="25" y="95" width="130" height="28" rx="6" fill="#9F1239" />
+      <text x="90" y="114" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">PERSISTENCE</text>
+      <text x="170" y="115" fill="#881337" font-size="17" font-weight="800">db.companyInvitation &amp; Member</text>
+      <text x="170" y="135" fill="#4B5563" font-size="14">SHA-256 tokenHash + 6 Roles + Assigned job scopes</text>
+
+      <line x1="25" y1="155" x2="615" y2="155" stroke="#FFE4E6" stroke-width="1.5" />
+
+      <!-- Notification -->
+      <rect x="25" y="170" width="130" height="28" rx="6" fill="#E11D48" />
+      <text x="90" y="189" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">INTEGRATION</text>
+      <text x="170" y="190" fill="#881337" font-size="17" font-weight="800">ZeptoMail Team Invitation</text>
+      <text x="170" y="210" fill="#4B5563" font-size="14">Direct 7-day acceptance link with embedded token</text>
+
+      <line x1="25" y1="230" x2="615" y2="230" stroke="#FFE4E6" stroke-width="1.5" />
+
+      <!-- Outcome -->
+      <rect x="25" y="245" width="105" height="28" rx="6" fill="#10B981" />
+      <text x="77" y="264" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">OUTCOME</text>
+      <text x="145" y="265" fill="#065F46" font-size="17" font-weight="800">Enforced 28-Permission RBAC Matrix</text>
+      <text x="145" y="285" fill="#4B5563" font-size="14">Strict multi-tenant isolation by companyId &amp; assigned jobs</text>
+    </g>
+
+    <!-- Right Side: 6 Sequential Steps -->
+    <g transform="translate(700, 85)">
+      <!-- Step 4.1 -->
+      <g transform="translate(0, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#FECDD3" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#FFF1F2" stroke="#E11D48" stroke-width="2" />
+        <text x="42" y="42" fill="#E11D48" font-size="16" font-weight="900" text-anchor="middle">4.1</text>
+        <text x="75" y="42" fill="#881337" font-size="18" font-weight="800">Invitation Request</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Admin opens team view</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">Recruiter Portal (:3002)</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Selects granular role</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">RECRUITER | INTERVIEWER | HM</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Scopes job assignments</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">assignedJobIds &amp; interviewTypes</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Zod schema parsed</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">TeamMemberInviteSchema</text>
+      </g>
+      <line x1="452" y1="157" x2="495" y2="157" stroke="#E11D48" stroke-width="3" marker-end="url(#arrRed)" />
+
+      <!-- Step 4.2 -->
+      <g transform="translate(500, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#FECDD3" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#FFF1F2" stroke="#E11D48" stroke-width="2" />
+        <text x="42" y="42" fill="#E11D48" font-size="16" font-weight="900" text-anchor="middle">4.2</text>
+        <text x="75" y="42" fill="#881337" font-size="18" font-weight="800">Privilege Guard</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Permission asserted</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">assertPermission('team:invite')</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Admin elevation guard</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">Only ADMIN can invite ADMIN</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Active membership check</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">Blocks already active emails</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Pending conflict check</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Prevents duplicate open invites</text>
+      </g>
+      <line x1="952" y1="157" x2="995" y2="157" stroke="#E11D48" stroke-width="3" marker-end="url(#arrRed)" />
+
+      <!-- Step 4.3 -->
+      <g transform="translate(1000, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#FECDD3" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#FFF1F2" stroke="#E11D48" stroke-width="2" />
+        <text x="42" y="42" fill="#E11D48" font-size="16" font-weight="900" text-anchor="middle">4.3</text>
+        <text x="75" y="42" fill="#881337" font-size="18" font-weight="800">Token Hashing</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• 32-byte crypto token</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">crypto.randomBytes(32)</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• SHA-256 storage</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">db.companyInvitation (tokenHash)</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• 7-day expiration set</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">expiresAt = now + 7 days</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Audit trail committed</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">RECRUITER_INVITATION_CREATED</text>
+      </g>
+      <line x1="1452" y1="157" x2="1495" y2="157" stroke="#E11D48" stroke-width="3" marker-end="url(#arrRed)" />
+
+      <!-- Step 4.4 -->
+      <g transform="translate(1500, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#FECDD3" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#FFF1F2" stroke="#E11D48" stroke-width="2" />
+        <text x="42" y="42" fill="#E11D48" font-size="16" font-weight="900" text-anchor="middle">4.4</text>
+        <text x="75" y="42" fill="#881337" font-size="18" font-weight="800">Invitation Email</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• ZeptoMail REST API call</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">sendRecruiterInvitationEmail()</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Direct acceptance URL</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">team/accept-invite?token=raw</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Delivery verification</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">Marks FAILED on network drop</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Resend &amp; Revoke support</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Admin can resend or cancel anytime</text>
+      </g>
+      <line x1="1952" y1="157" x2="1995" y2="157" stroke="#E11D48" stroke-width="3" marker-end="url(#arrRed)" />
+
+      <!-- Step 4.5 -->
+      <g transform="translate(2000, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#FECDD3" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#FFF1F2" stroke="#E11D48" stroke-width="2" />
+        <text x="42" y="42" fill="#E11D48" font-size="16" font-weight="900" text-anchor="middle">4.5</text>
+        <text x="75" y="42" fill="#881337" font-size="18" font-weight="800">Token Accept</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• Invitee submits token</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">acceptInvitation(token)</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• SHA-256 match in DB</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">Verifies tokenHash &amp; expiration</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• User provisioning</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">Upserts User (ROLE: RECRUITER)</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Idempotent retry safety</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Returns membership if accepted</text>
+      </g>
+      <line x1="2452" y1="157" x2="2495" y2="157" stroke="#E11D48" stroke-width="3" marker-end="url(#arrRed)" />
+
+      <!-- Step 4.6 -->
+      <g transform="translate(2500, 0)">
+        <rect width="445" height="315" rx="12" fill="#FFFFFF" stroke="#FECDD3" stroke-width="2" filter="url(#stepShadow)" />
+        <rect x="20" y="20" width="45" height="32" rx="6" fill="#FFF1F2" stroke="#E11D48" stroke-width="2" />
+        <text x="42" y="42" fill="#E11D48" font-size="16" font-weight="900" text-anchor="middle">4.6</text>
+        <text x="75" y="42" fill="#881337" font-size="18" font-weight="800">RBAC Enforcement</text>
+        <line x1="20" y1="65" x2="425" y2="65" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="20" y="95" fill="#334155" font-size="15" font-weight="700">• CompanyMember activated</text>
+        <text x="35" y="120" fill="#64748B" font-size="14">db.companyMember (status: ACTIVE)</text>
+        <text x="20" y="155" fill="#334155" font-size="15" font-weight="700">• Multi-tenant companyId</text>
+        <text x="35" y="180" fill="#64748B" font-size="14">Strict where: { companyId } scoping</text>
+        <text x="20" y="215" fill="#334155" font-size="15" font-weight="700">• Interviewer isolation</text>
+        <text x="35" y="240" fill="#64748B" font-size="14">Interviewer only sees assigned</text>
+        <text x="20" y="275" fill="#334155" font-size="15" font-weight="700">• Hiring Manager isolation</text>
+        <text x="35" y="298" fill="#64748B" font-size="14">Restricted to assignedJobIds</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- FOOTER / LEGEND -->
+  <g transform="translate(80, 2030)">
+    <rect width="3680" height="80" rx="12" fill="#0F172A" />
+    
+    <text x="40" y="48" fill="#FFFFFF" font-size="18" font-weight="800">COORDINATED ARCHITECTURAL SUITE:</text>
+    
+    <rect x="420" y="28" width="22" height="22" rx="4" fill="#4F46E5" />
+    <text x="455" y="46" fill="#C7D2FE" font-size="16" font-weight="700">Workflow 1: Candidate Application (Indigo)</text>
+
+    <rect x="940" y="28" width="22" height="22" rx="4" fill="#0284C7" />
+    <text x="975" y="46" fill="#BAE6FD" font-size="16" font-weight="700">Workflow 2: Job Publishing &amp; Expiration (Blue)</text>
+
+    <rect x="1510" y="28" width="22" height="22" rx="4" fill="#0D9488" />
+    <text x="1545" y="46" fill="#99F6E4" font-size="16" font-weight="700">Workflow 3: Mentor Activation (Teal)</text>
+
+    <rect x="2030" y="28" width="22" height="22" rx="4" fill="#E11D48" />
+    <text x="2065" y="46" fill="#FECDD3" font-size="16" font-weight="700">Workflow 4: Recruiter Team &amp; RBAC (Red)</text>
+
+    <text x="2680" y="46" fill="#94A3B8" font-size="16" font-weight="600">All 4 Workflows Verified Against Backend Implementation · Strict Multi-Tenant Scoping · Cryptographic Security</text>
+  </g>
+</svg>

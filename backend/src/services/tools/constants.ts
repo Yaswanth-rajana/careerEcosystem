@@ -8,6 +8,14 @@ export const JOB_METADATA_RETENTION_HOURS = parseInt(process.env.JOB_METADATA_RE
 export const GOTENBERG_URL = process.env.GOTENBERG_URL || 'http://localhost:3001';
 export const STORAGE_PROVIDER_TYPE = process.env.STORAGE_PROVIDER || 'local';
 
+export const CONVERSION_PROVIDER = process.env.CONVERSION_PROVIDER || (process.env.CLOUDCONVERT_API_KEY ? 'cloudconvert' : 'mock');
+export const CLOUDCONVERT_API_KEY = process.env.CLOUDCONVERT_API_KEY || '';
+export const CLOUDCONVERT_WEBHOOK_SECRET = process.env.CLOUDCONVERT_WEBHOOK_SECRET || '';
+export const CLOUDCONVERT_SANDBOX = process.env.CLOUDCONVERT_SANDBOX === 'true';
+export const CLOUDCONVERT_API_URL = CLOUDCONVERT_SANDBOX
+  ? 'https://api.sandbox.cloudconvert.com/v2'
+  : (process.env.CLOUDCONVERT_API_URL || 'https://api.cloudconvert.com/v2');
+
 export const SUPPORTED_CONVERSIONS: Record<string, string[]> = {
   doc: ['pdf'],
   docx: ['pdf'],

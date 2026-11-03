@@ -4,13 +4,24 @@ import { RecruiterOfferCreateSchema } from '../../validations/recruiterSchemas';
 import { AuditService } from '../auditService';
 import { z } from 'zod';
 
+import { RecruiterRbacService } from './recruiterRbacService';
+
 export class RecruiterOfferService {
   /**
    * Lists offers for the recruiter's company.
    */
-  static async listOffers(companyId: string): Promise<RecruiterOfferDTO[]> {
+  static async listOffers(companyId: string, auth?: AuthenticatedRecruiter): Promise<RecruiterOfferDTO[]> {
+    if (auth) {
+      RecruiterRbacService.assertPermission(auth, 'offers:view');
+    }
+
+    const where: any = { companyId };
+    if (auth && auth.companyRole === 'HIRING_MANAGER' && auth.membership.assignedJobIds.length > 0) {
+      where.jobId = { in: auth.membership.assignedJobIds };
+    }
+
     const offers = await db.offer.findMany({
-      where: { companyId },
+      where,
       orderBy: { createdAt: 'desc' },
       include: {
         candidate: { select: { name: true, email: true } },
@@ -43,14 +54,26 @@ export class RecruiterOfferService {
    * Creates a formal job offer for a candidate application.
    */
   static async createOffer(data: z.infer<typeof RecruiterOfferCreateSchema>, auth: AuthenticatedRecruiter) {
+    RecruiterRbacService.assertPermission(auth, 'offers:manage');
+
     const validated = RecruiterOfferCreateSchema.parse(data);
 
-    // Ownership check on job
-    const job = await db.job.findFirst({
-      where: { id: validated.jobId, companyId: auth.company.id },
-    });
+    // Ownership check on job and scoped access
+    const job = await RecruiterRbacService.assertJobAccess(auth, validated.jobId);
     if (!job) {
       throw new Error('Job not found or access denied.');
+    }
+
+    // Verify application belongs to company job
+    const app = await db.jobApplication.findFirst({
+      where: {
+        id: validated.applicationId,
+        jobId: validated.jobId,
+        job: { companyId: auth.company.id },
+      },
+    });
+    if (!app) {
+      throw new Error('Application not found or access denied.');
     }
 
     const offer = await db.offer.create({
@@ -124,6 +147,8 @@ export class RecruiterOfferService {
     newStatus: 'SENT' | 'ACCEPTED' | 'DECLINED' | 'WITHDRAWN',
     auth: AuthenticatedRecruiter
   ) {
+    RecruiterRbacService.assertPermission(auth, 'offers:manage');
+
     const existing = await db.offer.findFirst({
       where: { id, companyId },
     });

@@ -12,7 +12,8 @@ export async function GET(
     const auth = await getAuthenticatedRecruiter();
     const application = await RecruiterApplicationService.getApplicationDetail(
       params.id,
-      auth.company.id
+      auth.company.id,
+      auth
     );
 
     return NextResponse.json({ success: true, data: application });

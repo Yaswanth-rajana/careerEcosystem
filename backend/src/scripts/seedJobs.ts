@@ -370,10 +370,12 @@ export async function seedJobs() {
     });
 
     if (!existing) {
+      const now = new Date();
       await db.job.create({
         data: {
           ...jobData,
-          publishedAt: new Date(),
+          publishedAt: now,
+          expiresAt: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000),
         },
       });
       console.log(`Created job: ${jobData.title} at ${jobData.company}`);

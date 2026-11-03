@@ -1,0 +1,56 @@
+%% PATHWAY.ECO — Business Workflows Architecture Overview
+%% High-level summary of the 4 core domain workflows
+
+flowchart TB
+    classDef indigoStyle fill:#EEF2FF,stroke:#4F46E5,stroke-width:2px,color:#1E1B4B;
+    classDef blueStyle fill:#F0F9FF,stroke:#0284C7,stroke-width:2px,color:#0C4A6E;
+    classDef tealStyle fill:#F0FDFA,stroke:#0D9488,stroke-width:2px,color:#134E4A;
+    classDef redStyle fill:#FFF1F2,stroke:#E11D48,stroke-width:2px,color:#881337;
+
+    subgraph WF1 ["WORKFLOW 1: CANDIDATE JOB DISCOVERY & APPLICATION PIPELINE (INDIGO)"]
+        direction LR
+        W1_Actor["Actor: Candidate & Recruiter"] --> W1_S1["1.1 Job Discovery<br/>GET /api/jobs"]
+        W1_S1 --> W1_S2["1.2 Eligibility & Guard<br/>Status ACTIVE & non-expired"]
+        W1_S2 --> W1_S3["1.3 Resume Selection<br/>Profile CV or Upload (Ownership check)"]
+        W1_S3 --> W1_S4["1.4 Immutable Snapshot<br/>db.jobApplication (status: APPLIED)"]
+        W1_S4 --> W1_S5["1.5 ZeptoMail Delivery<br/>Dual candidate & recruiter emails"]
+        W1_S5 --> W1_S6["1.6 Recruiter Stream & Review<br/>Inline PDF streaming"]
+        W1_S6 --> W1_S7["1.7 Pipeline Transition<br/>SHORTLISTED, INTERVIEW, OFFER"]
+    end
+    class WF1,W1_Actor,W1_S1,W1_S2,W1_S3,W1_S4,W1_S5,W1_S6,W1_S7 indigoStyle;
+
+    subgraph WF2 ["WORKFLOW 2: RECRUITER JOB PUBLISHING & 30-DAY CRON EXPIRATION (BLUE)"]
+        direction LR
+        W2_Actor["Actor: Recruiter & Cron"] --> W2_S1["2.1 Job Drafting<br/>POST /api/recruiter/jobs"]
+        W2_S1 --> W2_S2["2.2 Company Binding & RBAC<br/>Bound to auth.company.id"]
+        W2_S2 --> W2_S3["2.3 Schema Validation<br/>Zod RecruiterJobCreateSchema"]
+        W2_S3 --> W2_S4["2.4 Publish & Index<br/>publishedAt = now, expiresAt = +30d"]
+        W2_S4 --> W2_S5["2.5 Candidate Discovery<br/>Active query filter (&gt; now - 30d)"]
+        W2_S5 --> W2_S6["2.6 Scheduled 30d Cron<br/>GET /api/jobs/cron/expire"]
+        W2_S6 --> W2_S7["2.7 Application Freeze<br/>Rejects apply; preserves pipeline"]
+    end
+    class WF2,W2_Actor,W2_S1,W2_S2,W2_S3,W2_S4,W2_S5,W2_S6,W2_S7 blueStyle;
+
+    subgraph WF3 ["WORKFLOW 3: MENTOR APPLICATION, ADMIN APPROVAL & ACTIVATION (TEAL)"]
+        direction LR
+        W3_Actor["Actor: Applicant & Admin"] --> W3_S1["3.1 Public Application<br/>POST /api/mentor-applications"]
+        W3_S1 --> W3_S2["3.2 Acknowledgment<br/>ZeptoMail with reference ID"]
+        W3_S2 --> W3_S3["3.3 Admin Review<br/>POST /api/admin/mentors/.../status"]
+        W3_S3 --> W3_S4["3.4 Identity Resolution<br/>Safe elevation to ROLE: MENTOR"]
+        W3_S4 --> W3_S5["3.5 24h Setup Token<br/>32-byte crypto, SHA-256 in DB"]
+        W3_S5 --> W3_S6["3.6 Password Setup<br/>Bcrypt 12 rounds, token consumed"]
+        W3_S6 --> W3_S7["3.7 Public Profile Live<br/>Enabled for candidate bookings"]
+    end
+    class WF3,W3_Actor,W3_S1,W3_S2,W3_S3,W3_S4,W3_S5,W3_S6,W3_S7 tealStyle;
+
+    subgraph WF4 ["WORKFLOW 4: RECRUITER TEAM INVITATION & GRANULAR RBAC (RED)"]
+        direction LR
+        W4_Actor["Actor: Company Admin & Invitee"] --> W4_S1["4.1 Invitation Request<br/>Select role & scope attributes"]
+        W4_S1 --> W4_S2["4.2 Privilege Guard<br/>Only ADMIN invites ADMIN; checks dupes"]
+        W4_S2 --> W4_S3["4.3 Token Hashing<br/>32-byte crypto, SHA-256, 7d expiry"]
+        W4_S3 --> W4_S4["4.4 Invitation Email<br/>ZeptoMail with accept link"]
+        W4_S4 --> W4_S5["4.5 Token Validation<br/>SHA-256 hash match & activation"]
+        W4_S5 --> W4_S6["4.6 Member Activation<br/>db.companyMember (status: ACTIVE)"]
+        W4_S6 --> W4_S7["4.7 RBAC Enforcement<br/>28 permissions matrix & tenant isolation"]
+    end
+    class WF4,W4_Actor,W4_S1,W4_S2,W4_S3,W4_S4,W4_S5,W4_S6,W4_S7 redStyle;

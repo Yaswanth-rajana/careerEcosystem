@@ -1,0 +1,540 @@
+<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" viewBox="0 0 3840 2160" width="3840" height="2160" style="background:#F8FAFC; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+
+    <linearGradient id="bannerRedGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E11D48" />
+      <stop offset="100%" stop-color="#881337" />
+    </linearGradient>
+
+    <!-- Shadows -->
+    <filter id="mainShadow" x="-2%" y="-2%" width="104%" height="106%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0F172A" flood-opacity="0.08" />
+    </filter>
+    <filter id="cardShadow" x="-3%" y="-4%" width="106%" height="110%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06" />
+    </filter>
+
+    <!-- Markers -->
+    <marker id="arrRed" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#E11D48" />
+    </marker>
+    <marker id="arrGreen" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#10B981" />
+    </marker>
+
+    <!-- Grid Pattern -->
+    <pattern id="bgGrid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#E2E8F0" stroke-width="0.8" opacity="0.6"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="3840" height="2160" fill="url(#bgGrid)" />
+
+  <!-- TOP HEADER (80, 50, 3680 x 120) -->
+  <g transform="translate(80, 50)">
+    <rect width="3680" height="120" rx="16" fill="url(#headerGrad)" filter="url(#mainShadow)" />
+    
+    <text x="45" y="70" fill="#FFFFFF" font-size="36" font-weight="900" letter-spacing="-0.5">PATHWAY<tspan fill="#60A5FA">.ECO</tspan></text>
+    <line x1="340" y1="35" x2="340" y2="85" stroke="#475569" stroke-width="2" />
+    <text x="375" y="56" fill="#FFFFFF" font-size="26" font-weight="800">Workflow 4 — Recruiter Team Invitation, Granular RBAC &amp; Tenant Isolation</text>
+    <text x="375" y="86" fill="#94A3B8" font-size="16" font-weight="500">Invitation Request → Scope Validation → 32-Byte Token &amp; SHA-256 Hash → ZeptoMail Dispatch → Token Acceptance → Membership Activation → 28-Permission Matrix</text>
+
+    <!-- Badges -->
+    <rect x="2960" y="42" width="220" height="38" rx="8" fill="#1E293B" stroke="#334155" />
+    <circle cx="2982" cy="61" r="6" fill="#E11D48" />
+    <text x="3000" y="67" fill="#E2E8F0" font-size="14" font-weight="700">THEME: RED</text>
+
+    <rect x="3200" y="42" width="220" height="38" rx="8" fill="#1E293B" stroke="#334155" />
+    <circle cx="3222" cy="61" r="6" fill="#10B981" />
+    <text x="3240" y="67" fill="#E2E8F0" font-size="14" font-weight="700">CODEBASE VERIFIED</text>
+
+    <rect x="3440" y="42" width="200" height="38" rx="8" fill="#1E293B" stroke="#334155" />
+    <circle cx="3460" cy="61" r="6" fill="#38BDF8" />
+    <text x="3478" y="67" fill="#E2E8F0" font-size="14" font-weight="700">PORTAL :3002</text>
+  </g>
+
+  <!-- SECTION 1: 8 SEQUENTIAL EXECUTION CARDS -->
+  <!-- Y = 200, Height = 580 -->
+  <g transform="translate(80, 200)">
+    <rect width="3680" height="580" rx="16" fill="#FFFFFF" stroke="#FECDD3" stroke-width="2" filter="url(#mainShadow)" />
+    
+    <!-- Title Bar -->
+    <path d="M 0 16 Q 0 0 16 0 L 3664 0 Q 3680 0 3680 16 L 3680 60 L 0 60 Z" fill="url(#bannerRedGrad)" />
+    <text x="35" y="38" fill="#FFFFFF" font-size="22" font-weight="800">EXECUTION PIPELINE: 8 SEQUENTIAL STAGES FROM INVITATION DISPATCH TO RBAC ENFORCEMENT</text>
+    <text x="3260" y="38" fill="#FFE4E6" font-size="15" font-weight="600">6 ROLES · 28 PERMISSIONS · CRYPTO HASHING</text>
+
+    <!-- 8 Cards: Each 420px wide, gap 37px -->
+    <!-- Card 1: Invitation Request -->
+    <g transform="translate(30, 80)">
+      <rect width="420" height="470" rx="12" fill="#FFFFFF" stroke="#FECDD3" stroke-width="2" filter="url(#cardShadow)" />
+      <rect x="18" y="18" width="55" height="32" rx="6" fill="#FFF1F2" stroke="#E11D48" stroke-width="2" />
+      <text x="45" y="40" fill="#E11D48" font-size="16" font-weight="900" text-anchor="middle">4.1</text>
+      <text x="85" y="40" fill="#881337" font-size="19" font-weight="800">Invitation Request</text>
+      <line x1="18" y1="62" x2="400" y2="62" stroke="#E2E8F0" stroke-width="1.5" />
+      
+      <rect x="18" y="75" width="85" height="24" rx="4" fill="#FFF1F2" />
+      <text x="60" y="92" fill="#E11D48" font-size="12" font-weight="800" text-anchor="middle">ADMIN</text>
+      <text x="115" y="92" fill="#64748B" font-size="13" font-weight="600">Recruiter Portal (:3002)</text>
+
+      <text x="18" y="130" fill="#1E293B" font-size="15" font-weight="700">• Admin Opens Team View</text>
+      <text x="32" y="152" fill="#475569" font-size="14">Company Admin navigates to /team</text>
+      <text x="32" y="172" fill="#475569" font-size="14">Inputs invitee email, name, title</text>
+
+      <text x="18" y="205" fill="#1E293B" font-size="15" font-weight="700">• Role Selection</text>
+      <text x="32" y="227" fill="#E11D48" font-size="14" font-weight="600">Selects 1 of 6 granular roles</text>
+      <text x="32" y="247" fill="#64748B" font-size="13">(RECRUITER, HM, INTERVIEWER...)</text>
+
+      <text x="18" y="280" fill="#1E293B" font-size="15" font-weight="700">• Scoping Attributes</text>
+      <text x="32" y="302" fill="#475569" font-size="14">Configures assignedJobIds (HM)</text>
+      <text x="32" y="322" fill="#475569" font-size="14">or interviewTypes (TECH / HR)</text>
+
+      <rect x="18" y="360" width="384" height="85" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+      <text x="30" y="385" fill="#0F172A" font-size="13" font-weight="800">PRIMARY OUTCOME:</text>
+      <text x="30" y="410" fill="#334155" font-size="13">Structured invitation payload</text>
+      <text x="30" y="430" fill="#64748B" font-size="13">Scoped role configuration</text>
+    </g>
+    <line x1="457" y1="315" x2="480" y2="315" stroke="#E11D48" stroke-width="3" marker-end="url(#arrRed)" />
+
+    <!-- Card 2: Privilege Guard & Duplicate Checks -->
+    <g transform="translate(487, 0)">
+      <rect width="420" height="470" rx="12" fill="#FFFFFF" stroke="#FECDD3" stroke-width="2" filter="url(#cardShadow)" />
+      <rect x="18" y="18" width="55" height="32" rx="6" fill="#FFF1F2" stroke="#E11D48" stroke-width="2" />
+      <text x="45" y="40" fill="#E11D48" font-size="16" font-weight="900" text-anchor="middle">4.2</text>
+      <text x="85" y="40" fill="#1E1B4B" font-size="19" font-weight="800">Privilege Guard</text>
+      <line x1="18" y1="62" x2="400" y2="62" stroke="#E2E8F0" stroke-width="1.5" />
+
+      <rect x="18" y="75" width="85" height="24" rx="4" fill="#FFF1F2" />
+      <text x="60" y="92" fill="#E11D48" font-size="12" font-weight="800" text-anchor="middle">RBAC</text>
+      <text x="115" y="92" fill="#64748B" font-size="13" font-weight="600">RecruiterTeamService Guards</text>
+
+      <text x="18" y="130" fill="#1E293B" font-size="15" font-weight="700">• Permission Assertion</text>
+      <text x="32" y="152" fill="#E11D48" font-size="13" font-weight="600">assertPermission(auth, 'team:invite')</text>
+      <text x="32" y="172" fill="#64748B" font-size="13">Only COMPANY_ADMIN has team:invite</text>
+
+      <text x="18" y="205" fill="#1E293B" font-size="15" font-weight="700">• Admin Elevation Guard</text>
+      <text x="32" y="227" fill="#475569" font-size="14">Only a COMPANY_ADMIN can invite</text>
+      <text x="32" y="247" fill="#EF4444" font-size="13">another COMPANY_ADMIN (403)</text>
+
+      <text x="18" y="280" fill="#1E293B" font-size="15" font-weight="700">• Conflict &amp; Duplicate Checks</text>
+      <text x="32" y="302" fill="#475569" font-size="14">Checks db.companyMember (active)</text>
+      <text x="32" y="322" fill="#EF4444" font-size="13">Checks db.companyInvitation (pending)</text>
+
+      <rect x="18" y="360" width="384" height="85" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+      <text x="30" y="385" fill="#0F172A" font-size="13" font-weight="800">PRIMARY OUTCOME:</text>
+      <text x="30" y="410" fill="#334155" font-size="13">Authority validated</text>
+      <text x="30" y="430" fill="#64748B" font-size="13">Duplicate invitations rejected</text>
+    </g>
+    <line x1="914" y1="315" x2="937" y2="315" stroke="#E11D48" stroke-width="3" marker-end="url(#arrRed)" />
+
+    <!-- Card 3: 32-Byte Token & SHA-256 Hashing -->
+    <g transform="translate(944, 0)">
+      <rect width="420" height="470" rx="12" fill="#FFFFFF" stroke="#FECDD3" stroke-width="2" filter="url(#cardShadow)" />
+      <rect x="18" y="18" width="55" height="32" rx="6" fill="#FFF1F2" stroke="#E11D48" stroke-width="2" />
+      <text x="45" y="40" fill="#E11D48" font-size="16" font-weight="900" text-anchor="middle">4.3</text>
+      <text x="85" y="40" fill="#1E1B4B" font-size="19" font-weight="800">Token Hashing</text>
+      <line x1="18" y1="62" x2="400" y2="62" stroke="#E2E8F0" stroke-width="1.5" />
+
+      <rect x="18" y="75" width="85" height="24" rx="4" fill="#FFF1F2" />
+      <text x="60" y="92" fill="#E11D48" font-size="12" font-weight="800" text-anchor="middle">CRYPTO</text>
+      <text x="115" y="92" fill="#64748B" font-size="13" font-weight="600">Crypto Random &amp; SHA-256</text>
+
+      <text x="18" y="130" fill="#1E293B" font-size="15" font-weight="700">• Cryptographic Token Generation</text>
+      <text x="32" y="152" fill="#E11D48" font-size="13" font-weight="600">crypto.randomBytes(32).toString('hex')</text>
+      <text x="32" y="172" fill="#64748B" font-size="13">Generates 256-bit entropy raw token</text>
+
+      <text x="18" y="205" fill="#1E293B" font-size="15" font-weight="700">• SHA-256 Digest Computation</text>
+      <text x="32" y="227" fill="#475569" font-size="14">tokenHash = sha256(rawToken)</text>
+      <text x="32" y="247" fill="#10B981" font-size="13" font-weight="600">Raw token NEVER stored in MongoDB</text>
+
+      <text x="18" y="280" fill="#1E293B" font-size="15" font-weight="700">• 7-Day Expiration Period</text>
+      <text x="32" y="302" fill="#475569" font-size="14">expiresAt = now + 7 days</text>
+      <text x="32" y="322" fill="#64748B" font-size="13">Status initialized to 'PENDING'</text>
+
+      <rect x="18" y="360" width="384" height="85" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+      <text x="30" y="385" fill="#0F172A" font-size="13" font-weight="800">PRIMARY OUTCOME:</text>
+      <text x="30" y="410" fill="#334155" font-size="13">Invitation persisted in DB</text>
+      <text x="30" y="430" fill="#64748B" font-size="13">db.companyInvitation record ready</text>
+    </g>
+    <line x1="1371" y1="315" x2="1394" y2="315" stroke="#E11D48" stroke-width="3" marker-end="url(#arrRed)" />
+
+    <!-- Card 4: Invitation Email Delivery -->
+    <g transform="translate(1401, 0)">
+      <rect width="420" height="470" rx="12" fill="#FFFFFF" stroke="#FECDD3" stroke-width="2" filter="url(#cardShadow)" />
+      <rect x="18" y="18" width="55" height="32" rx="6" fill="#FFF1F2" stroke="#E11D48" stroke-width="2" />
+      <text x="45" y="40" fill="#E11D48" font-size="16" font-weight="900" text-anchor="middle">4.4</text>
+      <text x="85" y="40" fill="#1E1B4B" font-size="19" font-weight="800">Invitation Email</text>
+      <line x1="18" y1="62" x2="400" y2="62" stroke="#E2E8F0" stroke-width="1.5" />
+
+      <rect x="18" y="75" width="85" height="24" rx="4" fill="#FFF1F2" />
+      <text x="60" y="92" fill="#E11D48" font-size="12" font-weight="800" text-anchor="middle">ZEPTOMAIL</text>
+      <text x="115" y="92" fill="#64748B" font-size="13" font-weight="600">ZeptoMail Integration</text>
+
+      <text x="18" y="130" fill="#1E293B" font-size="15" font-weight="700">• Invitation Template Call</text>
+      <text x="32" y="152" fill="#E11D48" font-size="13" font-weight="600">sendRecruiterInvitationEmail()</text>
+      <text x="32" y="172" fill="#64748B" font-size="13">Company name, inviter, assigned role</text>
+
+      <text x="18" y="205" fill="#1E293B" font-size="15" font-weight="700">• Embedded Acceptance Link</text>
+      <text x="32" y="227" fill="#475569" font-size="14">https://recruiter.pathway.eco</text>
+      <text x="32" y="247" fill="#64748B" font-size="13">/team/accept-invite?token=${rawToken}</text>
+
+      <text x="18" y="280" fill="#1E293B" font-size="15" font-weight="700">• Delivery Failure Protection</text>
+      <text x="32" y="302" fill="#475569" font-size="14">If network fails, marks status: FAILED</text>
+      <text x="32" y="322" fill="#64748B" font-size="13">Admin can view error &amp; click resend</text>
+
+      <rect x="18" y="360" width="384" height="85" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+      <text x="30" y="385" fill="#0F172A" font-size="13" font-weight="800">PRIMARY OUTCOME:</text>
+      <text x="30" y="410" fill="#334155" font-size="13">Invitee receives email</text>
+      <text x="30" y="430" fill="#64748B" font-size="13">Link valid for 7 days</text>
+    </g>
+    <line x1="1828" y1="315" x2="1851" y2="315" stroke="#E11D48" stroke-width="3" marker-end="url(#arrRed)" />
+
+    <!-- Card 5: Invitee Token Verification -->
+    <g transform="translate(1858, 0)">
+      <rect width="420" height="470" rx="12" fill="#FFFFFF" stroke="#FECDD3" stroke-width="2" filter="url(#cardShadow)" />
+      <rect x="18" y="18" width="55" height="32" rx="6" fill="#FFF1F2" stroke="#E11D48" stroke-width="2" />
+      <text x="45" y="40" fill="#E11D48" font-size="16" font-weight="900" text-anchor="middle">4.5</text>
+      <text x="85" y="40" fill="#1E1B4B" font-size="19" font-weight="800">Token Accept</text>
+      <line x1="18" y1="62" x2="400" y2="62" stroke="#E2E8F0" stroke-width="1.5" />
+
+      <rect x="18" y="75" width="85" height="24" rx="4" fill="#FFF1F2" />
+      <text x="60" y="92" fill="#E11D48" font-size="12" font-weight="800" text-anchor="middle">INVITEE</text>
+      <text x="115" y="92" fill="#64748B" font-size="13" font-weight="600">RecruiterTeamService</text>
+
+      <text x="18" y="130" fill="#1E293B" font-size="15" font-weight="700">• Invitee Submits Token</text>
+      <text x="32" y="152" fill="#475569" font-size="14">acceptInvitation(token)</text>
+      <text x="32" y="172" fill="#64748B" font-size="13">POST /api/recruiter/team/accept</text>
+
+      <text x="18" y="205" fill="#1E293B" font-size="15" font-weight="700">• Hash Match in MongoDB</text>
+      <text x="32" y="227" fill="#475569" font-size="14">Computes sha256 of input token</text>
+      <text x="32" y="247" fill="#64748B" font-size="13">where: { tokenHash: hash }</text>
+
+      <text x="18" y="280" fill="#1E293B" font-size="15" font-weight="700">• Expiration &amp; Revocation Guards</text>
+      <text x="32" y="302" fill="#EF4444" font-size="13">Fails if expiresAt &lt; now (EXPIRED)</text>
+      <text x="32" y="322" fill="#EF4444" font-size="13">Fails if status === 'REVOKED' (403)</text>
+
+      <rect x="18" y="360" width="384" height="85" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+      <text x="30" y="385" fill="#0F172A" font-size="13" font-weight="800">PRIMARY OUTCOME:</text>
+      <text x="30" y="410" fill="#334155" font-size="13">Token authenticated</text>
+      <text x="30" y="430" fill="#64748B" font-size="13">Invitee identity verified</text>
+    </g>
+    <line x1="2285" y1="315" x2="2308" y2="315" stroke="#E11D48" stroke-width="3" marker-end="url(#arrRed)" />
+
+    <!-- Card 6: User & Member Activation -->
+    <g transform="translate(2315, 0)">
+      <rect width="420" height="470" rx="12" fill="#FFFFFF" stroke="#FECDD3" stroke-width="2" filter="url(#cardShadow)" />
+      <rect x="18" y="18" width="55" height="32" rx="6" fill="#FFF1F2" stroke="#E11D48" stroke-width="2" />
+      <text x="45" y="40" fill="#E11D48" font-size="16" font-weight="900" text-anchor="middle">4.6</text>
+      <text x="85" y="40" fill="#1E1B4B" font-size="19" font-weight="800">Member Activation</text>
+      <line x1="18" y1="62" x2="400" y2="62" stroke="#E2E8F0" stroke-width="1.5" />
+
+      <rect x="18" y="75" width="85" height="24" rx="4" fill="#FFF1F2" />
+      <text x="60" y="92" fill="#E11D48" font-size="12" font-weight="800" text-anchor="middle">PERSIST</text>
+      <text x="115" y="92" fill="#64748B" font-size="13" font-weight="600">db.companyMember</text>
+
+      <text x="18" y="130" fill="#1E293B" font-size="15" font-weight="700">• User Entity Provisioning</text>
+      <text x="32" y="152" fill="#475569" font-size="14">Upserts User (role: 'RECRUITER')</text>
+      <text x="32" y="172" fill="#64748B" font-size="13">Upserts db.recruiterProfile</text>
+
+      <text x="18" y="205" fill="#1E293B" font-size="15" font-weight="700">• CompanyMember Activation</text>
+      <text x="32" y="227" fill="#E11D48" font-size="13" font-weight="600">db.companyMember.upsert()</text>
+      <text x="32" y="247" fill="#64748B" font-size="13">role, assignedJobIds, status: ACTIVE</text>
+
+      <text x="18" y="280" fill="#1E293B" font-size="15" font-weight="700">• Invitation Status Closed</text>
+      <text x="32" y="302" fill="#10B981" font-size="13" font-weight="600">status: ACCEPTED, acceptedAt: now</text>
+      <text x="32" y="322" fill="#64748B" font-size="13">Audit: RECRUITER_INVITATION_ACCEPTED</text>
+
+      <rect x="18" y="360" width="384" height="85" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+      <text x="30" y="385" fill="#0F172A" font-size="13" font-weight="800">PRIMARY OUTCOME:</text>
+      <text x="30" y="410" fill="#334155" font-size="13">Active team member created</text>
+      <text x="30" y="430" fill="#64748B" font-size="13">Membership tied to company</text>
+    </g>
+    <line x1="2742" y1="315" x2="2765" y2="315" stroke="#E11D48" stroke-width="3" marker-end="url(#arrRed)" />
+
+    <!-- Card 7: Multi-Tenant Boundary Enforcement -->
+    <g transform="translate(2772, 0)">
+      <rect width="420" height="470" rx="12" fill="#FFFFFF" stroke="#FECDD3" stroke-width="2" filter="url(#cardShadow)" />
+      <rect x="18" y="18" width="55" height="32" rx="6" fill="#FFF1F2" stroke="#E11D48" stroke-width="2" />
+      <text x="45" y="40" fill="#E11D48" font-size="16" font-weight="900" text-anchor="middle">4.7</text>
+      <text x="85" y="40" fill="#1E1B4B" font-size="19" font-weight="800">Tenant Isolation</text>
+      <line x1="18" y1="62" x2="400" y2="62" stroke="#E2E8F0" stroke-width="1.5" />
+
+      <rect x="18" y="75" width="85" height="24" rx="4" fill="#FFF1F2" />
+      <text x="60" y="92" fill="#E11D48" font-size="12" font-weight="800" text-anchor="middle">SECURITY</text>
+      <text x="115" y="92" fill="#64748B" font-size="13" font-weight="600">Company Boundary Guard</text>
+
+      <text x="18" y="130" fill="#1E293B" font-size="15" font-weight="700">• Database Scoping Injected</text>
+      <text x="32" y="152" fill="#E11D48" font-size="13" font-weight="600">where: { companyId: auth.company.id }</text>
+      <text x="32" y="172" fill="#64748B" font-size="13">Injected on all subsequent DB queries</text>
+
+      <text x="18" y="205" fill="#1E293B" font-size="15" font-weight="700">• Cross-Company Isolation</text>
+      <text x="32" y="227" fill="#475569" font-size="14">Cannot read candidates, jobs, or</text>
+      <text x="32" y="247" fill="#EF4444" font-size="13">interviews of any other company</text>
+
+      <text x="18" y="280" fill="#1E293B" font-size="15" font-weight="700">• Session Security</text>
+      <text x="32" y="302" fill="#475569" font-size="14">Session stores user ID + company ID</text>
+      <text x="32" y="322" fill="#64748B" font-size="13">Validated on every API call</text>
+
+      <rect x="18" y="360" width="384" height="85" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+      <text x="30" y="385" fill="#0F172A" font-size="13" font-weight="800">PRIMARY OUTCOME:</text>
+      <text x="30" y="410" fill="#334155" font-size="13">Multi-tenant boundary airtight</text>
+      <text x="30" y="430" fill="#64748B" font-size="13">Tenant data strictly separated</text>
+    </g>
+    <line x1="3199" y1="315" x2="3222" y2="315" stroke="#E11D48" stroke-width="3" marker-end="url(#arrRed)" />
+
+    <!-- Card 8: Granular Permission Enforcement -->
+    <g transform="translate(3229, 0)">
+      <rect width="420" height="470" rx="12" fill="#FFFFFF" stroke="#FECDD3" stroke-width="2" filter="url(#cardShadow)" />
+      <rect x="18" y="18" width="55" height="32" rx="6" fill="#FFF1F2" stroke="#E11D48" stroke-width="2" />
+      <text x="45" y="40" fill="#E11D48" font-size="16" font-weight="900" text-anchor="middle">4.8</text>
+      <text x="85" y="40" fill="#1E1B4B" font-size="19" font-weight="800">RBAC Enforcement</text>
+      <line x1="18" y1="62" x2="400" y2="62" stroke="#E2E8F0" stroke-width="1.5" />
+
+      <rect x="18" y="75" width="85" height="24" rx="4" fill="#FFF1F2" />
+      <text x="60" y="92" fill="#E11D48" font-size="12" font-weight="800" text-anchor="middle">POLICY</text>
+      <text x="115" y="92" fill="#64748B" font-size="13" font-weight="600">RecruiterRbacService</text>
+
+      <text x="18" y="130" fill="#1E293B" font-size="15" font-weight="700">• 28 Permissions Matrix</text>
+      <text x="32" y="152" fill="#475569" font-size="14">assertPermission(auth, perm)</text>
+      <text x="32" y="172" fill="#64748B" font-size="13">Evaluates role capability array</text>
+
+      <text x="18" y="205" fill="#1E293B" font-size="15" font-weight="700">• Interviewer Scoping</text>
+      <text x="32" y="227" fill="#475569" font-size="14">TECHNICAL &amp; HR Interviewers restricted</text>
+      <text x="32" y="247" fill="#64748B" font-size="13">to assigned candidate interviews</text>
+
+      <text x="18" y="280" fill="#1E293B" font-size="15" font-weight="700">• Hiring Manager Scoping</text>
+      <text x="32" y="302" fill="#475569" font-size="14">Restricted to assignedJobIds list</text>
+      <text x="32" y="322" fill="#10B981" font-size="13" font-weight="600">Departmental isolation enforced</text>
+
+      <rect x="18" y="360" width="384" height="85" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+      <text x="30" y="385" fill="#0F172A" font-size="13" font-weight="800">FINAL OUTCOME:</text>
+      <text x="30" y="410" fill="#059669" font-size="13" font-weight="700">Granular role-based access</text>
+      <text x="30" y="430" fill="#64748B" font-size="13">Zero unauthorized data access</text>
+    </g>
+  </g>
+
+  <!-- SECTION 2: TECHNICAL ARCHITECTURE & DEEP DIVE PANELS (3 Columns) -->
+  <!-- Y = 810, Height = 1200 -->
+  <g transform="translate(80, 810)">
+    <!-- Column 1: Team Invitation Controller & Lifecycle Routes (Width: 1200) -->
+    <g transform="translate(0, 0)">
+      <rect width="1200" height="1200" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2" filter="url(#mainShadow)" />
+      <rect width="1200" height="64" rx="16" fill="#1E293B" />
+      <text x="30" y="42" fill="#FFFFFF" font-size="20" font-weight="800">1. TEAM MANAGEMENT APIS, INVITATION RESEND &amp; REVOKE</text>
+
+      <g transform="translate(35, 90)">
+        <!-- Box 1: POST /api/recruiter/team/invite -->
+        <rect width="1130" height="250" rx="12" fill="#F8FAFC" stroke="#FECDD3" stroke-width="1.5" />
+        <rect x="25" y="20" width="85" height="28" rx="6" fill="#E11D48" />
+        <text x="67" y="39" fill="#FFFFFF" font-size="13" font-weight="900" text-anchor="middle">POST</text>
+        <text x="125" y="40" fill="#0F172A" font-size="18" font-weight="800">/api/recruiter/team/invite (Team Member Invitation)</text>
+        <line x1="25" y1="60" x2="1105" y2="60" stroke="#E2E8F0" stroke-width="1" />
+
+        <text x="25" y="90" fill="#334155" font-size="15" font-weight="700">• Auth Guard: Enforces active company recruiter session via ServerAuth</text>
+        <text x="25" y="120" fill="#334155" font-size="15" font-weight="700">• Permission Guard: <tspan fill="#E11D48">assertPermission(auth, 'team:invite')</tspan> (Only COMPANY_ADMIN permitted)</text>
+        <text x="25" y="150" fill="#334155" font-size="15" font-weight="700">• Zod Schema: <tspan font-family="monospace">TeamMemberInviteSchema.parse(payload)</tspan></text>
+        <text x="50" y="175" fill="#64748B" font-size="14">Fields: { email, name, role, title, department, assignedJobIds?: string[], interviewTypes?: string[] }</text>
+        <text x="25" y="208" fill="#334155" font-size="15" font-weight="700">• Service Action: <tspan fill="#881337">RecruiterTeamService.inviteMember(companyId, data, auth)</tspan></text>
+      </g>
+
+      <g transform="translate(35, 370)">
+        <!-- Box 2: POST /api/recruiter/team/accept -->
+        <rect width="1130" height="250" rx="12" fill="#F8FAFC" stroke="#FECDD3" stroke-width="1.5" />
+        <rect x="25" y="20" width="85" height="28" rx="6" fill="#BE123C" />
+        <text x="67" y="39" fill="#FFFFFF" font-size="13" font-weight="900" text-anchor="middle">POST</text>
+        <text x="125" y="40" fill="#0F172A" font-size="18" font-weight="800">/api/recruiter/team/accept (Token Acceptance &amp; Activation)</text>
+        <line x1="25" y1="60" x2="1105" y2="60" stroke="#E2E8F0" stroke-width="1" />
+
+        <text x="25" y="90" fill="#334155" font-size="15" font-weight="700">• Input Payload: <tspan font-family="monospace">{ token: string }</tspan> (Raw 32-byte hexadecimal token)</text>
+        <text x="25" y="120" fill="#334155" font-size="15" font-weight="700">• Hash Evaluation: Computes sha256(token) and queries <tspan fill="#E11D48">db.companyInvitation</tspan></text>
+        <text x="25" y="150" fill="#334155" font-size="15" font-weight="700">• Idempotent Acceptance: If already accepted, safely returns active membership record</text>
+        <text x="25" y="180" fill="#334155" font-size="15" font-weight="700">• Revocation Check: Throws HTTP 403 if invitation was revoked by company administrator</text>
+        <text x="25" y="210" fill="#334155" font-size="15" font-weight="700">• Account Elevation: Auto-provisions User (role: RECRUITER) + db.companyMember</text>
+      </g>
+
+      <g transform="translate(35, 650)">
+        <!-- Box 3: Resend & Revoke Operations -->
+        <rect width="1130" height="250" rx="12" fill="#F8FAFC" stroke="#FECDD3" stroke-width="1.5" />
+        <rect x="25" y="20" width="85" height="28" rx="6" fill="#9F1239" />
+        <text x="67" y="39" fill="#FFFFFF" font-size="13" font-weight="900" text-anchor="middle">MGMT</text>
+        <text x="125" y="40" fill="#0F172A" font-size="18" font-weight="800">Resend &amp; Revocation Lifecycle Management</text>
+        <line x1="25" y1="60" x2="1105" y2="60" stroke="#E2E8F0" stroke-width="1" />
+
+        <text x="25" y="90" fill="#334155" font-size="15" font-weight="700">• Resend Invitation: <tspan fill="#E11D48">RecruiterTeamService.resendInvitation(companyId, invitationId, auth)</tspan></text>
+        <text x="50" y="115" fill="#64748B" font-size="14">Generates fresh 32-byte token, resets 7-day expiration, updates lastSentAt, dispatches new email.</text>
+        <text x="25" y="150" fill="#334155" font-size="15" font-weight="700">• Revoke Invitation: <tspan fill="#E11D48">RecruiterTeamService.revokeInvitation(companyId, invitationId, auth)</tspan></text>
+        <text x="50" y="175" fill="#64748B" font-size="14">Sets status = 'REVOKED', records revokedAt. Immediately invalidates any in-flight email links.</text>
+        <text x="25" y="210" fill="#334155" font-size="15" font-weight="700">• Audit Logging: Emits <tspan font-family="monospace">RECRUITER_INVITATION_RESENT</tspan> &amp; <tspan font-family="monospace">RECRUITER_INVITATION_REVOKED</tspan></text>
+      </g>
+
+      <g transform="translate(35, 930)">
+        <!-- Box 4: Multi-Tenant Boundary Guarantee -->
+        <rect width="1130" height="230" rx="12" fill="#FFF1F2" stroke="#FECDD3" stroke-width="1.5" />
+        <text x="25" y="35" fill="#881337" font-size="17" font-weight="800">MULTI-TENANT ENFORCEMENT &amp; ISOLATION RULES</text>
+        <line x1="25" y1="52" x2="1105" y2="52" stroke="#FECDD3" stroke-width="1" />
+
+        <text x="25" y="80" fill="#334155" font-size="14">• <tspan font-weight="700">Company ID Binding:</tspan> All queries inject <tspan font-family="monospace">where: { companyId: auth.company.id }</tspan>. Zero leakage.</text>
+        <text x="25" y="110" fill="#334155" font-size="14">• <tspan font-weight="700">Invitee Multi-Tenancy:</tspan> A user can belong to multiple companies via distinct CompanyMember rows.</text>
+        <text x="25" y="140" fill="#334155" font-size="14">• <tspan font-weight="700">Audit Compliance:</tspan> Every team modification logs actorId, companyId, and previous/new roles.</text>
+        <text x="25" y="170" fill="#334155" font-size="14">• <tspan font-weight="700">Admin Lockout Protection:</tspan> The system prevents removing the last active COMPANY_ADMIN.</text>
+      </g>
+    </g>
+
+    <!-- Column 2: 6 Recruiter Roles & 28-Permission Matrix (Width: 1200) -->
+    <g transform="translate(1240, 0)">
+      <rect width="1200" height="1200" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2" filter="url(#mainShadow)" />
+      <rect width="1200" height="64" rx="16" fill="#1E293B" />
+      <text x="30" y="42" fill="#FFFFFF" font-size="20" font-weight="800">2. THE 6 RECRUITER ROLES &amp; COMPLETE 28-PERMISSION MATRIX</text>
+
+      <g transform="translate(35, 80)">
+        <!-- Table for 6 Roles -->
+        <text x="10" y="25" fill="#0F172A" font-size="16" font-weight="800">Role Definitions &amp; Functional Scope (RecruiterRbacService.ts):</text>
+
+        <!-- Role 1: COMPANY_ADMIN -->
+        <g transform="translate(0, 45)">
+          <rect width="1130" height="150" rx="10" fill="#F8FAFC" stroke="#FECDD3" stroke-width="1.5" />
+          <rect x="20" y="15" width="180" height="28" rx="6" fill="#881337" />
+          <text x="110" y="34" fill="#FFFFFF" font-size="13" font-weight="900" text-anchor="middle">COMPANY_ADMIN</text>
+          <text x="220" y="35" fill="#0F172A" font-size="16" font-weight="800">Complete Company Governance &amp; Administration</text>
+          <text x="20" y="70" fill="#334155" font-size="14" font-weight="700">Permissions (All 28): <tspan font-weight="500" fill="#475569">team:view, team:invite, team:manage_roles, team:remove_member, company:view, company:manage,</tspan></text>
+          <text x="20" y="95" fill="#475569" font-size="14">jobs:view, jobs:create, jobs:edit, jobs:publish, jobs:close, applications:view_all, applications:view_assigned,</text>
+          <text x="20" y="120" fill="#475569" font-size="14">candidates:view_all, pipeline:transition, interviews:*, offers:*, assessments:*, reports:view, dashboard:view</text>
+        </g>
+
+        <!-- Role 2: RECRUITER -->
+        <g transform="translate(0, 215)">
+          <rect width="1130" height="150" rx="10" fill="#F8FAFC" stroke="#FECDD3" stroke-width="1.5" />
+          <rect x="20" y="15" width="180" height="28" rx="6" fill="#BE123C" />
+          <text x="110" y="34" fill="#FFFFFF" font-size="13" font-weight="900" text-anchor="middle">RECRUITER</text>
+          <text x="220" y="35" fill="#0F172A" font-size="16" font-weight="800">Operational Recruiting &amp; Candidate Pipeline Management</text>
+          <text x="20" y="70" fill="#334155" font-size="14" font-weight="700">Permissions (23): <tspan font-weight="500" fill="#475569">jobs:create, jobs:edit, jobs:publish, jobs:close, applications:view_all, pipeline:transition,</tspan></text>
+          <text x="20" y="95" fill="#475569" font-size="14">interviews:view_all, interviews:schedule, interviews:assign, interviews:feedback_*, assessments:*, dashboard:view</text>
+          <text x="20" y="120" fill="#EF4444" font-size="13" font-weight="700">RESTRICTIONS: Lacks team management (team:invite, team:manage_roles) and company settings modification</text>
+        </g>
+
+        <!-- Role 3: HIRING_MANAGER -->
+        <g transform="translate(0, 385)">
+          <rect width="1130" height="160" rx="10" fill="#F8FAFC" stroke="#FECDD3" stroke-width="1.5" />
+          <rect x="20" y="15" width="180" height="28" rx="6" fill="#E11D48" />
+          <text x="110" y="34" fill="#FFFFFF" font-size="13" font-weight="900" text-anchor="middle">HIRING_MANAGER</text>
+          <text x="220" y="35" fill="#0F172A" font-size="16" font-weight="800">Departmental Hiring Authority (Job-Scoped Access)</text>
+          <text x="20" y="70" fill="#334155" font-size="14" font-weight="700">Permissions (11): <tspan font-weight="500" fill="#475569">jobs:view, applications:view_assigned, candidates:view_assigned, pipeline:transition,</tspan></text>
+          <text x="20" y="95" fill="#475569" font-size="14">interviews:view_assigned, interviews:feedback_*, offers:view, offers:manage, reports:view, dashboard:view</text>
+          <rect x="20" y="115" width="1090" height="30" rx="4" fill="#FEF2F2" />
+          <text x="30" y="135" fill="#991B1B" font-size="13" font-weight="700">STRICT SCOPING: Injects where: { id: { in: auth.membership.assignedJobIds } }. Only sees their assigned roles.</text>
+        </g>
+
+        <!-- Role 4: INTERVIEW_COORDINATOR -->
+        <g transform="translate(0, 565)">
+          <rect width="1130" height="140" rx="10" fill="#F8FAFC" stroke="#FECDD3" stroke-width="1.5" />
+          <rect x="20" y="15" width="220" height="28" rx="6" fill="#0369A1" />
+          <text x="130" y="34" fill="#FFFFFF" font-size="13" font-weight="900" text-anchor="middle">INTERVIEW_COORDINATOR</text>
+          <text x="260" y="35" fill="#0F172A" font-size="16" font-weight="800">Interview Logistics &amp; Candidate Scheduling</text>
+          <text x="20" y="70" fill="#334155" font-size="14" font-weight="700">Permissions (7): <tspan font-weight="500" fill="#475569">interviews:view_all, interviews:schedule, interviews:assign, candidates:view_all, applications:view_all, jobs:view</tspan></text>
+          <text x="20" y="100" fill="#EF4444" font-size="13" font-weight="700">RESTRICTIONS: Read-only access to applications/jobs; cannot submit technical/HR interview feedback scorecards.</text>
+        </g>
+
+        <!-- Role 5 & 6: TECHNICAL & HR INTERVIEWERS -->
+        <g transform="translate(0, 725)">
+          <rect width="1130" height="170" rx="10" fill="#F8FAFC" stroke="#FECDD3" stroke-width="1.5" />
+          <rect x="20" y="15" width="240" height="28" rx="6" fill="#4338CA" />
+          <text x="140" y="34" fill="#FFFFFF" font-size="13" font-weight="900" text-anchor="middle">TECHNICAL / HR INTERVIEWER</text>
+          <text x="280" y="35" fill="#0F172A" font-size="16" font-weight="800">Assigned Candidate Evaluation &amp; Scorecards</text>
+          <text x="20" y="70" fill="#334155" font-size="14" font-weight="700">Technical Interviewer (5): <tspan font-weight="500" fill="#475569">interviews:view_assigned, interviews:feedback_technical, candidates:view_assigned...</tspan></text>
+          <text x="20" y="95" fill="#334155" font-size="14" font-weight="700">HR Interviewer (5): <tspan font-weight="500" fill="#475569">interviews:view_assigned, interviews:feedback_hr, candidates:view_assigned...</tspan></text>
+          <rect x="20" y="120" width="1090" height="35" rx="4" fill="#FEF2F2" />
+          <text x="30" y="143" fill="#991B1B" font-size="13" font-weight="700">STRICT SCOPING: Injects where: { interviewerId: auth.user.id }. Cannot view other interview rounds.</text>
+        </g>
+
+        <!-- 28-Permission Breakdown Badge -->
+        <rect y="920" width="1130" height="160" rx="10" fill="#FFF1F2" stroke="#FECDD3" />
+        <text x="20" y="950" fill="#881337" font-size="16" font-weight="800">Summary of the 28 Granular RBAC Permissions:</text>
+        <text x="20" y="980" fill="#475569" font-size="13">Team (4): team:view, team:invite, team:manage_roles, team:remove_member | Company (2): company:view, company:manage</text>
+        <text x="20" y="1005" fill="#475569" font-size="13">Jobs (5): jobs:view, jobs:create, jobs:edit, jobs:publish, jobs:close | Applications (2): applications:view_all, applications:view_assigned</text>
+        <text x="20" y="1030" fill="#475569" font-size="13">Candidates (2): candidates:view_all, candidates:view_assigned | Pipeline (1): pipeline:transition</text>
+        <text x="20" y="1055" fill="#475569" font-size="13">Interviews (6): view_all, view_assigned, schedule, assign, feedback_tech, feedback_hr | Offers (2) | Assessments (2) | Reports (1) | Dashboard (1)</text>
+      </g>
+    </g>
+
+    <!-- Column 3: Prisma Models, Cryptographic Security & ZeptoMail (Width: 1200) -->
+    <g transform="translate(2480, 0)">
+      <rect width="1200" height="1200" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2" filter="url(#mainShadow)" />
+      <rect width="1200" height="64" rx="16" fill="#1E293B" />
+      <text x="30" y="42" fill="#FFFFFF" font-size="20" font-weight="800">3. PERSISTENCE MODELS, SHA-256 TOKENS &amp; EMAIL DISPATCH</text>
+
+      <g transform="translate(35, 90)">
+        <!-- Prisma Model: CompanyInvitation -->
+        <rect width="1130" height="420" rx="12" fill="#F8FAFC" stroke="#FECDD3" stroke-width="1.5" />
+        <rect x="25" y="20" width="140" height="28" rx="6" fill="#881337" />
+        <text x="95" y="39" fill="#FFFFFF" font-size="13" font-weight="900" text-anchor="middle">PRISMA MODEL</text>
+        <text x="185" y="40" fill="#0F172A" font-size="18" font-weight="800">model CompanyInvitation (collection: "CompanyInvitation")</text>
+        <line x1="25" y1="60" x2="1105" y2="60" stroke="#E2E8F0" stroke-width="1" />
+
+        <text x="25" y="90" fill="#334155" font-size="14" font-family="monospace">id                     String             @id @default(auto()) @map("_id") @db.ObjectId</text>
+        <text x="25" y="115" fill="#334155" font-size="14" font-family="monospace">companyId              String             @db.ObjectId (Multi-tenant company scoping)</text>
+        <text x="25" y="140" fill="#334155" font-size="14" font-family="monospace">email                  String             (Invitee contact email)</text>
+        <text x="25" y="165" fill="#E11D48" font-size="14" font-family="monospace">role                   CompanyMemberRole  (COMPANY_ADMIN, RECRUITER, HM...)</text>
+        <text x="25" y="190" fill="#334155" font-size="14" font-family="monospace">assignedJobIds         String[]           (Array of job IDs for Hiring Managers)</text>
+        <text x="25" y="215" fill="#334155" font-size="14" font-family="monospace">interviewTypes         String[]           (Array of interview types for interviewers)</text>
+        
+        <!-- Highlighted Token Hash -->
+        <rect x="20" y="235" width="1090" height="90" rx="8" fill="#FFF1F2" stroke="#FDA4AF" />
+        <text x="35" y="260" fill="#881337" font-size="14" font-weight="800">CRYPTOGRAPHIC STORAGE ATTRIBUTE:</text>
+        <text x="35" y="285" fill="#E11D48" font-size="14" font-family="monospace">tokenHash              String             (SHA-256 hex digest of the 32-byte raw token)</text>
+        <text x="35" y="305" fill="#64748B" font-size="13">Raw token is NEVER saved in MongoDB. Even database administrators cannot hijack invitation tokens.</text>
+
+        <text x="25" y="345" fill="#334155" font-size="14" font-family="monospace">status                 InvitationStatus   (Enum: PENDING, ACCEPTED, REVOKED, EXPIRED, FAILED)</text>
+        <text x="25" y="370" fill="#334155" font-size="14" font-family="monospace">expiresAt              DateTime           (Set to exactly now + 7 days)</text>
+        <text x="25" y="395" fill="#334155" font-size="14" font-family="monospace">acceptedAt             DateTime?          (Timestamp of membership activation)</text>
+      </g>
+
+      <g transform="translate(35, 530)">
+        <!-- Prisma Model: CompanyMember -->
+        <rect width="1130" height="340" rx="12" fill="#F8FAFC" stroke="#FECDD3" stroke-width="1.5" />
+        <rect x="25" y="20" width="140" height="28" rx="6" fill="#BE123C" />
+        <text x="95" y="39" fill="#FFFFFF" font-size="13" font-weight="900" text-anchor="middle">PRISMA MODEL</text>
+        <text x="185" y="40" fill="#0F172A" font-size="18" font-weight="800">model CompanyMember (collection: "CompanyMember")</text>
+        <line x1="25" y1="60" x2="1105" y2="60" stroke="#E2E8F0" stroke-width="1" />
+
+        <text x="25" y="90" fill="#334155" font-size="14" font-family="monospace">id                     String             @id @default(auto()) @map("_id") @db.ObjectId</text>
+        <text x="25" y="115" fill="#334155" font-size="14" font-family="monospace">companyId              String             @db.ObjectId</text>
+        <text x="25" y="140" fill="#334155" font-size="14" font-family="monospace">userId                 String             @db.ObjectId</text>
+        <text x="25" y="165" fill="#E11D48" font-size="14" font-family="monospace">role                   CompanyMemberRole  (Enforced in RecruiterRbacService)</text>
+        <text x="25" y="190" fill="#334155" font-size="14" font-family="monospace">assignedJobIds         String[]           (Assigned jobs list)</text>
+        <text x="25" y="215" fill="#334155" font-size="14" font-family="monospace">interviewTypes         String[]           (Assigned interview rounds)</text>
+        <text x="25" y="240" fill="#059669" font-size="14" font-family="monospace">status                 String             @default("ACTIVE") ("ACTIVE", "SUSPENDED")</text>
+
+        <rect x="25" y="265" width="1080" height="50" rx="6" fill="#FEF3C7" />
+        <text x="45" y="295" fill="#92400E" font-size="13" font-weight="700">COMPOUND UNIQUE CONSTRAINT: @@unique([companyId, userId]) — Prevents duplicate active memberships</text>
+      </g>
+
+      <g transform="translate(35, 890)">
+        <!-- ZeptoMail Invitation Template Box -->
+        <rect width="1130" height="270" rx="12" fill="#FFF1F2" stroke="#FECDD3" stroke-width="1.5" />
+        <text x="25" y="35" fill="#881337" font-size="17" font-weight="800">ZEPTOMAIL INVITATION EMAIL DISPATCH INTEGRATION</text>
+        <line x1="25" y1="52" x2="1105" y2="52" stroke="#FECDD3" stroke-width="1" />
+
+        <text x="25" y="80" fill="#334155" font-size="14">• <tspan font-weight="700">REST Provider:</tspan> Dispatches via <tspan font-family="monospace">https://api.zeptomail.in/v1.1/email</tspan> with Bearer API Key.</text>
+        <text x="25" y="110" fill="#334155" font-size="14">• <tspan font-weight="700">Template Payload:</tspan> Displays company name, inviter name, role description, and personalized accept button.</text>
+        <text x="25" y="140" fill="#334155" font-size="14">• <tspan font-weight="700">Direct Acceptance URL:</tspan> <tspan font-family="monospace">https://recruiter.pathway.eco/team/accept-invite?token=${rawToken}</tspan></text>
+        <text x="25" y="170" fill="#334155" font-size="14">• <tspan font-weight="700">7-Day Expiration Notice:</tspan> Template warns user that the cryptographic link expires in 7 days.</text>
+        <text x="25" y="200" fill="#334155" font-size="14">• <tspan font-weight="700">Delivery Status Logging:</tspan> Emits <tspan font-family="monospace">RECRUITER_INVITATION_CREATED</tspan> event with deliveryId in db.emailDelivery.</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- FOOTER BAR -->
+  <g transform="translate(80, 2030)">
+    <rect width="3680" height="80" rx="12" fill="#0F172A" />
+    <text x="40" y="48" fill="#FFFFFF" font-size="18" font-weight="800">WORKFLOW 4 VERIFICATION &amp; CODEBASE GROUND TRUTH:</text>
+    
+    <text x="560" y="48" fill="#FECDD3" font-size="15" font-weight="600">Services: RecruiterTeamService · RecruiterRbacService · EmailService · AuditService</text>
+    <text x="1600" y="48" fill="#94A3B8" font-size="15">Prisma Models: CompanyInvitation · CompanyMember · User · RecruiterProfile · AuditLog</text>
+    <text x="2680" y="48" fill="#FB7185" font-size="15" font-weight="700">✓ 6 Roles Verified · 28 Permissions Matrix · 7-Day SHA-256 Token · Strict Multi-Tenant Isolation</text>
+  </g>
+</svg>

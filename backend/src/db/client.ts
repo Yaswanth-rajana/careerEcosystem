@@ -36,6 +36,17 @@ if (!process.env.DATABASE_URL) {
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
+// Invalidate stale in-memory cached Prisma client if newly generated models are missing
+if (
+  globalForPrisma.prisma &&
+  (!(globalForPrisma.prisma as any).companyInvitation || !(globalForPrisma.prisma as any).offer)
+) {
+  try {
+    (globalForPrisma.prisma as any).$disconnect?.();
+  } catch {}
+  delete (globalForPrisma as any).prisma;
+}
+
 export const db =
   globalForPrisma.prisma ||
   new PrismaClient({

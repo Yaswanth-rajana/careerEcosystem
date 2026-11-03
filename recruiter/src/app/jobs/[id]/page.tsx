@@ -182,24 +182,51 @@ export default function JobDetailPage() {
                   <StatusBadge status={job.status} />
                 </div>
                 <p className="text-xs text-slate-500 mt-1">
-                  Created on {new Date(job.createdAt).toLocaleDateString()} • {job.applicationsCount} applicants
+                  Created on {new Date(job.createdAt).toLocaleDateString()}
+                  {job.status === 'EXPIRED' && job.expiresAt ? ` • Expired on ${new Date(job.expiresAt).toLocaleDateString()}` : ''}
+                  {` • ${job.applicationsCount} applicants`}
                 </p>
               </div>
 
               <div className="flex items-center gap-2">
                 <label className="text-xs font-semibold text-slate-600">Status:</label>
-                <select
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                  className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-900 focus:outline-none"
-                >
-                  <option value="DRAFT">DRAFT</option>
-                  <option value="PUBLISHED">PUBLISHED</option>
-                  <option value="PAUSED">PAUSED</option>
-                  <option value="CLOSED">CLOSED</option>
-                </select>
+                {job.status === 'EXPIRED' ? (
+                  <span
+                    className="rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-800"
+                    title="Expired jobs cannot be reopened. Please duplicate to create a new job."
+                  >
+                    EXPIRED
+                  </span>
+                ) : (
+                  <select
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                    className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-900 focus:outline-none"
+                  >
+                    <option value="DRAFT">DRAFT</option>
+                    <option value="PUBLISHED">PUBLISHED</option>
+                    <option value="PAUSED">PAUSED</option>
+                    <option value="CLOSED">CLOSED</option>
+                  </select>
+                )}
               </div>
             </div>
+
+            {job.status === 'EXPIRED' && (
+              <div className="rounded-xl border border-amber-200 bg-amber-50/80 p-4 text-xs text-amber-800 flex items-center justify-between gap-4">
+                <div>
+                  <span className="font-bold">Posting Expired: </span>
+                  This requisition reached its 30-day listing lifetime. To repost this role, click &quot;Duplicate&quot; above to create a new posting.
+                </div>
+                <button
+                  type="button"
+                  onClick={handleDuplicate}
+                  className="rounded-lg bg-amber-700 px-3 py-1.5 text-xs font-semibold text-white hover:bg-amber-800 shrink-0 transition"
+                >
+                  Duplicate Role
+                </button>
+              </div>
+            )}
 
             {/* Editable Fields */}
             <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">

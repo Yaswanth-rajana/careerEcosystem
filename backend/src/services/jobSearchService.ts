@@ -6,11 +6,12 @@ import {
   formatSalary,
   ApplicationStatus,
 } from '../types/jobs';
+import { JobExpirationService } from './jobExpirationService';
 
 export class JobSearchService {
   /**
    * Performs server-side search, filtering, sorting, and pagination.
-   * Only returns active PUBLISHED jobs for candidate discovery.
+   * Only returns active PUBLISHED jobs for candidate discovery (strictly within the 30-day window).
    * Projection strictly excludes heavy text fields (description, requirements, responsibilities).
    */
   static async searchJobs(
@@ -21,14 +22,18 @@ export class JobSearchService {
     const limit = Math.min(50, Math.max(1, params.limit || 20));
     const skip = (page - 1) * limit;
 
-    // Base filter: Only PUBLISHED jobs
+    const now = new Date();
+    const expirationThreshold = JobExpirationService.getExpirationThreshold(now);
+
+    // Base filter: Only PUBLISHED jobs within the 30-day expiration window.
+    // Defense-in-depth: Even if scheduler runs late or fails, expired jobs are excluded at DB query level.
     const where: any = {
       status: 'PUBLISHED',
+      publishedAt: { gt: expirationThreshold },
     };
 
     // Filter by postedWithin date
     if (params.postedWithin) {
-      const now = new Date();
       let threshold = new Date();
       if (params.postedWithin === '24h') {
         threshold.setHours(now.getHours() - 24);
@@ -37,9 +42,15 @@ export class JobSearchService {
       } else if (params.postedWithin === '7d') {
         threshold.setDate(now.getDate() - 7);
       } else if (params.postedWithin === '30d') {
-        threshold.setDate(now.getDate() - 30);
+        threshold = expirationThreshold;
       }
-      where.publishedAt = { gte: threshold };
+
+      // Bound by expiration threshold to guarantee jobs older than 30 days are never returned
+      const effectiveThreshold = threshold.getTime() > expirationThreshold.getTime()
+        ? threshold
+        : expirationThreshold;
+
+      where.publishedAt = { gt: effectiveThreshold };
     }
 
     // Filter by location
@@ -132,7 +143,9 @@ export class JobSearchService {
           salaryCurrency: true,
           salaryPeriod: true,
           publishedAt: true,
+          expiresAt: true,
           createdAt: true,
+          status: true,
           jobVerified: true,
           companyVerified: true,
           featured: true,
@@ -208,6 +221,13 @@ export class JobSearchService {
         jobVerified: job.jobVerified,
         companyVerified: job.companyVerified,
         featured: job.featured,
+        status: job.status,
+        isExpired: false,
+        expiresAt: job.expiresAt
+          ? job.expiresAt.toISOString()
+          : job.publishedAt
+          ? JobExpirationService.calculateExpiresAt(job.publishedAt).toISOString()
+          : null,
       };
     });
 

@@ -13,7 +13,7 @@ import {
   Search,
   Filter,
   Clock,
-  Video,
+  Mail,
   ChevronRight,
   ChevronLeft,
   CheckCircle2,
@@ -230,19 +230,48 @@ function BookingsContent() {
                     </div>
 
                     <div className="flex items-center gap-2 pt-2">
-                      {booking.sessionId && (
-                        <Link
-                          href={`/mentorship/sessions/${booking.sessionId}`}
-                          className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-xs transition"
-                        >
-                          <Video className="w-3.5 h-3.5" />
-                          Session Workspace
-                        </Link>
-                      )}
+                      {booking.status === 'CONFIRMED' && (() => {
+                        const sessionStart = new Date(booking.scheduledStart);
+                        const formattedDate = sessionStart.toLocaleDateString('en-US', {
+                          weekday: 'long',
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                          timeZone: booking.timezone || 'Asia/Kolkata',
+                        });
+                        const formattedTime = sessionStart.toLocaleTimeString('en-US', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: true,
+                          timeZone: booking.timezone || 'Asia/Kolkata',
+                        });
+                        const meetingLink =
+                          booking.meetingUrl ||
+                          `https://meet.pathway.eco/room/${booking.mentorId.slice(-6)}-${booking.id.slice(-6)}`;
+                        const emailSubject = `Mentorship Session Joining Link — ${booking.service.title}`;
+                        const emailBody = `Hi ${booking.candidate.name},\n\nHere is your joining link for our upcoming mentorship session on PATHWAY.ECO:\n\n• Session: ${booking.service.title}\n• Scheduled Date & Time: ${formattedDate} at ${formattedTime} (${booking.timezone})\n• Meeting Link: ${meetingLink}\n\nPlease join a few minutes prior to the start time. Looking forward to speaking with you!\n\nBest regards,\nYour Mentor`;
+
+                        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(booking.candidate.email)}&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+
+                        return (
+                          <a
+                            href={gmailUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-xs transition active:scale-[0.98]"
+                            title="Send joining link to student via Gmail Web (opens in new tab)"
+                          >
+                            <Mail className="w-3.5 h-3.5" />
+                            <span>Send Joining Link</span>
+                          </a>
+                        );
+                      })()}
 
                       <Link
                         href={`/mentorship/bookings/${booking.id}`}
-                        className="inline-flex items-center justify-center py-2 px-3 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200/80 rounded-xl transition"
+                        className={`inline-flex items-center justify-center py-2 px-3 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200/80 rounded-xl transition ${
+                          booking.status !== 'CONFIRMED' && !booking.sessionId ? 'w-full' : ''
+                        }`}
                       >
                         Details <ChevronRight className="w-3.5 h-3.5 ml-1" />
                       </Link>

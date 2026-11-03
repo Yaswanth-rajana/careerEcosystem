@@ -71,27 +71,51 @@ export class MentorAuthService {
       throw new MentorAuthError(`Your account is currently ${fullUser.status.toLowerCase()}. Access denied.`, 403);
     }
 
-    // Resolve mentor record by userId or email
+    // Role check: Only users with MENTOR or ADMIN role are authorized
+    const allowedMentorRoles = ['MENTOR', 'ADMIN', 'SUPER_ADMIN'];
+    if (!allowedMentorRoles.includes(fullUser.role.toUpperCase())) {
+      throw new MentorAuthError('Forbidden. Candidates cannot access or claim mentor profiles.', 403);
+    }
+
+    // 1. Resolve mentor record by explicit userId link
     let mentorRecord = await db.mentor.findFirst({
-      where: {
-        OR: [
-          { userId: fullUser.id },
-          { email: fullUser.email.toLowerCase() },
-        ],
-      },
+      where: { userId: fullUser.id },
     });
 
+    // 2. If not linked by userId yet, verify trusted admin-approved application before linking
     if (!mentorRecord) {
-      // If user has role CANDIDATE and no mentor record, deny access
+      const approvedApp = await db.mentorApplication.findFirst({
+        where: {
+          email: fullUser.email.toLowerCase(),
+          userId: fullUser.id,
+          status: 'APPROVED',
+        },
+      });
+
+      if (approvedApp) {
+        const unlinkedMentor = await db.mentor.findFirst({
+          where: {
+            email: fullUser.email.toLowerCase(),
+            userId: null,
+          },
+        });
+
+        if (unlinkedMentor) {
+          mentorRecord = await db.mentor.update({
+            where: { id: unlinkedMentor.id },
+            data: { userId: fullUser.id },
+          });
+        }
+      }
+    }
+
+    if (!mentorRecord) {
+      // If user has no verified linked mentor record, deny access
       throw new MentorAuthError('Forbidden. No mentor profile exists for this account. Candidates cannot access the Mentor Portal.', 403);
     }
 
-    // Auto-link userId if missing
-    if (!mentorRecord.userId) {
-      mentorRecord = await db.mentor.update({
-        where: { id: mentorRecord.id },
-        data: { userId: fullUser.id },
-      });
+    if (mentorRecord.userId && mentorRecord.userId !== fullUser.id) {
+      throw new MentorAuthError('Forbidden. This mentor profile is linked to another user account.', 403);
     }
 
     return {

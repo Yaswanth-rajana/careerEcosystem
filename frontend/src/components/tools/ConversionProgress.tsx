@@ -19,12 +19,16 @@ export interface ConversionProgressProps {
   state: ConversionStepState;
   filename: string;
   errorMessage?: string;
+  onRetry?: () => void;
+  onReset?: () => void;
 }
 
 export const ConversionProgress: React.FC<ConversionProgressProps> = ({
   state,
   filename,
   errorMessage,
+  onRetry,
+  onReset,
 }) => {
   const getStepText = () => {
     switch (state) {
@@ -80,7 +84,7 @@ export const ConversionProgress: React.FC<ConversionProgressProps> = ({
       <div className="space-y-4">
         <div className="flex items-center justify-between text-xs font-semibold text-slate-700">
           <span>{getStepText()}</span>
-          <span className="font-mono text-slate-400">PATHWAY ENGINE</span>
+          <span className="font-mono text-slate-400">PATHWAY SERVERLESS ENGINE</span>
         </div>
 
         {/* Animated Progress Track */}
@@ -97,10 +101,35 @@ export const ConversionProgress: React.FC<ConversionProgressProps> = ({
         </div>
       </div>
 
-      {state === 'FAILED' && errorMessage && (
-        <div className="flex items-start gap-2.5 p-4 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm">
-          <AlertCircle className="w-4 h-4 shrink-0 text-red-500 mt-0.5" />
-          <span>{errorMessage}</span>
+      {state === 'FAILED' && (
+        <div className="space-y-4">
+          {errorMessage && (
+            <div className="flex items-start gap-2.5 p-4 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm">
+              <AlertCircle className="w-4 h-4 shrink-0 text-red-500 mt-0.5" />
+              <span>{errorMessage}</span>
+            </div>
+          )}
+
+          <div className="flex flex-col sm:flex-row items-center justify-end gap-3 pt-2">
+            {onReset && (
+              <button
+                type="button"
+                onClick={onReset}
+                className="w-full sm:w-auto px-5 py-2.5 rounded-full text-xs font-bold border border-slate-300 text-slate-700 hover:bg-slate-50 transition-colors"
+              >
+                Choose Another File
+              </button>
+            )}
+            {onRetry && (
+              <button
+                type="button"
+                onClick={onRetry}
+                className="w-full sm:w-auto px-6 py-2.5 rounded-full text-xs font-bold text-white bg-blue-600 hover:bg-black transition-all shadow-sm"
+              >
+                Try Again
+              </button>
+            )}
+          </div>
         </div>
       )}
     </div>

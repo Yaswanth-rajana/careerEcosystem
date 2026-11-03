@@ -1,0 +1,430 @@
+<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" viewBox="0 0 3840 2160" width="3840" height="2160" style="background:#F8FAFC; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="headerGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+
+    <linearGradient id="cardGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F8FAFC" />
+    </linearGradient>
+
+    <!-- Drop Shadows -->
+    <filter id="shadow2" x="-3%" y="-3%" width="106%" height="108%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#0F172A" flood-opacity="0.08" />
+    </filter>
+    <filter id="cardShadow2" x="-4%" y="-4%" width="108%" height="112%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.06" />
+    </filter>
+
+    <!-- Markers -->
+    <marker id="arrBlue2" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#2563EB" />
+    </marker>
+    <marker id="arrRed2" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#DC2626" />
+    </marker>
+    <marker id="arrGreen2" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#059669" />
+    </marker>
+    <marker id="arrAmber2" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#D97706" />
+    </marker>
+  </defs>
+
+  <!-- Background Grid -->
+  <pattern id="grid2" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#E2E8F0" stroke-width="0.75" opacity="0.6"/>
+  </pattern>
+  <rect width="3840" height="2160" fill="url(#grid2)" />
+
+  <!-- ========================================================================= -->
+  <!-- HEADER BAR (y: 40 to 160)                                                 -->
+  <!-- ========================================================================= -->
+  <rect x="60" y="40" width="3720" height="120" rx="18" fill="url(#headerGrad2)" filter="url(#shadow2)" />
+  <text x="110" y="98" fill="#FFFFFF" font-size="36" font-weight="900" letter-spacing="-0.5">PATHWAY<tspan fill="#38BDF8">.ECO</tspan></text>
+  <text x="390" y="96" fill="#64748B" font-size="24">|</text>
+  <text x="420" y="98" fill="#F8FAFC" font-size="30" font-weight="700">Detailed Backend Request Lifecycle &amp; Security Pipeline</text>
+  <text x="420" y="132" fill="#94A3B8" font-size="18" font-weight="500">8-Stage Request Execution Pipeline · Edge Middleware · Identity Hydration · Granular RBAC · Schema Validation · Atomic Persistence</text>
+
+  <!-- Status Badges -->
+  <g transform="translate(2900, 68)">
+    <rect x="0" y="0" width="180" height="48" rx="10" fill="#1E293B" stroke="#334155" stroke-width="1.5" />
+    <circle cx="24" cy="24" r="6" fill="#10B981" />
+    <text x="42" y="30" fill="#F8FAFC" font-size="16" font-weight="700">8 GATED STAGES</text>
+
+    <rect x="195" y="0" width="220" height="48" rx="10" fill="#1E293B" stroke="#334155" stroke-width="1.5" />
+    <text x="210" y="30" fill="#38BDF8" font-size="16" font-weight="700">EARLY ERROR EXITS</text>
+
+    <rect x="430" y="0" width="240" height="48" rx="10" fill="#1E293B" stroke="#334155" stroke-width="1.5" />
+    <text x="445" y="30" fill="#A78BFA" font-size="16" font-weight="700">FAIL-SAFE VALIDATION</text>
+
+    <rect x="685" y="0" width="200" height="48" rx="10" fill="#1E293B" stroke="#334155" stroke-width="1.5" />
+    <text x="700" y="30" fill="#34D399" font-size="16" font-weight="700">ATOMIC ROLLBACK</text>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- ROW 1: STAGES 1 TO 4 (y: 200 to 1040, height: 840)                        -->
+  <!-- ========================================================================= -->
+
+  <!-- Stage 1: Client Request Dispatch (x: 60, width: 885) -->
+  <g transform="translate(60, 200)">
+    <rect x="0" y="0" width="885" height="840" rx="18" fill="url(#cardGrad2)" stroke="#94A3B8" stroke-width="2" filter="url(#shadow2)" />
+    <rect x="0" y="0" width="885" height="54" rx="18" fill="#475569" />
+    <rect x="0" y="30" width="885" height="24" fill="#475569" />
+    <text x="24" y="36" fill="#FFFFFF" font-size="22" font-weight="800">Stage 1 — Client Request Dispatch</text>
+    <circle cx="845" cy="27" r="16" fill="#1E293B" />
+    <text x="839" y="33" fill="#FFFFFF" font-size="16" font-weight="900">1</text>
+
+    <g transform="translate(28, 80)" font-size="18" fill="#1E293B">
+      <text x="0" y="20" font-weight="800" font-size="20" fill="#0F172A">Request Origin &amp; Transport</text>
+      <text x="0" y="55" font-weight="700">• Originating Client Portals:</text>
+      <text x="24" y="85" fill="#4338CA">1. Candidate Portal (:3000)</text>
+      <text x="24" y="115" fill="#2563EB">2. Recruiter / Hiring Portal (:3004)</text>
+      <text x="24" y="145" fill="#0F766E">3. Mentor Portal (:3003)</text>
+      <text x="24" y="175" fill="#BE123C">4. Admin &amp; Governance Portal (:3002)</text>
+
+      <line x1="0" y1="210" x2="830" y2="210" stroke="#E2E8F0" stroke-width="1.5" />
+      <text x="0" y="245" font-weight="800" font-size="20" fill="#0F172A">Request Packaging</text>
+      <text x="0" y="280" font-weight="700">• Methods: <tspan fill="#2563EB">GET, POST, PUT, DELETE, PATCH</tspan></text>
+      <text x="0" y="315" font-weight="700">• Cookie Header (HttpOnly, SameSite=Lax):</text>
+      <text x="24" y="345" fill="#4338CA">career_session | career_recruiter_session | pathway_admin_session</text>
+      <text x="0" y="380" font-weight="700">• Payloads: JSON body OR multipart/form-data</text>
+      <text x="0" y="415" font-weight="700">• External Schedulers: Bearer CRON_SECRET token</text>
+
+      <!-- Security Callout Box -->
+      <rect x="0" y="460" width="830" height="150" rx="12" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5" />
+      <text x="20" y="495" fill="#991B1B" font-size="18" font-weight="800">UNTRUSTED CLIENT SECURITY BOUNDARY</text>
+      <text x="20" y="530" fill="#7F1D1D" font-size="16">• Client browsers are completely untrusted.</text>
+      <text x="20" y="560" fill="#7F1D1D" font-size="16">• No client holds MongoDB credentials, S3 secrets, or ZeptoMail keys.</text>
+      <text x="20" y="590" fill="#7F1D1D" font-size="16">• All database queries must be mediated by the backend server.</text>
+
+      <!-- Forward Output -->
+      <rect x="0" y="640" width="830" height="135" rx="12" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5" />
+      <text x="20" y="675" fill="#166534" font-size="18" font-weight="800">SUCCESS TRANSITION → STAGE 2</text>
+      <text x="20" y="710" fill="#14532D" font-size="16">HTTPS request reaches Next.js Edge routing engine</text>
+      <text x="20" y="740" fill="#14532D" font-size="16">Forwarded directly into Edge Next.js Middleware</text>
+    </g>
+  </g>
+  <path d="M 945 620 L 1005 620" stroke="#2563EB" stroke-width="4" marker-end="url(#arrBlue2)" />
+
+  <!-- Stage 2: Edge Route Protection (x: 1005, width: 885) -->
+  <g transform="translate(1005, 200)">
+    <rect x="0" y="0" width="885" height="840" rx="18" fill="url(#cardGrad2)" stroke="#94A3B8" stroke-width="2" filter="url(#shadow2)" />
+    <rect x="0" y="0" width="885" height="54" rx="18" fill="#334155" />
+    <rect x="0" y="30" width="885" height="24" fill="#334155" />
+    <text x="24" y="36" fill="#FFFFFF" font-size="22" font-weight="800">Stage 2 — Edge Route Protection</text>
+    <circle cx="845" cy="27" r="16" fill="#0F172A" />
+    <text x="839" y="33" fill="#FFFFFF" font-size="16" font-weight="900">2</text>
+
+    <g transform="translate(28, 80)" font-size="18" fill="#1E293B">
+      <text x="0" y="20" font-weight="800" font-size="20" fill="#0F172A">Edge Middleware (middleware.ts)</text>
+      <text x="0" y="55" font-weight="700">• Evaluates request path against protected matchers:</text>
+      <text x="24" y="85" fill="#475569">Candidate: /dashboard, /profile, /my-path, /tools</text>
+      <text x="24" y="115" fill="#475569">Recruiter: /jobs, /candidates, /applications, /team</text>
+      <text x="24" y="145" fill="#475569">Mentor: /mentorship, /availability, /students</text>
+      <text x="24" y="175" fill="#475569">Admin: /users, /courses, /audit-logs, /settings</text>
+
+      <line x1="0" y1="210" x2="830" y2="210" stroke="#E2E8F0" stroke-width="1.5" />
+      <text x="0" y="245" font-weight="800" font-size="20" fill="#0F172A">Decision Logic &amp; Redirection</text>
+      <text x="0" y="280" font-weight="700">• Reads HttpOnly session cookie from headers</text>
+      <text x="0" y="315" font-weight="700">• Public Assets (_next/static, favicon): Pass through</text>
+      <text x="0" y="350" font-weight="700">• Root (/) Navigation: Authenticated → /dashboard</text>
+      <text x="0" y="385" font-weight="700">• Auth Routes (/login, /register): Logged-in → /dashboard</text>
+
+      <!-- Failure Exit Box -->
+      <rect x="0" y="440" width="830" height="170" rx="12" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5" />
+      <text x="20" y="475" fill="#991B1B" font-size="18" font-weight="800">EARLY EXIT: UNAUTHENTICATED ROUTE ACCESS</text>
+      <text x="20" y="510" fill="#DC2626" font-size="17" font-weight="800">HTTP 307 Redirect → /login?from=${pathname}</text>
+      <text x="20" y="545" fill="#7F1D1D" font-size="16">• Blocks unauthenticated visits before executing server code.</text>
+      <text x="20" y="575" fill="#7F1D1D" font-size="16">• Preserves deep-link redirect target in query parameters.</text>
+
+      <!-- Forward Output -->
+      <rect x="0" y="640" width="830" height="135" rx="12" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5" />
+      <text x="20" y="675" fill="#166534" font-size="18" font-weight="800">SUCCESS TRANSITION → STAGE 3</text>
+      <text x="20" y="710" fill="#14532D" font-size="16">Valid cookie present; request proceeds to API route handler</text>
+      <text x="20" y="740" fill="#14532D" font-size="16">Transfers execution context into serverAuth guard</text>
+    </g>
+  </g>
+  <path d="M 1890 620 L 1950 620" stroke="#2563EB" stroke-width="4" marker-end="url(#arrBlue2)" />
+
+  <!-- Stage 3: Server/Auth Resolution (x: 1950, width: 885) -->
+  <g transform="translate(1950, 200)">
+    <rect x="0" y="0" width="885" height="840" rx="18" fill="url(#cardGrad2)" stroke="#94A3B8" stroke-width="2" filter="url(#shadow2)" />
+    <rect x="0" y="0" width="885" height="54" rx="18" fill="#1E293B" />
+    <rect x="0" y="30" width="885" height="24" fill="#1E293B" />
+    <text x="24" y="36" fill="#FFFFFF" font-size="22" font-weight="800">Stage 3 — Server/Auth Resolution</text>
+    <circle cx="845" cy="27" r="16" fill="#0F172A" />
+    <text x="839" y="33" fill="#FFFFFF" font-size="16" font-weight="900">3</text>
+
+    <g transform="translate(28, 80)" font-size="18" fill="#1E293B">
+      <text x="0" y="20" font-weight="800" font-size="20" fill="#0F172A">Session Hydration (serverAuth.ts)</text>
+      <text x="0" y="55" font-weight="700">• Extracts raw session token from cookies()</text>
+      <text x="0" y="85" font-weight="700">• Performs token lookup in MongoDB <tspan font-weight="800">Session</tspan> collection</text>
+      <text x="0" y="115" font-weight="700">• Validates <tspan fill="#2563EB">expiresAt &gt; new Date()</tspan> (7-day sliding session)</text>
+      <text x="0" y="145" font-weight="700">• Verifies User account status: <tspan fill="#059669">User.status === 'ACTIVE'</tspan></text>
+      <text x="24" y="175" fill="#DC2626">Rejects if status is 'SUSPENDED' or 'DEACTIVATED'</text>
+
+      <line x1="0" y1="210" x2="830" y2="210" stroke="#E2E8F0" stroke-width="1.5" />
+      <text x="0" y="245" font-weight="800" font-size="20" fill="#0F172A">Portal-Specific Authentication Guards</text>
+      <text x="0" y="280" font-weight="700">• <tspan fill="#2563EB">UserService.getSession():</tspan> Resolves candidate identity</text>
+      <text x="0" y="315" font-weight="700">• <tspan fill="#2563EB">RecruiterAuthService.verifyRecruiter():</tspan></text>
+      <text x="24" y="345" fill="#475569">Hydrates CompanyMember, verifies active membership &amp; company</text>
+      <text x="0" y="380" font-weight="700">• <tspan fill="#2563EB">MentorAuthService.verifyMentor():</tspan> Checks approved mentor</text>
+      <text x="0" y="415" font-weight="700">• <tspan fill="#2563EB">AdminAuthService.verifyAdmin():</tspan> Checks ADMIN role</text>
+
+      <!-- Failure Exit Box -->
+      <rect x="0" y="445" width="830" height="165" rx="12" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5" />
+      <text x="20" y="480" fill="#991B1B" font-size="18" font-weight="800">EARLY EXIT: INVALID / EXPIRED SESSION</text>
+      <text x="20" y="515" fill="#DC2626" font-size="17" font-weight="800">HTTP 401 Unauthorized { success: false, error: 'Unauthorized' }</text>
+      <text x="20" y="550" fill="#7F1D1D" font-size="16">• Token expired, missing from DB, or forged.</text>
+      <text x="20" y="580" fill="#7F1D1D" font-size="16">• User status deactivated or suspended by platform administrators.</text>
+
+      <!-- Forward Output -->
+      <rect x="0" y="640" width="830" height="135" rx="12" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5" />
+      <text x="20" y="675" fill="#166534" font-size="18" font-weight="800">SUCCESS TRANSITION → STAGE 4</text>
+      <text x="20" y="710" fill="#14532D" font-size="16">Identity resolved; AuthenticatedRecruiter / User DTO attached</text>
+      <text x="20" y="740" fill="#14532D" font-size="16">Context passes directly to RBAC authorization gate</text>
+    </g>
+  </g>
+  <path d="M 2835 620 L 2895 620" stroke="#2563EB" stroke-width="4" marker-end="url(#arrBlue2)" />
+
+  <!-- Stage 4: Authorization and RBAC (x: 2895, width: 885) -->
+  <g transform="translate(2895, 200)">
+    <rect x="0" y="0" width="885" height="840" rx="18" fill="url(#cardGrad2)" stroke="#94A3B8" stroke-width="2" filter="url(#shadow2)" />
+    <rect x="0" y="0" width="885" height="54" rx="18" fill="#0F172A" />
+    <rect x="0" y="30" width="885" height="24" fill="#0F172A" />
+    <text x="24" y="36" fill="#FFFFFF" font-size="22" font-weight="800">Stage 4 — Authorization &amp; Multi-Tenant RBAC</text>
+    <circle cx="845" cy="27" r="16" fill="#334155" />
+    <text x="839" y="33" fill="#FFFFFF" font-size="16" font-weight="900">4</text>
+
+    <g transform="translate(28, 80)" font-size="18" fill="#1E293B">
+      <text x="0" y="20" font-weight="800" font-size="20" fill="#0F172A">Permission Matrix (RecruiterRbacService)</text>
+      <text x="0" y="55" font-weight="700">• Evaluates 28 granular permissions against 6 roles:</text>
+      <text x="24" y="85" fill="#047857">COMPANY_ADMIN: Full company &amp; team management</text>
+      <text x="24" y="115" fill="#047857">RECRUITER: Job posting, candidate review, pipeline move</text>
+      <text x="24" y="145" fill="#047857">TECHNICAL_INTERVIEWER: Assigned interviews &amp; feedback</text>
+      <text x="24" y="175" fill="#047857">HIRING_MANAGER: Scoped to assignedJobIds[]</text>
+
+      <line x1="0" y1="210" x2="830" y2="210" stroke="#E2E8F0" stroke-width="1.5" />
+      <text x="0" y="245" font-weight="800" font-size="20" fill="#0F172A">Tenant &amp; Resource Isolation Boundaries</text>
+      <text x="0" y="280" font-weight="700">• Company Isolation: <tspan fill="#047857">where: { companyId: auth.company.id }</tspan></text>
+      <text x="24" y="310" fill="#475569">Recruiter can NEVER query or mutate jobs of another company</text>
+      <text x="0" y="345" font-weight="700">• Candidate Resource Ownership:</text>
+      <text x="24" y="375" fill="#475569">Candidates can only access their own profile and resumes</text>
+      <text x="0" y="410" font-weight="700">• Admin Permissions: requirePermission('MANAGE_USERS')</text>
+
+      <!-- Failure Exit Box -->
+      <rect x="0" y="445" width="830" height="165" rx="12" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5" />
+      <text x="20" y="480" fill="#991B1B" font-size="18" font-weight="800">EARLY EXIT: PERMISSION OR TENANT VIOLATION</text>
+      <text x="20" y="515" fill="#DC2626" font-size="17" font-weight="800">HTTP 403 Forbidden { success: false, error: 'Access Denied' }</text>
+      <text x="20" y="550" fill="#7F1D1D" font-size="16">• Role lacks required capability for this endpoint.</text>
+      <text x="20" y="580" fill="#7F1D1D" font-size="16">• Cross-company or unauthorized resource access attempt.</text>
+
+      <!-- Forward Output -->
+      <rect x="0" y="640" width="830" height="135" rx="12" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5" />
+      <text x="20" y="675" fill="#166534" font-size="18" font-weight="800">SUCCESS TRANSITION → STAGE 5</text>
+      <text x="20" y="710" fill="#14532D" font-size="16">Authorization confirmed; request proceeds to input validation</text>
+      <text x="20" y="740" fill="#14532D" font-size="16">Loops down to Stage 5 (Schema Validation)</text>
+    </g>
+  </g>
+
+  <!-- Big Transition Connector from Row 1 to Row 2 (Stage 4 down and across to Stage 5) -->
+  <path d="M 3337 1040 L 3337 1070 Q 3337 1090 3317 1090 L 520 1090 Q 502 1090 502 1110 L 502 1130" fill="none" stroke="#2563EB" stroke-width="4" marker-end="url(#arrBlue2)" />
+
+  <!-- ========================================================================= -->
+  <!-- ROW 2: STAGES 5 TO 8 (y: 1130 to 1970, height: 840)                       -->
+  <!-- ========================================================================= -->
+
+  <!-- Stage 5: Schema Validation & Parsing (x: 60, width: 885) -->
+  <g transform="translate(60, 1130)">
+    <rect x="0" y="0" width="885" height="840" rx="18" fill="url(#cardGrad2)" stroke="#94A3B8" stroke-width="2" filter="url(#shadow2)" />
+    <rect x="0" y="0" width="885" height="54" rx="18" fill="#047857" />
+    <rect x="0" y="30" width="885" height="24" fill="#047857" />
+    <text x="24" y="36" fill="#FFFFFF" font-size="22" font-weight="800">Stage 5 — Schema Validation &amp; Parse</text>
+    <circle cx="845" cy="27" r="16" fill="#065F46" />
+    <text x="839" y="33" fill="#FFFFFF" font-size="16" font-weight="900">5</text>
+
+    <g transform="translate(28, 80)" font-size="18" fill="#1E293B">
+      <text x="0" y="20" font-weight="800" font-size="20" fill="#0F172A">Zod Schema Validation</text>
+      <text x="0" y="55" font-weight="700">• Parses request body against strict Zod definitions:</text>
+      <text x="24" y="85" fill="#475569">JobApplySchema: coverNote, resumeId, screening answers</text>
+      <text x="24" y="115" fill="#475569">RecruiterJobCreateSchema: title, skills, salary bounds</text>
+      <text x="24" y="145" fill="#475569">TeamMemberInviteSchema: email, role, assignedJobIds</text>
+      <text x="24" y="175" fill="#475569">Step1AboutYouSchema ... Step7PreferencesSchema</text>
+
+      <line x1="0" y1="210" x2="830" y2="210" stroke="#E2E8F0" stroke-width="1.5" />
+      <text x="0" y="245" font-weight="800" font-size="20" fill="#0F172A">Binary &amp; File Signature Validation</text>
+      <text x="0" y="280" font-weight="700">• File size limits strictly enforced (max 10MB/25MB)</text>
+      <text x="0" y="315" font-weight="700">• <tspan fill="#047857">FileValidationService.validateFileSignature():</tspan></text>
+      <text x="24" y="345" fill="#475569">Inspects magic-byte headers for %PDF-, PK.. (DOCX)</text>
+      <text x="24" y="375" fill="#475569">Blocks file extension spoofing attacks (e.g. .exe as .pdf)</text>
+      <text x="0" y="410" font-weight="700">• Sanitizes clean filenames (removes path traversals)</text>
+
+      <!-- Failure Exit Box -->
+      <rect x="0" y="445" width="830" height="165" rx="12" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5" />
+      <text x="20" y="480" fill="#991B1B" font-size="18" font-weight="800">EARLY EXIT: MALFORMED / INVALID PAYLOAD</text>
+      <text x="20" y="515" fill="#DC2626" font-size="17" font-weight="800">HTTP 400 Bad Request { success: false, errors: [...] }</text>
+      <text x="20" y="550" fill="#7F1D1D" font-size="16">• Missing required fields, invalid email format, or type mismatch.</text>
+      <text x="20" y="580" fill="#7F1D1D" font-size="16">• Magic-byte signature failed or file exceeded size limit.</text>
+
+      <!-- Forward Output -->
+      <rect x="0" y="640" width="830" height="135" rx="12" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5" />
+      <text x="20" y="675" fill="#166534" font-size="18" font-weight="800">SUCCESS TRANSITION → STAGE 6</text>
+      <text x="20" y="710" fill="#14532D" font-size="16">Type-safe validated payload passed to Domain Service</text>
+      <text x="20" y="740" fill="#14532D" font-size="16">Guarantees clean, sanitized data reaches business logic</text>
+    </g>
+  </g>
+  <path d="M 945 1550 L 1005 1550" stroke="#2563EB" stroke-width="4" marker-end="url(#arrBlue2)" />
+
+  <!-- Stage 6: Domain Service Logic (x: 1005, width: 885) -->
+  <g transform="translate(1005, 1130)">
+    <rect x="0" y="0" width="885" height="840" rx="18" fill="url(#cardGrad2)" stroke="#94A3B8" stroke-width="2" filter="url(#shadow2)" />
+    <rect x="0" y="0" width="885" height="54" rx="18" fill="#0284C7" />
+    <rect x="0" y="30" width="885" height="24" fill="#0284C7" />
+    <text x="24" y="36" fill="#FFFFFF" font-size="22" font-weight="800">Stage 6 — Domain Service Logic</text>
+    <circle cx="845" cy="27" r="16" fill="#0369A1" />
+    <text x="839" y="33" fill="#FFFFFF" font-size="16" font-weight="900">6</text>
+
+    <g transform="translate(28, 80)" font-size="18" fill="#1E293B">
+      <text x="0" y="20" font-weight="800" font-size="20" fill="#0F172A">Business Logic Execution (@backend)</text>
+      <text x="0" y="55" font-weight="700">• ApplicationService.applyToJob():</text>
+      <text x="24" y="85" fill="#475569">Verifies candidate owns resume; blocks duplicate application</text>
+      <text x="0" y="115" font-weight="700">• RecruiterJobService.createJob():</text>
+      <text x="24" y="145" fill="#475569">Injects companyId, sets publishedAt, verifies company status</text>
+      <text x="0" y="175" font-weight="700">• MentorApplicationService.approveApplication():</text>
+      <text x="24" y="205" fill="#475569">Elevates existing User or provisions new account + token</text>
+
+      <line x1="0" y1="230" x2="830" y2="230" stroke="#E2E8F0" stroke-width="1.5" />
+      <text x="0" y="265" font-weight="800" font-size="20" fill="#0F172A">Transactional &amp; Idempotent Operations</text>
+      <text x="0" y="300" font-weight="700">• Creates Immutable Resume Snapshot for recruiter review</text>
+      <text x="0" y="335" font-weight="700">• Generates 32-byte crypto random invitation tokens</text>
+      <text x="0" y="370" font-weight="700">• Automatic cleanup of freshly uploaded orphaned files on error</text>
+      <text x="0" y="405" font-weight="700">• Schedules non-blocking notification tasks in parallel</text>
+
+      <!-- Failure Exit Box -->
+      <rect x="0" y="445" width="830" height="165" rx="12" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5" />
+      <text x="20" y="480" fill="#991B1B" font-size="18" font-weight="800">EARLY EXIT: BUSINESS RULE VIOLATION</text>
+      <text x="20" y="515" fill="#DC2626" font-size="17" font-weight="800">HTTP 400 Bad Request / 404 Not Found { error: message }</text>
+      <text x="20" y="550" fill="#7F1D1D" font-size="16">• Candidate already applied; job closed/expired; resume unowned.</text>
+      <text x="20" y="580" fill="#7F1D1D" font-size="16">• Automatically deletes newly uploaded temporary resume file.</text>
+
+      <!-- Forward Output -->
+      <rect x="0" y="640" width="830" height="135" rx="12" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5" />
+      <text x="20" y="675" fill="#166534" font-size="18" font-weight="800">SUCCESS TRANSITION → STAGE 7</text>
+      <text x="20" y="710" fill="#14532D" font-size="16">Business invariants satisfied; data passed to Prisma Client</text>
+      <text x="20" y="740" fill="#14532D" font-size="16">Executes atomic persistence operation in MongoDB</text>
+    </g>
+  </g>
+  <path d="M 1890 1550 L 1950 1550" stroke="#2563EB" stroke-width="4" marker-end="url(#arrBlue2)" />
+
+  <!-- Stage 7: Data Persistence through Prisma (x: 1950, width: 885) -->
+  <g transform="translate(1950, 1130)">
+    <rect x="0" y="0" width="885" height="840" rx="18" fill="url(#cardGrad2)" stroke="#94A3B8" stroke-width="2" filter="url(#shadow2)" />
+    <rect x="0" y="0" width="885" height="54" rx="18" fill="#059669" />
+    <rect x="0" y="30" width="885" height="24" fill="#059669" />
+    <text x="24" y="36" fill="#FFFFFF" font-size="22" font-weight="800">Stage 7 — Data Persistence through Prisma</text>
+    <circle cx="845" cy="27" r="16" fill="#047857" />
+    <text x="839" y="33" fill="#FFFFFF" font-size="16" font-weight="900">7</text>
+
+    <g transform="translate(28, 80)" font-size="18" fill="#1E293B">
+      <text x="0" y="20" font-weight="800" font-size="20" fill="#0F172A">Prisma Client Query Engine</text>
+      <text x="0" y="55" font-weight="700">• Connection pooling via singleton Prisma instance</text>
+      <text x="0" y="85" font-weight="700">• Database operations:</text>
+      <text x="24" y="115" fill="#059669">db.jobApplication.create({ data: { ... } })</text>
+      <text x="24" y="145" fill="#059669">db.job.update({ where: { id }, data: { status } })</text>
+      <text x="24" y="175" fill="#059669">db.user.update({ where: { id }, data: { role: 'MENTOR' } })</text>
+      <text x="24" y="205" fill="#059669">db.auditLog.create({ data: { actor, action, resource } })</text>
+
+      <line x1="0" y1="230" x2="830" y2="230" stroke="#E2E8F0" stroke-width="1.5" />
+      <text x="0" y="265" font-weight="800" font-size="20" fill="#0F172A">Database Integrity &amp; Index Guarantees</text>
+      <text x="0" y="300" font-weight="700">• Compound Unique Constraints enforce race safety:</text>
+      <text x="24" y="330" fill="#475569">candidateId_jobId (JobApplication) | companyId_userId (Member)</text>
+      <text x="0" y="365" font-weight="700">• Indexed keys for query speed: status, email, publishedAt</text>
+      <text x="0" y="400" font-weight="700">• Cascade delete rules enforced on profile and company relations</text>
+
+      <!-- Failure Exit Box -->
+      <rect x="0" y="445" width="830" height="165" rx="12" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5" />
+      <text x="20" y="480" fill="#991B1B" font-size="18" font-weight="800">DATABASE EXCEPTION EXIT</text>
+      <text x="20" y="515" fill="#DC2626" font-size="17" font-weight="800">HTTP 500 Internal Server Error { error: 'Persistence Error' }</text>
+      <text x="20" y="550" fill="#7F1D1D" font-size="16">• Unique constraint collision (code P2002) or connection timeout.</text>
+      <text x="20" y="580" fill="#7F1D1D" font-size="16">• Domain service catches error, rolls back local file, and logs error.</text>
+
+      <!-- Forward Output -->
+      <rect x="0" y="640" width="830" height="135" rx="12" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5" />
+      <text x="20" y="675" fill="#166534" font-size="18" font-weight="800">SUCCESS TRANSITION → STAGE 8</text>
+      <text x="20" y="710" fill="#14532D" font-size="16">Database commit successful; returned document hydrated</text>
+      <text x="20" y="740" fill="#14532D" font-size="16">Passes to async events and HTTP response dispatch</text>
+    </g>
+  </g>
+  <path d="M 2835 1550 L 2895 1550" stroke="#2563EB" stroke-width="4" marker-end="url(#arrBlue2)" />
+
+  <!-- Stage 8: Events & Response Dispatch (x: 2895, width: 885) -->
+  <g transform="translate(2895, 1130)">
+    <rect x="0" y="0" width="885" height="840" rx="18" fill="url(#cardGrad2)" stroke="#94A3B8" stroke-width="2" filter="url(#shadow2)" />
+    <rect x="0" y="0" width="885" height="54" rx="18" fill="#2563EB" />
+    <rect x="0" y="30" width="885" height="24" fill="#2563EB" />
+    <text x="24" y="36" fill="#FFFFFF" font-size="22" font-weight="800">Stage 8 — Events &amp; Response Dispatch</text>
+    <circle cx="845" cy="27" r="16" fill="#1D4ED8" />
+    <text x="839" y="33" fill="#FFFFFF" font-size="16" font-weight="900">8</text>
+
+    <g transform="translate(28, 80)" font-size="18" fill="#1E293B">
+      <text x="0" y="20" font-weight="800" font-size="20" fill="#0F172A">Non-Blocking Event Triggers</text>
+      <text x="0" y="55" font-weight="700">• Transactional Emails via EmailService:</text>
+      <text x="24" y="85" fill="#D97706">Candidate confirmation &amp; recruiter alert emails</text>
+      <text x="24" y="115" fill="#D97706">Mentor application approval &amp; password setup link</text>
+      <text x="24" y="145" fill="#D97706">Recruiter team member invitation email</text>
+      <text x="0" y="180" font-weight="700">• Email delivery record logged to <tspan font-weight="800">EmailDelivery</tspan> collection</text>
+      <text x="0" y="210" font-weight="700">• AuditLog event committed for administrative tracking</text>
+
+      <line x1="0" y1="230" x2="830" y2="230" stroke="#E2E8F0" stroke-width="1.5" />
+      <text x="0" y="265" font-weight="800" font-size="20" fill="#0F172A">HTTP Response Construction</text>
+      <text x="0" y="300" font-weight="700">• Format: Clean JSON Data Transfer Object (DTO)</text>
+      <text x="0" y="335" font-weight="700">• Status Codes: <tspan fill="#059669" font-weight="800">HTTP 200 OK / HTTP 201 Created</tspan></text>
+      <text x="0" y="370" font-weight="700">• Set-Cookie Header (on login/register):</text>
+      <text x="24" y="400" fill="#2563EB">career_session: HttpOnly; Path=/; SameSite=Lax; Max-Age=7d</text>
+
+      <!-- Client Delivery Box -->
+      <rect x="0" y="445" width="830" height="165" rx="12" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5" />
+      <text x="20" y="480" fill="#166534" font-size="18" font-weight="800">CLIENT STATE SYNCHRONIZATION</text>
+      <text x="20" y="515" fill="#14532D" font-size="16">• React UI immediately updates optimistic or revalidated state.</text>
+      <text x="20" y="545" fill="#14532D" font-size="16">• Candidate dashboard shows updated application status.</text>
+      <text x="20" y="575" fill="#14532D" font-size="16">• Recruiter hiring board updates applicant counts in real time.</text>
+
+      <!-- Completed Badge -->
+      <rect x="0" y="640" width="830" height="135" rx="12" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5" />
+      <text x="20" y="675" fill="#1E40AF" font-size="18" font-weight="800">END OF REQUEST PIPELINE</text>
+      <text x="20" y="710" fill="#1E3A8A" font-size="16">Connection safely closed with zero memory leaks</text>
+      <text x="20" y="740" fill="#1E3A8A" font-size="16">All state transitions committed atomically to MongoDB</text>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- FOOTER LEGEND (y: 2000 to 2120, height: 120)                              -->
+  <!-- ========================================================================= -->
+  <rect x="60" y="2000" width="3720" height="120" rx="14" fill="#0F172A" stroke="#334155" stroke-width="1.5" />
+  <g transform="translate(100, 2035)" font-size="16" fill="#E2E8F0">
+    <text x="0" y="22" fill="#38BDF8" font-weight="800">REQUEST PIPELINE LEGEND:</text>
+
+    <line x1="260" y1="16" x2="310" y2="16" stroke="#2563EB" stroke-width="4" marker-end="url(#arrBlue2)" />
+    <text x="325" y="22" font-weight="600">Standard Execution Flow</text>
+
+    <line x1="560" y1="16" x2="610" y2="16" stroke="#DC2626" stroke-width="4" marker-end="url(#arrRed2)" />
+    <text x="625" y="22" font-weight="600">Early Failure Exit (HTTP 4xx/5xx)</text>
+
+    <line x1="910" y1="16" x2="960" y2="16" stroke="#059669" stroke-width="4" marker-end="url(#arrGreen2)" />
+    <text x="975" y="22" font-weight="600">Database Persistence Operation</text>
+
+    <line x1="1260" y1="16" x2="1310" y2="16" stroke="#D97706" stroke-width="4" marker-end="url(#arrAmber2)" />
+    <text x="1325" y="22" font-weight="600">Async Event / ZeptoMail Call</text>
+
+    <rect x="1600" y="5" width="22" height="22" rx="4" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5" />
+    <text x="1635" y="22" font-weight="600">Security Gate / Error Payloads</text>
+
+    <text x="1950" y="22" fill="#F8FAFC" font-weight="700">FAIL-SAFE DEFENSE:</text>
+    <text x="2150" y="22" fill="#94A3B8">Every gate fails fast with structured JSON · No unhandled rejections · Orphaned files cleaned up on database write failure</text>
+  </g>
+
+</svg>

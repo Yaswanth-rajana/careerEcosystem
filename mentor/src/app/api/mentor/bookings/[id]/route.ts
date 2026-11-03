@@ -37,8 +37,19 @@ export async function PATCH(
     );
     return NextResponse.json({ booking: updated });
   } catch (err: any) {
+    let errorMessage = err.message || 'Failed to update booking status';
+    if (err.name === 'ZodError' && Array.isArray(err.issues) && err.issues.length > 0) {
+      errorMessage = err.issues.map((i: any) => i.message).join(', ');
+    } else {
+      try {
+        const parsed = JSON.parse(errorMessage);
+        if (Array.isArray(parsed) && parsed[0]?.message) {
+          errorMessage = parsed.map((p: any) => p.message).join(', ');
+        }
+      } catch {}
+    }
     return NextResponse.json(
-      { error: err.message || 'Failed to update booking status' },
+      { error: errorMessage },
       { status: err.statusCode || 400 }
     );
   }

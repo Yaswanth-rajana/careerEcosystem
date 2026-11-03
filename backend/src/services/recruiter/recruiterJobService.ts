@@ -6,6 +6,8 @@ import {
 } from '../../types/recruiter';
 import { RecruiterJobCreateSchema, RecruiterJobUpdateSchema } from '../../validations/recruiterSchemas';
 import { AuditService } from '../auditService';
+import { JobExpirationService } from '../jobExpirationService';
+import { RecruiterRbacService } from './recruiterRbacService';
 import { z } from 'zod';
 
 export interface ListRecruiterJobsParams {
@@ -23,17 +25,37 @@ export class RecruiterJobService {
   /**
    * Retrieves paginated job postings strictly scoped to the recruiter's company.
    */
-  static async listJobs(companyId: string, params: ListRecruiterJobsParams = {}) {
+  static async listJobs(companyId: string, params: ListRecruiterJobsParams = {}, auth?: AuthenticatedRecruiter) {
+    if (auth) {
+      RecruiterRbacService.assertPermission(auth, 'jobs:view');
+    }
+
     const page = Math.max(1, params.page || 1);
     const limit = Math.min(100, Math.max(1, params.limit || 25));
     const skip = (page - 1) * limit;
+
+    const expirationThreshold = JobExpirationService.getExpirationThreshold();
 
     const where: any = {
       companyId,
     };
 
+    if (auth && auth.companyRole === 'HIRING_MANAGER' && auth.membership.assignedJobIds.length > 0) {
+      where.id = { in: auth.membership.assignedJobIds };
+    }
+
     if (params.status && params.status !== 'All') {
-      where.status = params.status;
+      if (params.status === 'EXPIRED') {
+        where.OR = [
+          { status: 'EXPIRED' },
+          { status: 'PUBLISHED', publishedAt: { lte: expirationThreshold } },
+        ];
+      } else if (params.status === 'PUBLISHED') {
+        where.status = 'PUBLISHED';
+        where.publishedAt = { gt: expirationThreshold };
+      } else {
+        where.status = params.status;
+      }
     }
     if (params.workMode && params.workMode !== 'All') {
       where.workMode = params.workMode;
@@ -79,11 +101,13 @@ export class RecruiterJobService {
     const items: RecruiterJobListDTO[] = jobs.map((job) => {
       const apps = job.applications || [];
       const shortlistedCount = apps.filter((a) => a.status === 'SHORTLISTED').length;
+      const isExpired = job.status === 'EXPIRED' || (job.status === 'PUBLISHED' && JobExpirationService.isJobExpired(job));
+      const effectiveStatus = isExpired ? 'EXPIRED' : job.status;
 
       return {
         id: job.id,
         title: job.title,
-        status: job.status as any,
+        status: effectiveStatus as any,
         workMode: job.workMode,
         employmentType: job.employmentType,
         experienceLevel: job.experienceLevel,
@@ -96,6 +120,11 @@ export class RecruiterJobService {
         shortlistedCount,
         interviewsCount: (job.interviews || []).length,
         publishedAt: job.publishedAt?.toISOString() || null,
+        expiresAt: job.expiresAt
+          ? job.expiresAt.toISOString()
+          : job.publishedAt
+          ? JobExpirationService.calculateExpiresAt(job.publishedAt).toISOString()
+          : null,
         createdAt: job.createdAt.toISOString(),
       };
     });
@@ -110,9 +139,12 @@ export class RecruiterJobService {
   }
 
   /**
-   * Retrieves full job details, ensuring company ownership.
+   * Retrieves full job details, ensuring company ownership and RBAC scoping.
    */
-  static async getJobDetail(jobId: string, companyId: string): Promise<RecruiterJobDetailDTO> {
+  static async getJobDetail(jobId: string, companyId: string, auth?: AuthenticatedRecruiter): Promise<RecruiterJobDetailDTO> {
+    if (auth) {
+      await RecruiterRbacService.assertJobAccess(auth, jobId);
+    }
     const job = await db.job.findFirst({
       where: {
         id: jobId,
@@ -120,6 +152,9 @@ export class RecruiterJobService {
       },
       include: {
         applications: {
+          select: { id: true, status: true },
+        },
+        interviews: {
           select: { id: true },
         },
       },
@@ -129,10 +164,19 @@ export class RecruiterJobService {
       throw new Error(`Job not found or access denied.`);
     }
 
+    const isExpired = job.status === 'EXPIRED' || (job.status === 'PUBLISHED' && JobExpirationService.isJobExpired(job));
+    const effectiveStatus = isExpired ? 'EXPIRED' : job.status;
+
+    const apps = job.applications || [];
+    const shortlistedCount = apps.filter((a) => a.status === 'SHORTLISTED').length;
+    const interviewApps = apps.filter((a) => a.status === 'INTERVIEW').length;
+    const scheduledInterviews = (job.interviews || []).length;
+    const interviewsCount = Math.max(scheduledInterviews, interviewApps);
+
     return {
       id: job.id,
       title: job.title,
-      status: job.status as any,
+      status: effectiveStatus as any,
       workMode: job.workMode,
       employmentType: job.employmentType,
       experienceLevel: job.experienceLevel,
@@ -148,10 +192,16 @@ export class RecruiterJobService {
       niceToHave: job.niceToHave,
       benefits: job.benefits,
       publishedAt: job.publishedAt?.toISOString() || null,
-      expiresAt: job.expiresAt?.toISOString() || null,
+      expiresAt: job.expiresAt
+        ? job.expiresAt.toISOString()
+        : job.publishedAt
+        ? JobExpirationService.calculateExpiresAt(job.publishedAt).toISOString()
+        : null,
       createdAt: job.createdAt.toISOString(),
       updatedAt: job.updatedAt.toISOString(),
-      applicationsCount: (job.applications || []).length,
+      applicationsCount: apps.length,
+      shortlistedCount,
+      interviewsCount,
       companyId: job.companyId!,
       createdById: job.createdById,
     };
@@ -161,9 +211,18 @@ export class RecruiterJobService {
    * Creates a new job posting scoped to the recruiter's company.
    */
   static async createJob(data: z.infer<typeof RecruiterJobCreateSchema>, auth: AuthenticatedRecruiter) {
+    RecruiterRbacService.assertPermission(auth, 'jobs:create');
+
     const validated = RecruiterJobCreateSchema.parse(data);
 
+    if (validated.status === 'PUBLISHED') {
+      RecruiterRbacService.assertPermission(auth, 'jobs:publish');
+    }
+
     const isPublished = validated.status === 'PUBLISHED';
+    const now = new Date();
+    const publishedAt = isPublished ? now : null;
+    const expiresAt = isPublished ? JobExpirationService.calculateExpiresAt(now) : null;
 
     const job = await db.job.create({
       data: {
@@ -189,7 +248,8 @@ export class RecruiterJobService {
         status: validated.status,
         jobVerified: auth.company.verified,
         companyVerified: auth.company.verified,
-        publishedAt: isPublished ? new Date() : null,
+        publishedAt,
+        expiresAt,
       },
     });
 
@@ -210,18 +270,27 @@ export class RecruiterJobService {
    * Updates an existing job posting with ownership verification.
    */
   static async updateJob(jobId: string, data: z.infer<typeof RecruiterJobUpdateSchema>, auth: AuthenticatedRecruiter) {
+    RecruiterRbacService.assertPermission(auth, 'jobs:edit');
+    const existing = await RecruiterRbacService.assertJobAccess(auth, jobId);
+
     const validated = RecruiterJobUpdateSchema.parse(data);
 
-    const existing = await db.job.findFirst({
-      where: { id: jobId, companyId: auth.company.id },
-    });
+    if (validated.status === 'PUBLISHED') {
+      RecruiterRbacService.assertPermission(auth, 'jobs:publish');
+    }
+    if (validated.status === 'CLOSED') {
+      RecruiterRbacService.assertPermission(auth, 'jobs:close');
+    }
 
-    if (!existing) {
-      throw new Error('Job not found or access denied.');
+    const isExpired = existing.status === 'EXPIRED' || (existing.status === 'PUBLISHED' && JobExpirationService.isJobExpired(existing));
+
+    if (isExpired && validated.status === 'PUBLISHED') {
+      throw new Error('Expired jobs cannot be reopened by editing. Please duplicate the job to create a new posting.');
     }
 
     const wasDraft = existing.status === 'DRAFT';
     const isNowPublished = validated.status === 'PUBLISHED';
+    const now = new Date();
 
     const updated = await db.job.update({
       where: { id: jobId },
@@ -242,7 +311,7 @@ export class RecruiterJobService {
         ...(validated.niceToHave !== undefined ? { niceToHave: validated.niceToHave } : {}),
         ...(validated.benefits !== undefined ? { benefits: validated.benefits } : {}),
         ...(validated.status !== undefined ? { status: validated.status } : {}),
-        ...(wasDraft && isNowPublished ? { publishedAt: new Date() } : {}),
+        ...(wasDraft && isNowPublished ? { publishedAt: now, expiresAt: JobExpirationService.calculateExpiresAt(now) } : {}),
       },
     });
 
@@ -263,13 +332,8 @@ export class RecruiterJobService {
    * Clones a job posting as a DRAFT.
    */
   static async duplicateJob(jobId: string, auth: AuthenticatedRecruiter) {
-    const original = await db.job.findFirst({
-      where: { id: jobId, companyId: auth.company.id },
-    });
-
-    if (!original) {
-      throw new Error('Original job not found or access denied.');
-    }
+    RecruiterRbacService.assertPermission(auth, 'jobs:create');
+    const original = await RecruiterRbacService.assertJobAccess(auth, jobId);
 
     const cloned = await db.job.create({
       data: {
@@ -316,6 +380,19 @@ export class RecruiterJobService {
    * Pauses or closes a job.
    */
   static async changeJobStatus(jobId: string, newStatus: 'PUBLISHED' | 'PAUSED' | 'CLOSED', auth: AuthenticatedRecruiter) {
+    const existing = await db.job.findFirst({
+      where: { id: jobId, companyId: auth.company.id },
+    });
+
+    if (!existing) {
+      throw new Error('Job not found or access denied.');
+    }
+
+    const isExpired = existing.status === 'EXPIRED' || (existing.status === 'PUBLISHED' && JobExpirationService.isJobExpired(existing));
+    if (isExpired && newStatus === 'PUBLISHED') {
+      throw new Error('Expired jobs cannot be reopened. Please duplicate the job to create a new posting.');
+    }
+
     return this.updateJob(jobId, { status: newStatus }, auth);
   }
 }

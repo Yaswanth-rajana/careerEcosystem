@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const filter = (searchParams.get('filter') as 'upcoming' | 'today' | 'completed' | 'all') || 'all';
 
-    const interviews = await RecruiterInterviewService.listInterviews(auth.company.id, filter);
+    const interviews = await RecruiterInterviewService.listInterviews(auth.company.id, filter, auth);
     return NextResponse.json({ success: true, data: interviews });
   } catch (error: any) {
     if (error instanceof RecruiterAuthError) {

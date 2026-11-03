@@ -12,7 +12,8 @@
     "forceConsistentCasingInFileNames": true,
     "types": ["node"],
     "paths": {
-      "@backend/*": ["./src/*"]
+      "@backend/*": ["./src/*"],
+      "@/*": ["../recruiter/src/*"]
     }
   },
   "include": ["src/**/*"],

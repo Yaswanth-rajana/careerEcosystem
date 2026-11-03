@@ -18,16 +18,20 @@ export async function GET(request: NextRequest) {
     const sortBy = searchParams.get('sortBy') || undefined;
     const sortDir = (searchParams.get('sortDir') as 'asc' | 'desc') || undefined;
 
-    const result = await RecruiterJobService.listJobs(auth.company.id, {
-      page,
-      limit,
-      q,
-      status,
-      workMode,
-      employmentType,
-      sortBy,
-      sortDir,
-    });
+    const result = await RecruiterJobService.listJobs(
+      auth.company.id,
+      {
+        page,
+        limit,
+        q,
+        status,
+        workMode,
+        employmentType,
+        sortBy,
+        sortDir,
+      },
+      auth
+    );
 
     return NextResponse.json({ success: true, ...result });
   } catch (error: any) {

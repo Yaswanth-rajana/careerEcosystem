@@ -5,6 +5,7 @@ const nextConfig = {
   reactStrictMode: true,
   experimental: {
     externalDir: true,
+    serverComponentsExternalPackages: ['pdf-parse', 'mammoth'],
   },
   images: {
     remotePatterns: [

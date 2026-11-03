@@ -132,7 +132,7 @@ async function runGoogleAuthTests() {
     assert(onboardedAuthResult.user.isOnboarded === true, 'Existing user with completed onboarding has isOnboarded=true (CASE 4: /dashboard)');
 
     // ----------------------------------------------------
-    // TEST 7: CASE 7 & Regression: Existing email/password user links Google
+    // TEST 7: CASE 7 & Anti-Pre-Hijacking: Existing email/password user links Google
     // ----------------------------------------------------
     const linkEmail = `${testEmailPrefix}_link@example.com`;
     const linkPassword = 'Password123!';
@@ -146,32 +146,64 @@ async function runGoogleAuthTests() {
     });
     assert(Boolean(passwordUser.user.id), 'Registered standard email/password user');
 
-    // 2. Sign in with Google using matching verified email
+    // 2. Anti-pre-hijacking: Unauthenticated Google sign-in without password MUST be rejected
+    try {
+      await UserService.authenticateWithGoogle({
+        googleId: linkGoogleSub,
+        email: linkEmail,
+        emailVerified: true,
+        name: 'Linked Google User',
+        avatarUrl: 'https://lh3.googleusercontent.com/linked_avatar',
+      });
+      assert(false, 'Should reject automatic linking without password proof of ownership');
+    } catch (err: any) {
+      assert(
+        err.message.includes('verify ownership by providing your account password'),
+        'Rejects unverified Google linking to prevent pre-registration account takeover'
+      );
+    }
+
+    // 3. Incorrect password MUST be rejected
+    try {
+      await UserService.authenticateWithGoogle({
+        googleId: linkGoogleSub,
+        email: linkEmail,
+        emailVerified: true,
+        name: 'Linked Google User',
+        linkPassword: 'WrongPassword999!',
+      });
+      assert(false, 'Should reject linking with invalid password');
+    } catch (err: any) {
+      assert(err.message.includes('Invalid account password'), 'Rejects linking with invalid account password');
+    }
+
+    // 4. Sign in with Google with valid linkPassword proves ownership and links successfully
     const linkedResult = await UserService.authenticateWithGoogle({
       googleId: linkGoogleSub,
       email: linkEmail,
       emailVerified: true,
       name: 'Linked Google User',
       avatarUrl: 'https://lh3.googleusercontent.com/linked_avatar',
+      linkPassword,
     });
 
-    assert(linkedResult.user.id === passwordUser.user.id, 'Google login links to existing account without duplicating (CASE 7)');
+    assert(linkedResult.user.id === passwordUser.user.id, 'Google login links to existing account with verified password proof of ownership');
 
-    // 3. Verify user can STILL authenticate with original password
+    // 5. Verify user can STILL authenticate with original password (password is NOT deleted)
     const passwordAuthResult = await UserService.authenticateUser({
       email: linkEmail,
       password: linkPassword,
     });
     assert(passwordAuthResult.user.id === passwordUser.user.id, 'Original password login remains fully functional after Google linking');
 
-    // 4. Verify user can STILL authenticate with Google
+    // 6. Verify returning user can authenticate with Google without re-entering password
     const repeatLinkedGoogle = await UserService.authenticateWithGoogle({
       googleId: linkGoogleSub,
       email: linkEmail,
       emailVerified: true,
       name: 'Linked Google User',
     });
-    assert(repeatLinkedGoogle.user.id === passwordUser.user.id, 'Google login works seamlessly after linking');
+    assert(repeatLinkedGoogle.user.id === passwordUser.user.id, 'Returning linked Google user logs in seamlessly without password prompt');
 
     // ----------------------------------------------------
     // TEST 8: Anti-hijacking: Reject linking if email is already linked to a different googleId

@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { BookingListDTO } from '@backend/types/mentorship';
 import { StatusBadge } from '../StatusBadge';
-import { Clock, Video, ChevronRight, User } from 'lucide-react';
+import { Clock } from 'lucide-react';
 
 interface SessionCardProps {
   booking: BookingListDTO;
@@ -52,23 +52,12 @@ export function SessionCard({ booking, isToday = false }: SessionCardProps) {
         </div>
       )}
 
-      <div className="flex items-center gap-2 pt-1">
-        {booking.sessionId && (
-          <Link
-            href={`/mentorship/sessions/${booking.sessionId}`}
-            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition"
-          >
-            <Video className="w-3.5 h-3.5" />
-            Join & Notes
-          </Link>
-        )}
-
+      <div className="pt-1">
         <Link
-          href={`/mentorship/bookings/${booking.id}`}
-          className="inline-flex items-center justify-center p-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg border border-slate-200 transition"
-          title="View Details"
+          href={`/mentorship/bookings/${booking.id}?from=dashboard`}
+          className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition"
         >
-          <ChevronRight className="w-4 h-4" />
+          <span>View</span>
         </Link>
       </div>
     </div>

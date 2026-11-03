@@ -126,7 +126,7 @@ export class JobsApiClient {
    */
   static async applyToJob(
     jobId: string,
-    payload?: { coverNote?: string; answers?: any; resumeUrl?: string }
+    payload?: { coverNote?: string; answers?: any; resumeUrl?: string; resumeId?: string; isNewUpload?: boolean }
   ): Promise<ApplicationDTO> {
     const res = await fetch(`/api/jobs/${jobId}/apply`, {
       method: 'POST',

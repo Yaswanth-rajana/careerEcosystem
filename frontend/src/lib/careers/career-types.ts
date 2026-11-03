@@ -78,6 +78,51 @@ export interface SalaryRange {
   updatedAt?: string;
 }
 
+export type CareerLevelId = 'entry' | 'junior' | 'mid' | 'senior';
+
+export type CareerDomainType =
+  | 'software'
+  | 'cloud_devops'
+  | 'security'
+  | 'data'
+  | 'hardware'
+  | 'product_business'
+  | 'general';
+
+export interface CareerLevelDefinition {
+  id: CareerLevelId;
+  label: string; // e.g. 'Beginner / Entry Level'
+  roleTitle: string; // e.g. 'Associate Software Engineer'
+  experienceRange: string; // e.g. '0–1 yrs'
+  description: string; // Concise role description
+  focusSummary: string; // What candidate focuses on at this level
+  expectedCompetencies: string[];
+  responsibilities: string[];
+  practicalWorkTitle?: string; // e.g. 'Projects & Portfolio' vs 'Labs & Circuit Simulations'
+  practicalWorkDescription?: string;
+  skillGroups: CareerSkillGroup;
+  learningPhases: CareerLearningPhase[];
+  practicalWork: CareerProject[];
+  certifications?: CareerCertification[];
+  practiceAreas: CareerPracticeArea[];
+  interviewTopics: CareerInterviewTopic[];
+  readinessChecklist: Array<{
+    id: string;
+    label: string;
+    status: string;
+    isDone?: boolean;
+    type?: 'resume' | 'skills' | 'practical' | 'links' | 'certifications' | 'experience';
+  }>;
+  roadmapStageDescriptions: {
+    learn: string;
+    practice: string;
+    mentorship: string;
+    prepare: string;
+    jobReady: string;
+    opportunities: string;
+  };
+}
+
 export interface RoleOverviewBlocks {
   whatYouDo: string | string[];
   youWillWorkOn: string[];
@@ -89,6 +134,7 @@ export interface CareerPath {
   slug: string;
   title: string;
   category: 'Technology' | 'Data & AI' | 'Product & Design' | 'Cybersecurity' | 'Business & Growth' | 'Electronics & Systems' | 'Mechanical & Manufacturing';
+  domainType?: CareerDomainType;
   tagline: string;
   shortDescription: string;
   typicalTrajectory: string[]; // e.g. ['Beginner', 'Junior Developer', 'Mid-Level Software Engineer', 'Senior Engineer']
@@ -102,6 +148,7 @@ export interface CareerPath {
   certifications: CareerCertification[];
   practiceAreas: CareerPracticeArea[];
   interviewTopics: CareerInterviewTopic[];
+  levels?: Partial<Record<CareerLevelId, CareerLevelDefinition>>;
 }
 
 /* Candidate State & Context Types */

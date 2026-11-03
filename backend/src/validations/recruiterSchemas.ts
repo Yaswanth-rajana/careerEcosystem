@@ -21,7 +21,7 @@ export const RecruiterJobCreateSchema = z.object({
 });
 
 export const RecruiterJobUpdateSchema = RecruiterJobCreateSchema.partial().extend({
-  status: z.enum(['DRAFT', 'PUBLISHED', 'PAUSED', 'CLOSED']).optional(),
+  status: z.enum(['DRAFT', 'PUBLISHED', 'PAUSED', 'CLOSED', 'EXPIRED']).optional(),
 });
 
 export const RecruiterApplicationStatusUpdateSchema = z.object({
@@ -100,9 +100,45 @@ export const CompanyProfileUpdateSchema = z.object({
   logoUrl: z.string().url().optional().or(z.literal('')).nullable(),
 });
 
+export const RecruiterRoleEnum = z.enum([
+  'COMPANY_ADMIN',
+  'RECRUITER',
+  'TECHNICAL_INTERVIEWER',
+  'HR_INTERVIEWER',
+  'INTERVIEW_COORDINATOR',
+  'HIRING_MANAGER',
+]);
+
 export const TeamMemberInviteSchema = z.object({
-  email: z.string().email('Valid email required'),
-  name: z.string().min(2, 'Name required'),
-  role: z.enum(['COMPANY_ADMIN', 'RECRUITER', 'HIRING_MANAGER', 'INTERVIEWER']).default('RECRUITER'),
+  email: z.string().email('Valid work email required'),
+  name: z.string().min(2, 'Name must be at least 2 characters').optional().nullable(),
+  role: RecruiterRoleEnum.default('RECRUITER'),
   title: z.string().max(100).optional().nullable(),
+  department: z.string().max(100).optional().nullable(),
+  assignedJobIds: z.array(z.string()).optional().default([]),
+  interviewTypes: z.array(z.string()).optional().default([]),
+  message: z.string().max(1000).optional().nullable(),
+});
+
+export const TeamMemberUpdateRoleSchema = z.object({
+  role: RecruiterRoleEnum.optional(),
+  title: z.string().max(100).optional().nullable(),
+  department: z.string().max(100).optional().nullable(),
+  assignedJobIds: z.array(z.string()).optional(),
+  interviewTypes: z.array(z.string()).optional(),
+  status: z.enum(['ACTIVE', 'SUSPENDED']).optional(),
+});
+
+export const InterviewFeedbackSchema = z.object({
+  feedback: z.string().min(5, 'Feedback must be at least 5 characters').max(3000),
+  rating: z.number().int().min(1).max(5).optional().nullable(),
+  recommendation: z.enum(['STRONG_HIRE', 'ADVANCE', 'HOLD', 'REJECT']),
+});
+
+export const InterviewAssignSchema = z.object({
+  interviewerId: z.string().min(1, 'Interviewer ID is required'),
+  interviewerName: z.string().min(1).optional(),
+  meetingUrl: z.string().url('Invalid meeting URL').optional().or(z.literal('')).nullable(),
+  scheduledAt: z.string().datetime().optional(),
+  notes: z.string().max(2000).optional().nullable(),
 });

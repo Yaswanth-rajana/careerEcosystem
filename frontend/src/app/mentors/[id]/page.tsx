@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { getMentorById } from '@/lib/mentors/mentor-repository';
@@ -24,13 +24,48 @@ import {
 } from 'lucide-react';
 
 import { useAuth } from '@/lib/AuthContext';
-import { useRouter } from 'next/navigation';
-
-export default function MentorProfilePage() {
+function MentorProfileContent() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const mentorId = params?.id as string;
   const { user } = useAuth();
   const router = useRouter();
+
+  const fromBooking = searchParams?.get('fromBooking');
+  const fromOrigin = searchParams?.get('from');
+
+  const [bookingRef, setBookingRef] = useState<string | null>(fromBooking || null);
+
+  useEffect(() => {
+    if (fromBooking) {
+      setBookingRef(fromBooking);
+    } else if (typeof document !== 'undefined' && document.referrer) {
+      const match = document.referrer.match(/\/mentors\/bookings\/([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) {
+        setBookingRef(match[1]);
+      }
+    }
+  }, [fromBooking]);
+
+  const backTarget = (() => {
+    if (bookingRef) {
+      const qs = fromOrigin ? `?from=${fromOrigin}` : '';
+      return {
+        href: `/mentors/bookings/${bookingRef}${qs}`,
+        label: 'Back to Booking Details',
+      };
+    }
+    if (fromOrigin === 'dashboard') {
+      return {
+        href: '/dashboard',
+        label: 'Back to Dashboard',
+      };
+    }
+    return {
+      href: '/mentors',
+      label: 'Back to Mentors Discovery',
+    };
+  })();
 
   const [mentor, setMentor] = useState<Mentor | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -92,9 +127,9 @@ export default function MentorProfilePage() {
             The mentor profile you are looking for may have been updated or is no longer available.
           </p>
           <div className="pt-4">
-            <Link href="/mentors">
+            <Link href={backTarget.href}>
               <Button variant="primary" leftIcon={<ArrowLeft className="w-4 h-4" />} className="bg-blue-600 hover:bg-blue-700 text-white">
-                Back to Mentors Discovery
+                {backTarget.label}
               </Button>
             </Link>
           </div>
@@ -112,11 +147,11 @@ export default function MentorProfilePage() {
         {/* Back Link */}
         <div className="mb-6">
           <Link
-            href="/mentors"
+            href={backTarget.href}
             className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-blue-600 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Back to Mentors Discovery</span>
+            <span>{backTarget.label}</span>
           </Link>
         </div>
 
@@ -335,5 +370,19 @@ export default function MentorProfilePage() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function MentorProfilePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#FAFAFC]">
+          <div className="w-8 h-8 rounded-full border-2 border-blue-600 border-t-transparent animate-spin" />
+        </div>
+      }
+    >
+      <MentorProfileContent />
+    </Suspense>
   );
 }

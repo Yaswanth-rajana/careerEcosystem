@@ -59,6 +59,10 @@ export class RateLimitService {
     this.provider = provider;
   }
 
+  public static reset(): void {
+    this.provider = new MemoryRateLimitProvider();
+  }
+
   /**
    * Enforces conversion rate limits.
    * Authenticated: 5 requests / min

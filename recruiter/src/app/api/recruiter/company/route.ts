@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: NextRequest) {
   try {
     const auth = await getAuthenticatedRecruiter();
-    const profile = await RecruiterCompanyService.getCompanyProfile(auth.company.id);
+    const profile = await RecruiterCompanyService.getCompanyProfile(auth.company.id, auth);
 
     return NextResponse.json({ success: true, data: profile });
   } catch (error: any) {

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { UserService } from '@backend/services/userService';
+import { SignUpSchema } from '@backend/validations/schemas';
 import { SESSION_COOKIE_NAME } from '@backend/auth/security';
 
 export const dynamic = 'force-dynamic';
@@ -8,15 +9,18 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, password, role } = body;
 
-    if (!name || !email || !password) {
-      return NextResponse.json({ error: 'Name, email, and password are required.' }, { status: 400 });
+    let validated;
+    try {
+      validated = SignUpSchema.parse(body);
+    } catch (validationErr: any) {
+      const message = validationErr?.errors?.[0]?.message || 'Invalid registration details provided.';
+      return NextResponse.json({ error: message }, { status: 400 });
     }
 
     let result;
     try {
-      result = await UserService.registerUser({ name, email, password, role });
+      result = await UserService.registerUser(validated);
     } catch (err: any) {
       return NextResponse.json({ error: err.message || 'Registration failed' }, { status: 400 });
     }

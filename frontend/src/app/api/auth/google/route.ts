@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { credential } = body;
+    const { credential, linkPassword } = body;
 
     if (!credential || typeof credential !== 'string') {
       return NextResponse.json(
@@ -39,6 +39,7 @@ export async function POST(request: Request) {
         emailVerified: verified.emailVerified,
         name: verified.name,
         avatarUrl: verified.picture,
+        linkPassword: typeof linkPassword === 'string' ? linkPassword : undefined,
       });
     } catch (authError: any) {
       console.error('[GoogleAuth] UserService error:', authError.message);

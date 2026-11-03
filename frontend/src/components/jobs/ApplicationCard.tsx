@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { ApplicationDTO } from '@backend/types/jobs';
 import { ApplicationStatusBadge } from './ApplicationStatusBadge';
-import { Building2, MapPin, Calendar, Clock, AlertTriangle } from 'lucide-react';
+import { Building2, MapPin, Calendar, Clock, AlertTriangle, CheckCircle2, FileText } from 'lucide-react';
 import { Button } from '@/components/design-system/Button';
 import { JobsApiClient } from '@/services/jobsClient';
 
@@ -89,6 +89,87 @@ export const ApplicationCard: React.FC<Props> = ({
           <ApplicationStatusBadge status={status} />
         </div>
       </div>
+
+      {/* Submitted Resume Info */}
+      <div className="mt-3 flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+        <div className="flex items-center gap-2 text-slate-700 min-w-0">
+          <FileText className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+          <span className="text-slate-500">Submitted Resume:</span>
+          {application.resumeFilename ? (
+            <span className="font-semibold text-slate-800 truncate">{application.resumeFilename}</span>
+          ) : (
+            <span className="text-slate-400 italic">No resume attached</span>
+          )}
+        </div>
+        {(application.resumeUrl || application.resumeId) && (
+          <a
+            href={application.resumeUrl || `/api/applications/${application.id}/resume`}
+            target="_blank"
+            rel="noreferrer"
+            className="text-[11px] font-semibold text-blue-600 hover:text-blue-700 hover:underline shrink-0 ml-2"
+          >
+            View Resume
+          </a>
+        )}
+      </div>
+
+      {/* Scheduled Interviews if any */}
+      {application.interviews && application.interviews.length > 0 && (
+        <div className="mt-3.5 space-y-2">
+          {application.interviews.map((inv) => (
+            <div
+              key={inv.id}
+              className="p-3.5 rounded-xl bg-purple-50/70 border border-purple-200/80 text-xs text-purple-900 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+            >
+              <div>
+                <span className="font-bold flex items-center gap-1.5 text-purple-950">
+                  <Calendar className="w-3.5 h-3.5 text-purple-700" />
+                  {inv.title} ({inv.type})
+                </span>
+                <p className="text-[11px] text-purple-700 mt-0.5">
+                  Scheduled for {new Date(inv.scheduledAt).toLocaleString()} ({inv.durationMinutes} mins)
+                </p>
+              </div>
+              {inv.meetingUrl && (
+                <a
+                  href={inv.meetingUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 font-bold text-xs bg-purple-600 text-white px-3 py-1.5 rounded-lg hover:bg-purple-700 self-start sm:self-auto transition"
+                >
+                  Join Meeting
+                </a>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Official Offers if any */}
+      {application.offers && application.offers.length > 0 && (
+        <div className="mt-3.5 space-y-2">
+          {application.offers.map((off) => (
+            <div
+              key={off.id}
+              className="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200/80 text-xs text-emerald-900 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+            >
+              <div>
+                <span className="font-bold flex items-center gap-1.5 text-emerald-950">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
+                  Offer Received: {off.positionTitle}
+                </span>
+                <p className="text-[11px] text-emerald-700 mt-0.5">
+                  Compensation: {off.currency} {off.salaryOffered.toLocaleString()} / {off.salaryPeriod.toLowerCase()}
+                  {off.startDate ? ` • Start Date: ${new Date(off.startDate).toLocaleDateString()}` : ''}
+                </p>
+              </div>
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-200/80 text-emerald-900 font-bold text-[11px] self-start sm:self-auto">
+                Status: {off.status}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Recruiter Feedback Note if available */}
       {application.feedback && (

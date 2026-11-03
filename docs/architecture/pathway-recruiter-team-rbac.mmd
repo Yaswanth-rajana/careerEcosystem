@@ -1,0 +1,49 @@
+sequenceDiagram
+    autonumber
+    %% PATHWAY.ECO — Workflow 4: Recruiter Team Invitation, Granular RBAC & Tenant Isolation
+    
+    actor Admin as Company Admin (:3002)
+    actor Invitee as Invited Team Member
+    participant MW as Edge Middleware
+    participant Auth as ServerAuth Guard
+    participant RBAC as RecruiterRbacService
+    participant TeamService as RecruiterTeamService
+    participant DB as Prisma / MongoDB
+    participant Zepto as ZeptoMail API
+
+    Admin->>MW: POST /api/recruiter/team/invite (Cookie: career_recruiter_session)
+    MW->>Auth: Pass through route (valid cookie)
+    Auth->>DB: Resolve Admin & Company context
+    DB-->>Auth: Admin active, role == COMPANY_ADMIN
+    Auth->>RBAC: assertPermission(auth, 'team:invite')
+    RBAC-->>TeamService: Authorized
+    TeamService->>DB: Check duplicate active member in company
+    TeamService->>DB: Check conflicting pending invitation
+    
+    TeamService->>TeamService: rawToken = crypto.randomBytes(32).toString('hex')
+    TeamService->>DB: db.companyInvitation.create({ tokenHash = sha256(rawToken), role, expiresAt: now + 7d, status: PENDING })
+    DB-->>TeamService: Invitation record committed
+    TeamService->>DB: AuditLog RECRUITER_INVITATION_CREATED
+    TeamService-)Zepto: sendRecruiterInvitationEmail({ acceptUrl: /team/accept-invite?token=rawToken })
+    TeamService-->>Admin: HTTP 201 Created { invitation: DTO }
+
+    Invitee->>MW: POST /api/recruiter/team/accept { token: rawToken }
+    MW->>TeamService: acceptInvitation(rawToken)
+    TeamService->>DB: Query db.companyInvitation (where: { tokenHash: sha256(rawToken) })
+    DB-->>TeamService: Valid invitation found (expiresAt > now, not revoked)
+    TeamService->>DB: Upsert User (role: 'RECRUITER') & RecruiterProfile
+    TeamService->>DB: db.companyMember.upsert({ companyId, userId, role, status: 'ACTIVE', assignedJobIds, interviewTypes })
+    TeamService->>DB: db.companyInvitation.update({ status: 'ACCEPTED', acceptedAt: now })
+    TeamService->>DB: AuditLog RECRUITER_INVITATION_ACCEPTED
+    TeamService-->>Invitee: HTTP 200 OK (Membership activated)
+
+    Note over Invitee, DB: Every subsequent API request passes through RecruiterRbacService
+    Invitee->>MW: GET /api/recruiter/applications
+    MW->>RBAC: assertPermission(auth, 'applications:view_assigned')
+    RBAC->>DB: Injects where: { job: { companyId: auth.company.id } }
+    alt Hiring Manager Scoping
+        RBAC->>DB: Injects where: { jobId: { in: auth.membership.assignedJobIds } }
+    else Interviewer Scoping
+        RBAC->>DB: Injects where: { interviewerId: auth.user.id }
+    end
+    DB-->>Invitee: Strictly isolated, permission-scoped records returned

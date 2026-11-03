@@ -1,0 +1,427 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 1450" width="2400" height="1450" style="background:#FFFFFF; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Pastel Mint-to-Blue Horizontal Gradient exactly matching reference image -->
+    <linearGradient id="nodeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#D1FAE5" />
+      <stop offset="50%" stop-color="#E0F2FE" />
+      <stop offset="100%" stop-color="#DBEAFE" />
+    </linearGradient>
+
+    <!-- Marker Arrowhead -->
+    <marker id="arrBlack" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#000000" />
+    </marker>
+  </defs>
+
+  <!-- Outer Black Border (Matching Reference Image) -->
+  <rect x="20" y="20" width="2360" height="1410" fill="#FFFFFF" stroke="#000000" stroke-width="4.5" rx="4" />
+
+  <!-- Diagram Title Header -->
+  <text x="60" y="70" fill="#000000" font-size="28" font-weight="900" letter-spacing="-0.3">PATHWAY.ECO — Candidate Portal Backend Workflow Architecture</text>
+  <text x="60" y="98" fill="#64748B" font-size="16" font-weight="600">Job Discovery &amp; Application Pipeline, Immutable Resume Snapshotting &amp; Mentorship Booking Lifecycle</text>
+  <line x1="60" y1="115" x2="2340" y2="115" stroke="#E2E8F0" stroke-width="1.5" />
+
+  <!-- Directional Connecting Edges -->
+  
+    <path d="M 310 220 L 490 220" fill="none" stroke="#000000" stroke-width="2.5" marker-end="url(#arrBlack)" />
+    
+      <rect x="336.75" y="208" width="126.5" height="22" rx="4" fill="#FFFFFF" opacity="0.95" />
+      <text x="400" y="224" fill="#000000" font-size="14.5" font-weight="700" text-anchor="middle">— Upload CV →</text>
+    
+  
+
+    <path d="M 750 220 L 1000 220" fill="none" stroke="#000000" stroke-width="2.5" marker-end="url(#arrBlack)" />
+    
+      <rect x="820.25" y="208" width="109.5" height="22" rx="4" fill="#FFFFFF" opacity="0.95" />
+      <text x="875" y="224" fill="#000000" font-size="14.5" font-weight="700" text-anchor="middle">— Convert →</text>
+    
+  
+
+    <path d="M 1260 220 L 1510 220" fill="none" stroke="#000000" stroke-width="2.5" marker-end="url(#arrBlack)" />
+    
+      <rect x="1300.5" y="208" width="169" height="22" rx="4" fill="#FFFFFF" opacity="0.95" />
+      <text x="1385" y="224" fill="#000000" font-size="14.5" font-weight="700" text-anchor="middle">— Persist Buffer →</text>
+    
+  
+
+    <path d="M 200 260 L 200 480 L 490 480" fill="none" stroke="#000000" stroke-width="2.5" marker-end="url(#arrBlack)" />
+    
+      <rect x="98.5" y="358" width="203" height="22" rx="4" fill="#FFFFFF" opacity="0.95" />
+      <text x="200" y="374" fill="#000000" font-size="14.5" font-weight="700" text-anchor="middle">Select / Search Jobs →</text>
+    
+  
+
+    <path d="M 1510 480 L 750 480" fill="none" stroke="#000000" stroke-width="2.5" marker-end="url(#arrBlack)" />
+    
+      <rect x="969" y="468" width="322" height="22" rx="4" fill="#FFFFFF" opacity="0.95" />
+      <text x="1130" y="484" fill="#000000" font-size="14.5" font-weight="700" text-anchor="middle">← Query Active Jobs (30d Lifespan) —</text>
+    
+  
+
+    <path d="M 620 520 L 620 710" fill="none" stroke="#000000" stroke-width="2.5" marker-end="url(#arrBlack)" />
+    
+      <rect x="531.25" y="603" width="177.5" height="22" rx="4" fill="#FFFFFF" opacity="0.95" />
+      <text x="620" y="619" fill="#000000" font-size="14.5" font-weight="700" text-anchor="middle">Apply with Job ID ↓</text>
+    
+  
+
+    <path d="M 750 240 L 800 240 L 800 730 L 750 730" fill="none" stroke="#000000" stroke-width="2.5" marker-end="url(#arrBlack)" />
+    
+      <rect x="750.25" y="363" width="279.5" height="22" rx="4" fill="#FFFFFF" opacity="0.95" />
+      <text x="890" y="379" fill="#000000" font-size="14.5" font-weight="700" text-anchor="middle">Attach Frozen Resume Snapshot →</text>
+    
+  
+
+    <path d="M 750 750 L 1000 750" fill="none" stroke="#000000" stroke-width="2.5" marker-end="url(#arrBlack)" />
+    
+      <rect x="748" y="738" width="254" height="22" rx="4" fill="#FFFFFF" opacity="0.95" />
+      <text x="875" y="754" fill="#000000" font-size="14.5" font-weight="700" text-anchor="middle">— Freeze Snapshot &amp; Commit →</text>
+    
+  
+
+    <path d="M 1270 750 L 1510 750" fill="none" stroke="#000000" stroke-width="2.5" marker-end="url(#arrBlack)" />
+    
+      <rect x="1250.25" y="738" width="279.5" height="22" rx="4" fill="#FFFFFF" opacity="0.95" />
+      <text x="1390" y="754" fill="#000000" font-size="14.5" font-weight="700" text-anchor="middle">— Alert Candidate &amp; Recruiter →</text>
+    
+  
+
+    <path d="M 200 260 L 200 970" fill="none" stroke="#000000" stroke-width="2.5" marker-end="url(#arrBlack)" />
+    
+      <rect x="94.25" y="603" width="211.5" height="22" rx="4" fill="#FFFFFF" opacity="0.95" />
+      <text x="200" y="619" fill="#000000" font-size="14.5" font-weight="700" text-anchor="middle">Browse Vetted Mentors ↓</text>
+    
+  
+
+    <path d="M 310 1010 L 490 1010" fill="none" stroke="#000000" stroke-width="2.5" marker-end="url(#arrBlack)" />
+    
+      <rect x="319.75" y="998" width="160.5" height="22" rx="4" fill="#FFFFFF" opacity="0.95" />
+      <text x="400" y="1014" fill="#000000" font-size="14.5" font-weight="700" text-anchor="middle">— Select Mentor →</text>
+    
+  
+
+    <path d="M 750 1010 L 1000 1010" fill="none" stroke="#000000" stroke-width="2.5" marker-end="url(#arrBlack)" />
+    
+      <rect x="773.5" y="998" width="203" height="22" rx="4" fill="#FFFFFF" opacity="0.95" />
+      <text x="875" y="1014" fill="#000000" font-size="14.5" font-weight="700" text-anchor="middle">— Query Weekly Rules →</text>
+    
+  
+
+    <path d="M 1270 1010 L 1510 1010" fill="none" stroke="#000000" stroke-width="2.5" marker-end="url(#arrBlack)" />
+    
+      <rect x="1292.75" y="998" width="194.5" height="22" rx="4" fill="#FFFFFF" opacity="0.95" />
+      <text x="1390" y="1014" fill="#000000" font-size="14.5" font-weight="700" text-anchor="middle">— Reserve Time Slot →</text>
+    
+  
+
+    <path d="M 1760 1010 L 1980 1010" fill="none" stroke="#000000" stroke-width="2.5" marker-end="url(#arrBlack)" />
+    
+      <rect x="1785.5" y="998" width="169" height="22" rx="4" fill="#FFFFFF" opacity="0.95" />
+      <text x="1870" y="1014" fill="#000000" font-size="14.5" font-weight="700" text-anchor="middle">— Commit Booking →</text>
+    
+  
+
+    <path d="M 1635 970 L 1635 790" fill="none" stroke="#000000" stroke-width="2.5" marker-end="url(#arrBlack)" />
+    
+      <rect x="1554.75" y="868" width="160.5" height="22" rx="4" fill="#FFFFFF" opacity="0.95" />
+      <text x="1635" y="884" fill="#000000" font-size="14.5" font-weight="700" text-anchor="middle">Send ICS Invite ↑</text>
+    
+  
+
+    <path d="M 620 790 L 620 1282 L 900 1282" fill="none" stroke="#000000" stroke-width="2.5" marker-end="url(#arrBlack)" />
+    
+      <rect x="480.25" y="1024" width="279.5" height="22" rx="4" fill="#FFFFFF" opacity="0.95" />
+      <text x="620" y="1040" fill="#000000" font-size="14.5" font-weight="700" text-anchor="middle">Application Updates (APPLIED) →</text>
+    
+  
+
+    <path d="M 1635 1050 L 1635 1282 L 1360 1282" fill="none" stroke="#000000" stroke-width="2.5" marker-end="url(#arrBlack)" />
+    
+      <rect x="1495.25" y="1154" width="279.5" height="22" rx="4" fill="#FFFFFF" opacity="0.95" />
+      <text x="1635" y="1170" fill="#000000" font-size="14.5" font-weight="700" text-anchor="middle">← Upcoming Bookings (CONFIRMED)</text>
+    
+  
+
+  <!-- Rectangular Process Nodes & Visual Icons -->
+  
+    
+    <g transform="translate(178, 124)">
+      <circle cx="20" cy="12" r="10" fill="#000000"/>
+      <path d="M 6 36 C 6 24 12 21 20 21 C 28 21 34 24 34 36 Z" fill="#000000"/>
+    </g>
+  
+    <g>
+      <rect x="90" y="180" width="220" height="80" rx="6" fill="url(#nodeGrad)" stroke="#A7F3D0" stroke-width="1.2" />
+      
+      <text x="200" y="209" fill="#000000" font-size="17" font-weight="800" text-anchor="middle">Candidate (Student)</text>
+      <text x="200" y="235" fill="#334155" font-size="13.5" font-weight="600" text-anchor="middle">frontend/ (:3000)</text>
+    
+    </g>
+  
+
+    
+    <g transform="translate(598, 124)">
+      <path d="M 6 4 L 32 4 L 44 16 L 44 50 L 6 50 Z" fill="#FFFFFF" stroke="#0284C7" stroke-width="2.5"/>
+      <path d="M 32 4 L 32 16 L 44 16 Z" fill="#E0F2FE" stroke="#0284C7" stroke-width="2"/>
+      <circle cx="19" cy="30" r="8" fill="#0D9488"/>
+      <path d="M 19 30 L 19 22 A 8 8 0 0 1 27 30 Z" fill="#EA580C"/>
+      <rect x="30" y="32" width="3.5" height="10" fill="#EF4444"/>
+      <rect x="35.5" y="27" width="3.5" height="15" fill="#F59E0B"/>
+    </g>
+  
+    <g>
+      <rect x="490" y="180" width="260" height="80" rx="6" fill="url(#nodeGrad)" stroke="#A7F3D0" stroke-width="1.2" />
+      
+      <text x="620" y="209" fill="#000000" font-size="17" font-weight="800" text-anchor="middle">Resume Upload &amp; Parser</text>
+      <text x="620" y="235" fill="#334155" font-size="13.5" font-weight="600" text-anchor="middle">POST /api/candidate/resumes</text>
+    
+    </g>
+  
+
+    
+    <g transform="translate(1108, 124)">
+      <ellipse cx="24" cy="12" rx="19" ry="7" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+      <path d="M 5 12 L 5 30 A 19 7 0 0 0 43 30 L 43 12" fill="none" stroke="#000000" stroke-width="2.5"/>
+      <path d="M 5 21 A 19 7 0 0 0 43 21" fill="none" stroke="#000000" stroke-width="2"/>
+      <g transform="translate(6, 18) scale(0.65)">
+        <circle cx="16" cy="16" r="11" fill="#0284C7" stroke="#0369A1" stroke-width="2.5"/>
+        <circle cx="16" cy="16" r="4" fill="#FFFFFF"/>
+      </g>
+      <g transform="translate(22, 10) scale(0.5)">
+        <circle cx="16" cy="16" r="11" fill="#0D9488" stroke="#115E59" stroke-width="2.5"/>
+        <circle cx="16" cy="16" r="4" fill="#FFFFFF"/>
+      </g>
+    </g>
+  
+    <g>
+      <rect x="1000" y="180" width="260" height="80" rx="6" fill="url(#nodeGrad)" stroke="#A7F3D0" stroke-width="1.2" />
+      
+      <text x="1130" y="209" fill="#000000" font-size="17" font-weight="800" text-anchor="middle">Gotenberg Engine</text>
+      <text x="1130" y="235" fill="#334155" font-size="13.5" font-weight="600" text-anchor="middle">HTML/Docx to PDF Converter</text>
+    
+    </g>
+  
+
+    
+    <g transform="translate(1613, 124)">
+      <ellipse cx="22" cy="10" rx="18" ry="7" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+      <path d="M 4 10 L 4 22 A 18 7 0 0 0 40 22 L 40 10" fill="none" stroke="#000000" stroke-width="2.5"/>
+      <path d="M 4 22 L 4 34 A 18 7 0 0 0 40 34 L 40 22" fill="none" stroke="#000000" stroke-width="2.5"/>
+      <path d="M 4 34 L 4 46 A 18 7 0 0 0 40 46 L 40 34" fill="none" stroke="#000000" stroke-width="2.5"/>
+    </g>
+  
+    <g>
+      <rect x="1510" y="180" width="250" height="80" rx="6" fill="url(#nodeGrad)" stroke="#A7F3D0" stroke-width="1.2" />
+      
+      <text x="1635" y="209" fill="#000000" font-size="17" font-weight="800" text-anchor="middle">MongoDB: Resume</text>
+      <text x="1635" y="235" fill="#334155" font-size="13.5" font-weight="600" text-anchor="middle">Storage &amp; Resume Model</text>
+    
+    </g>
+  
+
+    
+    <g transform="translate(598, 384)">
+      <rect x="0" y="0" width="56" height="40" rx="3" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+      <line x1="28" y1="40" x2="28" y2="48" stroke="#000000" stroke-width="3"/>
+      <line x1="16" y1="48" x2="40" y2="48" stroke="#000000" stroke-width="3"/>
+      <line x1="8" y1="10" x2="24" y2="10" stroke="#F59E0B" stroke-width="2.5"/>
+      <line x1="8" y1="16" x2="20" y2="16" stroke="#EF4444" stroke-width="2.5"/>
+      <line x1="8" y1="22" x2="26" y2="22" stroke="#3B82F6" stroke-width="2.5"/>
+      <circle cx="39" cy="21" r="10" fill="#0D9488"/>
+      <path d="M 39 21 L 39 11 A 10 10 0 0 1 49 21 Z" fill="#F59E0B"/>
+    </g>
+  
+    <g>
+      <rect x="490" y="440" width="260" height="80" rx="6" fill="url(#nodeGrad)" stroke="#A7F3D0" stroke-width="1.2" />
+      
+      <text x="620" y="469" fill="#000000" font-size="17" font-weight="800" text-anchor="middle">Job Search Engine</text>
+      <text x="620" y="495" fill="#334155" font-size="13.5" font-weight="600" text-anchor="middle">GET /api/jobs (Faceted)</text>
+    
+    </g>
+  
+
+    
+    <g transform="translate(1613, 384)">
+      <ellipse cx="22" cy="10" rx="18" ry="7" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+      <path d="M 4 10 L 4 22 A 18 7 0 0 0 40 22 L 40 10" fill="none" stroke="#000000" stroke-width="2.5"/>
+      <path d="M 4 22 L 4 34 A 18 7 0 0 0 40 34 L 40 22" fill="none" stroke="#000000" stroke-width="2.5"/>
+      <path d="M 4 34 L 4 46 A 18 7 0 0 0 40 46 L 40 34" fill="none" stroke="#000000" stroke-width="2.5"/>
+    </g>
+  
+    <g>
+      <rect x="1510" y="440" width="250" height="80" rx="6" fill="url(#nodeGrad)" stroke="#A7F3D0" stroke-width="1.2" />
+      
+      <text x="1635" y="469" fill="#000000" font-size="17" font-weight="800" text-anchor="middle">MongoDB: Job</text>
+      <text x="1635" y="495" fill="#334155" font-size="13.5" font-weight="600" text-anchor="middle">status: PUBLISHED (30d TTL)</text>
+    
+    </g>
+  
+
+    
+    <g transform="translate(598, 654)">
+      <line x1="4" y1="4" x2="4" y2="36" stroke="#0284C7" stroke-width="2.5"/>
+      <line x1="4" y1="36" x2="44" y2="36" stroke="#0284C7" stroke-width="2.5"/>
+      <polyline points="6,28 15,28 23,16 32,22 40,10" fill="none" stroke="#EF4444" stroke-width="2.5"/>
+      <circle cx="6" cy="28" r="2.5" fill="#0284C7"/>
+      <circle cx="15" cy="28" r="2.5" fill="#0284C7"/>
+      <circle cx="23" cy="16" r="2.5" fill="#0284C7"/>
+      <circle cx="32" cy="22" r="2.5" fill="#0284C7"/>
+      <circle cx="32" cy="22" r="9" fill="none" stroke="#D97706" stroke-width="3"/>
+      <line x1="39" y1="28" x2="46" y2="36" stroke="#0284C7" stroke-width="3.5" stroke-linecap="round"/>
+    </g>
+  
+    <g>
+      <rect x="490" y="710" width="260" height="80" rx="6" fill="url(#nodeGrad)" stroke="#A7F3D0" stroke-width="1.2" />
+      
+      <text x="620" y="739" fill="#000000" font-size="17" font-weight="800" text-anchor="middle">Application Handler</text>
+      <text x="620" y="765" fill="#334155" font-size="13.5" font-weight="600" text-anchor="middle">POST /api/jobs/[id]/apply</text>
+    
+    </g>
+  
+
+    
+    <g transform="translate(1113, 654)">
+      <ellipse cx="22" cy="10" rx="18" ry="7" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+      <path d="M 4 10 L 4 22 A 18 7 0 0 0 40 22 L 40 10" fill="none" stroke="#000000" stroke-width="2.5"/>
+      <path d="M 4 22 L 4 34 A 18 7 0 0 0 40 34 L 40 22" fill="none" stroke="#000000" stroke-width="2.5"/>
+      <path d="M 4 34 L 4 46 A 18 7 0 0 0 40 46 L 40 34" fill="none" stroke="#000000" stroke-width="2.5"/>
+    </g>
+  
+    <g>
+      <rect x="1000" y="710" width="270" height="80" rx="6" fill="url(#nodeGrad)" stroke="#A7F3D0" stroke-width="1.2" />
+      
+      <text x="1135" y="739" fill="#000000" font-size="17" font-weight="800" text-anchor="middle">MongoDB: JobApplication</text>
+      <text x="1135" y="765" fill="#334155" font-size="13.5" font-weight="600" text-anchor="middle">Immutable Resume Snapshot</text>
+    
+    </g>
+  
+
+    
+    <g transform="translate(1613, 654)">
+      <rect x="2" y="8" width="42" height="28" rx="3" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+      <polyline points="2,8 23,23 44,8" fill="none" stroke="#000000" stroke-width="2.5"/>
+      <circle cx="39" cy="8" r="5" fill="#EF4444"/>
+    </g>
+  
+    <g>
+      <rect x="1510" y="710" width="250" height="80" rx="6" fill="url(#nodeGrad)" stroke="#A7F3D0" stroke-width="1.2" />
+      
+      <text x="1635" y="739" fill="#000000" font-size="17" font-weight="800" text-anchor="middle">ZeptoMail Service</text>
+      <text x="1635" y="765" fill="#334155" font-size="13.5" font-weight="600" text-anchor="middle">Dual Transactional Emails</text>
+    
+    </g>
+  
+
+    
+    <g transform="translate(178, 914)">
+      <polygon points="20,4 25,15 37,16 28,24 31,36 20,29 9,36 12,24 3,16 15,15" fill="#F59E0B" stroke="#B45309" stroke-width="2"/>
+    </g>
+  
+    <g>
+      <rect x="90" y="970" width="220" height="80" rx="6" fill="url(#nodeGrad)" stroke="#A7F3D0" stroke-width="1.2" />
+      
+      <text x="200" y="999" fill="#000000" font-size="17" font-weight="800" text-anchor="middle">Mentor Directory</text>
+      <text x="200" y="1025" fill="#334155" font-size="13.5" font-weight="600" text-anchor="middle">GET /api/mentors (APPROVED)</text>
+    
+    </g>
+  
+
+    
+    <g transform="translate(598, 914)">
+      <rect x="4" y="10" width="38" height="32" rx="3" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+      <rect x="4" y="6" width="38" height="10" rx="2" fill="#EF4444" stroke="#000000" stroke-width="2"/>
+      <line x1="13" y1="2" x2="13" y2="8" stroke="#000000" stroke-width="3" stroke-linecap="round"/>
+      <line x1="33" y1="2" x2="33" y2="8" stroke="#000000" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="15" cy="23" r="2" fill="#0F172A"/>
+      <circle cx="23" cy="23" r="2" fill="#0F172A"/>
+      <circle cx="31" cy="23" r="2" fill="#0F172A"/>
+      <circle cx="15" cy="31" r="2" fill="#0F172A"/>
+      <circle cx="23" cy="31" r="2" fill="#0F172A"/>
+      <circle cx="31" cy="31" r="2" fill="#0F172A"/>
+    </g>
+  
+    <g>
+      <rect x="490" y="970" width="260" height="80" rx="6" fill="url(#nodeGrad)" stroke="#A7F3D0" stroke-width="1.2" />
+      
+      <text x="620" y="999" fill="#000000" font-size="17" font-weight="800" text-anchor="middle">Availability Engine</text>
+      <text x="620" y="1025" fill="#334155" font-size="13.5" font-weight="600" text-anchor="middle">GET /availability (Slots)</text>
+    
+    </g>
+  
+
+    
+    <g transform="translate(1113, 914)">
+      <ellipse cx="22" cy="10" rx="18" ry="7" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+      <path d="M 4 10 L 4 22 A 18 7 0 0 0 40 22 L 40 10" fill="none" stroke="#000000" stroke-width="2.5"/>
+      <path d="M 4 22 L 4 34 A 18 7 0 0 0 40 34 L 40 22" fill="none" stroke="#000000" stroke-width="2.5"/>
+      <path d="M 4 34 L 4 46 A 18 7 0 0 0 40 46 L 40 34" fill="none" stroke="#000000" stroke-width="2.5"/>
+    </g>
+  
+    <g>
+      <rect x="1000" y="970" width="270" height="80" rx="6" fill="url(#nodeGrad)" stroke="#A7F3D0" stroke-width="1.2" />
+      
+      <text x="1135" y="999" fill="#000000" font-size="17" font-weight="800" text-anchor="middle">MongoDB: Slots &amp; Blackouts</text>
+      <text x="1135" y="1025" fill="#334155" font-size="13.5" font-weight="600" text-anchor="middle">Weekly Rules &amp; Exceptions</text>
+    
+    </g>
+  
+
+    
+    <g transform="translate(1613, 914)">
+      <rect x="4" y="10" width="38" height="32" rx="3" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+      <rect x="4" y="6" width="38" height="10" rx="2" fill="#EF4444" stroke="#000000" stroke-width="2"/>
+      <line x1="13" y1="2" x2="13" y2="8" stroke="#000000" stroke-width="3" stroke-linecap="round"/>
+      <line x1="33" y1="2" x2="33" y2="8" stroke="#000000" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="15" cy="23" r="2" fill="#0F172A"/>
+      <circle cx="23" cy="23" r="2" fill="#0F172A"/>
+      <circle cx="31" cy="23" r="2" fill="#0F172A"/>
+      <circle cx="15" cy="31" r="2" fill="#0F172A"/>
+      <circle cx="23" cy="31" r="2" fill="#0F172A"/>
+      <circle cx="31" cy="31" r="2" fill="#0F172A"/>
+    </g>
+  
+    <g>
+      <rect x="1510" y="970" width="250" height="80" rx="6" fill="url(#nodeGrad)" stroke="#A7F3D0" stroke-width="1.2" />
+      
+      <text x="1635" y="999" fill="#000000" font-size="17" font-weight="800" text-anchor="middle">Booking State Machine</text>
+      <text x="1635" y="1025" fill="#334155" font-size="13.5" font-weight="600" text-anchor="middle">POST /api/bookings</text>
+    
+    </g>
+  
+
+    
+    <g transform="translate(2083, 914)">
+      <ellipse cx="22" cy="10" rx="18" ry="7" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+      <path d="M 4 10 L 4 22 A 18 7 0 0 0 40 22 L 40 10" fill="none" stroke="#000000" stroke-width="2.5"/>
+      <path d="M 4 22 L 4 34 A 18 7 0 0 0 40 34 L 40 22" fill="none" stroke="#000000" stroke-width="2.5"/>
+      <path d="M 4 34 L 4 46 A 18 7 0 0 0 40 46 L 40 34" fill="none" stroke="#000000" stroke-width="2.5"/>
+    </g>
+  
+    <g>
+      <rect x="1980" y="970" width="250" height="80" rx="6" fill="url(#nodeGrad)" stroke="#A7F3D0" stroke-width="1.2" />
+      
+      <text x="2105" y="999" fill="#000000" font-size="17" font-weight="800" text-anchor="middle">MongoDB: Booking</text>
+      <text x="2105" y="1025" fill="#334155" font-size="13.5" font-weight="600" text-anchor="middle">status: CONFIRMED</text>
+    
+    </g>
+  
+
+    
+    <g transform="translate(1372, 1258.5)">
+      <path d="M 6 4 L 32 4 L 44 16 L 44 50 L 6 50 Z" fill="#FFFFFF" stroke="#0284C7" stroke-width="2.5"/>
+      <path d="M 32 4 L 32 16 L 44 16 Z" fill="#E0F2FE" stroke="#0284C7" stroke-width="2"/>
+      <circle cx="19" cy="30" r="8" fill="#0D9488"/>
+      <path d="M 19 30 L 19 22 A 8 8 0 0 1 27 30 Z" fill="#EA580C"/>
+      <rect x="30" y="32" width="3.5" height="10" fill="#EF4444"/>
+      <rect x="35.5" y="27" width="3.5" height="15" fill="#F59E0B"/>
+    </g>
+  
+    <g>
+      <rect x="900" y="1240" width="460" height="85" rx="6" fill="url(#nodeGrad)" stroke="#A7F3D0" stroke-width="1.2" />
+      
+      <text x="1130" y="1271.5" fill="#000000" font-size="17" font-weight="800" text-anchor="middle">Candidate Dashboard &amp; Live Status</text>
+      <text x="1130" y="1297.5" fill="#334155" font-size="13.5" font-weight="600" text-anchor="middle">GET /api/candidate/dashboard</text>
+    
+    </g>
+  
+</svg>

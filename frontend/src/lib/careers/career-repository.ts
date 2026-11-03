@@ -7,8 +7,16 @@ import {
   CandidateSkill,
   CareerSkill,
   CareerSkillLevel,
+  CareerLevelId,
 } from './career-types';
 import { getRecommendedMentors } from '../mentors/mentor-repository';
+import {
+  getCareerLevelData,
+  DEFAULT_CAREER_LEVELS,
+  resolveInitialCareerLevel,
+} from './career-levels-data';
+
+export { getCareerLevelData, DEFAULT_CAREER_LEVELS, resolveInitialCareerLevel };
 
 export const CAREER_CATEGORIES = [
   'Technology',
@@ -16,6 +24,7 @@ export const CAREER_CATEGORIES = [
   'Product & Design',
   'Cybersecurity',
   'Business & Growth',
+  'Electronics & Systems',
   'Mechanical & Manufacturing',
 ] as const;
 
@@ -62,11 +71,12 @@ const LEVEL_WEIGHTS: Record<CareerSkillLevel, number> = {
 
 /**
  * Performs proficiency-aware skill gap analysis comparing candidate's verified/entered skills
- * against the target career path's required skill set.
+ * against the target career path's required skill set (personalized by selected career level if provided).
  */
 export function analyzeSkillGap(
   candidate: CandidateCareerContext | null,
-  careerSlug: string
+  careerSlug: string,
+  levelId?: CareerLevelId
 ): SkillGapAnalysis {
   const career = getCareerPathBySlug(careerSlug);
   if (!career) {
@@ -80,10 +90,14 @@ export function analyzeSkillGap(
     };
   }
 
+  // Use level-specific skill groups when level is specified
+  const levelData = levelId ? getCareerLevelData(career, levelId) : null;
+  const skillGroups = levelData ? levelData.skillGroups : career.skillGroups;
+
   const allRequiredSkills: CareerSkill[] = [
-    ...career.skillGroups.mustKnow,
-    ...career.skillGroups.goodToKnow,
-    ...career.skillGroups.advanced,
+    ...skillGroups.mustKnow,
+    ...skillGroups.goodToKnow,
+    ...skillGroups.advanced,
   ];
 
   if (!candidate || !candidate.skills || candidate.skills.length === 0) {
@@ -91,7 +105,7 @@ export function analyzeSkillGap(
       matchedSkills: [],
       developingSkills: [],
       missingSkills: allRequiredSkills,
-      nextFocusSkills: career.skillGroups.mustKnow.slice(0, 3),
+      nextFocusSkills: skillGroups.mustKnow.slice(0, 3),
       matchPercentage: 0,
       hasEnoughData: false,
     };
@@ -159,11 +173,14 @@ export function analyzeSkillGap(
 
 /**
  * Calculates preparation progress across 5 PATHWAY activity dimensions:
- * Learning, Projects, Practice, Mentorship, Profile.
+ * Learning, Practical Work, Practice, Mentorship, Profile.
+ * Maps cleanly into the 6-stage roadmap:
+ * 0: Learn, 1: Practice, 2: Get Mentored, 3: Prepare, 4: Get Job Ready, 5: Find Opportunities
  */
 export function calculateCareerProgress(
   candidate: CandidateCareerContext | null,
-  careerSlug: string
+  careerSlug: string,
+  levelId?: CareerLevelId
 ): CareerProgressMetrics {
   const career = getCareerPathBySlug(careerSlug);
   if (!career || !candidate) {
@@ -175,27 +192,30 @@ export function calculateCareerProgress(
       profilePercent: 15, // Baseline for starting
       overallPathwayProgress: 5,
       currentStageIndex: 0,
-      currentStageName: 'Foundation',
+      currentStageName: 'Learn',
     };
   }
 
-  const gap = analyzeSkillGap(candidate, careerSlug);
+  const levelData = levelId ? getCareerLevelData(career, levelId) : null;
+  const gap = analyzeSkillGap(candidate, careerSlug, levelId);
+  const targetSkillGroups = levelData ? levelData.skillGroups : career.skillGroups;
+  const targetPractical = levelData ? levelData.practicalWork : career.projects;
 
-  // 1. Learning Percent based on matched & developing skills
+  // 1. Learning Percent based on matched & developing skills for the level
   const totalSkillsCount =
-    career.skillGroups.mustKnow.length +
-    career.skillGroups.goodToKnow.length +
-    career.skillGroups.advanced.length || 1;
+    targetSkillGroups.mustKnow.length +
+    targetSkillGroups.goodToKnow.length +
+    targetSkillGroups.advanced.length || 1;
 
   const learningPercent = Math.min(
     100,
     Math.round(((gap.matchedSkills.length + gap.developingSkills.length * 0.5) / totalSkillsCount) * 100)
   );
 
-  // 2. Projects Percent based on user's logged projects vs career required projects
-  const totalProjectsReq = career.projects.length || 1;
+  // 2. Practical Work Percent based on user's logged projects vs level required practical work
+  const totalPracticalReq = targetPractical.length || 1;
   const userProjectsCount = candidate.projects ? candidate.projects.length : 0;
-  const projectsPercent = Math.min(100, Math.round((userProjectsCount / totalProjectsReq) * 100));
+  const projectsPercent = Math.min(100, Math.round((userProjectsCount / totalPracticalReq) * 100));
 
   // 3. Practice Percent based on completed assessments
   const completedAssessmentsCount = candidate.completedAssessments ? candidate.completedAssessments.length : 0;
@@ -221,29 +241,29 @@ export function calculateCareerProgress(
       profilePercent * 0.15
   );
 
-  // Milestone Stages:
-  // 0: Foundation, 1: Core Skills, 2: Specialized, 3: Projects, 4: Practice, 5: Mentorship, 6: Interview Prep, 7: Job Ready, 8: Opportunities
+  // 6-Stage Roadmap Milestone Mapping:
+  // 0: Learn, 1: Practice, 2: Get Mentored, 3: Prepare, 4: Get Job Ready, 5: Find Opportunities
   let currentStageIndex = 0;
-  let currentStageName = 'Foundation';
+  let currentStageName = 'Learn';
 
   if (overallPathwayProgress >= 90) {
-    currentStageIndex = 7;
-    currentStageName = 'Job Ready';
-  } else if (overallPathwayProgress >= 75) {
-    currentStageIndex = 6;
-    currentStageName = 'Interview Prep';
-  } else if (overallPathwayProgress >= 60) {
     currentStageIndex = 5;
-    currentStageName = 'Mentorship';
-  } else if (overallPathwayProgress >= 45) {
+    currentStageName = 'Find Opportunities';
+  } else if (overallPathwayProgress >= 75) {
     currentStageIndex = 4;
-    currentStageName = 'Practice';
-  } else if (overallPathwayProgress >= 30) {
+    currentStageName = 'Get Job Ready';
+  } else if (overallPathwayProgress >= 60) {
     currentStageIndex = 3;
-    currentStageName = 'Projects';
-  } else if (overallPathwayProgress >= 15) {
+    currentStageName = 'Prepare';
+  } else if (overallPathwayProgress >= 45) {
+    currentStageIndex = 2;
+    currentStageName = 'Get Mentored';
+  } else if (overallPathwayProgress >= 25) {
     currentStageIndex = 1;
-    currentStageName = 'Core Skills';
+    currentStageName = 'Practice';
+  } else {
+    currentStageIndex = 0;
+    currentStageName = 'Learn';
   }
 
   return {
@@ -259,17 +279,20 @@ export function calculateCareerProgress(
 }
 
 /**
- * Returns candidate-aware "Your Next Step" recommendation card data.
+ * Returns candidate-aware "Your Next Step" recommendation card data tailored by target level.
  */
 export function getRecommendedNextStep(
   candidate: CandidateCareerContext | null,
-  careerSlug: string
+  careerSlug: string,
+  levelId?: CareerLevelId
 ): {
   title: string;
   actionLabel: string;
   rationale: string;
   actionUrl: string;
   focusSkill?: string;
+  currentLevel?: string;
+  targetLevel?: string;
 } {
   const career = getCareerPathBySlug(careerSlug);
   if (!career) {
@@ -281,43 +304,53 @@ export function getRecommendedNextStep(
     };
   }
 
+  const levelData = levelId ? getCareerLevelData(career, levelId) : null;
+  const levelLabel = levelData ? levelData.label : 'Beginner / Entry Level';
+
   if (!candidate) {
     return {
-      title: `Sign in to personalize your ${career.title} path`,
+      title: `Sign in to personalize your ${career.title} path (${levelLabel})`,
       actionLabel: 'Sign In to Account',
-      rationale: 'Connect your candidate profile to calculate your exact skill gap and next focus steps.',
+      rationale: `Connect your candidate profile to calculate your exact skill gap for target level: ${levelLabel}.`,
       actionUrl: '/login',
+      targetLevel: levelLabel,
     };
   }
 
-  const gap = analyzeSkillGap(candidate, careerSlug);
+  const gap = analyzeSkillGap(candidate, careerSlug, levelId);
 
   if (gap.nextFocusSkills.length > 0) {
     const focusSkill = gap.nextFocusSkills[0];
     return {
-      title: `Build ${focusSkill.name} Skills`,
+      title: `Build ${focusSkill.name} Skills for ${levelLabel}`,
       focusSkill: focusSkill.name,
+      targetLevel: levelLabel,
       actionLabel: `Start ${focusSkill.name} Learning`,
-      rationale: `You already have ${gap.matchedSkills.map((s) => s.name).slice(0, 2).join(' and ') || 'a baseline'}, but ${focusSkill.name} is currently a key gap for your ${career.title} path.`,
+      rationale: `You already have ${gap.matchedSkills.map((s) => s.name).slice(0, 2).join(' and ') || 'a baseline'}, but ${focusSkill.name} is a high-priority skill for ${levelLabel} ${career.title}.`,
       actionUrl: `#learning-roadmap`,
     };
   }
 
-  if (candidate.projects.length < career.projects.length) {
-    const nextProj = career.projects[candidate.projects.length] || career.projects[0];
+  const practicalItems = levelData ? levelData.practicalWork : career.projects;
+  const practicalTitle = levelData?.practicalWorkTitle || 'Projects & Portfolio';
+
+  if (candidate.projects.length < practicalItems.length) {
+    const nextProj = practicalItems[candidate.projects.length] || practicalItems[0];
     return {
-      title: `Build Real-World Project: ${nextProj.title}`,
-      actionLabel: 'View Project Brief',
-      rationale: `You have strong core skills! Now prove your knowledge by building ${nextProj.title}.`,
+      title: `Complete Practical Work: ${nextProj.title}`,
+      actionLabel: 'View Practical Brief',
+      rationale: `You have strong core skills for ${levelLabel}! Demonstrate your competence by completing ${nextProj.title}.`,
       actionUrl: `#project-roadmap`,
+      targetLevel: levelLabel,
     };
   }
 
   return {
-    title: `Prepare for ${career.title} Technical Interviews`,
+    title: `Prepare for ${career.title} Technical & Role Interviews (${levelLabel})`,
     actionLabel: 'Start Interview Practice',
-    rationale: 'You are well-prepared! Practice scenario questions and review key system design topics.',
+    rationale: `You are well-prepared! Practice scenario questions and review key topics tailored for ${levelLabel}.`,
     actionUrl: `#interview-prep`,
+    targetLevel: levelLabel,
   };
 }
 
@@ -349,186 +382,183 @@ export async function getRecommendedMentorsForCandidate({
 }
 
 /**
- * Candidate-aware matching jobs preview.
+ * Candidate-aware matching jobs preview tailored by selected career level.
  */
 export function getMatchingJobsForCandidate({
   candidate,
   careerSlug,
+  levelId,
 }: {
   candidate: CandidateCareerContext | null;
   careerSlug: string;
+  levelId?: CareerLevelId;
 }) {
   const career = getCareerPathBySlug(careerSlug);
   const roleName = career ? career.title : 'Software Engineer';
+  const levelData = levelId && career ? getCareerLevelData(career, levelId) : null;
+  const targetTitle = levelData ? levelData.roleTitle : roleName;
 
+  // Filter or structure realistic matching jobs based on levelId
+  if (levelId === 'senior') {
+    return [
+      {
+        id: 'job-s01',
+        title: `Senior ${roleName}`,
+        company: 'Apex Enterprise Systems',
+        location: 'Hyderabad, India (Hybrid)',
+        type: 'Full-time',
+        experienceLevel: 'Senior (5+ yrs)',
+        salary: '₹22–34 LPA',
+        skills: levelData?.skillGroups.mustKnow.map((s) => s.name).slice(0, 3) || ['System Design', 'Leadership', 'Architecture'],
+        postedDate: '1 day ago',
+      },
+      {
+        id: 'job-s02',
+        title: `Lead ${roleName}`,
+        company: 'CloudScale Global',
+        location: 'Bengaluru, India (Hybrid)',
+        type: 'Full-time',
+        experienceLevel: 'Senior / Lead (6+ yrs)',
+        salary: '₹28–42 LPA',
+        skills: levelData?.skillGroups.mustKnow.map((s) => s.name).slice(0, 3) || ['Architecture', 'Scaling'],
+        postedDate: '3 days ago',
+      },
+      {
+        id: 'job-s03',
+        title: `Staff ${roleName}`,
+        company: 'NextGen Autonomous',
+        location: 'Remote, India',
+        type: 'Full-time',
+        experienceLevel: 'Staff (7+ yrs)',
+        salary: '₹35–50 LPA',
+        skills: levelData?.skillGroups.goodToKnow.map((s) => s.name).slice(0, 3) || ['Distributed Systems', 'Strategy'],
+        postedDate: 'Just now',
+      },
+    ];
+  }
+
+  if (levelId === 'mid') {
+    return [
+      {
+        id: 'job-m01',
+        title: `${roleName} II`,
+        company: 'CloudScale Technologies',
+        location: 'Bengaluru, India (Hybrid)',
+        type: 'Full-time',
+        experienceLevel: 'Mid-Level (3-5 yrs)',
+        salary: '₹14–22 LPA',
+        skills: levelData?.skillGroups.mustKnow.map((s) => s.name).slice(0, 3) || ['Optimization', 'APIs'],
+        postedDate: '2 days ago',
+      },
+      {
+        id: 'job-m02',
+        title: `${roleName}`,
+        company: 'FinPulse Systems',
+        location: 'Pune, India (Hybrid)',
+        type: 'Full-time',
+        experienceLevel: 'Mid-Level (2-4 yrs)',
+        salary: '₹12–18 LPA',
+        skills: levelData?.skillGroups.mustKnow.map((s) => s.name).slice(0, 3) || ['Databases', 'Cloud'],
+        postedDate: '4 days ago',
+      },
+      {
+        id: 'job-m03',
+        title: `Specialist ${roleName}`,
+        company: 'Nexus Tech Labs',
+        location: 'Remote, India',
+        type: 'Full-time',
+        experienceLevel: 'Mid-Level (3-5 yrs)',
+        salary: '₹16–24 LPA',
+        skills: levelData?.skillGroups.goodToKnow.map((s) => s.name).slice(0, 3) || ['Testing', 'Microservices'],
+        postedDate: 'Just now',
+      },
+    ];
+  }
+
+  if (levelId === 'junior') {
+    return [
+      {
+        id: 'job-j01',
+        title: `Junior ${roleName}`,
+        company: 'NextGen Solutions',
+        location: 'Bengaluru, India',
+        type: 'Full-time',
+        experienceLevel: 'Junior (1-3 yrs)',
+        salary: '₹8–14 LPA',
+        skills: levelData?.skillGroups.mustKnow.map((s) => s.name).slice(0, 3) || ['TypeScript', 'SQL'],
+        postedDate: 'Just now',
+      },
+      {
+        id: 'job-j02',
+        title: `${roleName} - Early Career`,
+        company: 'Veloce Digital',
+        location: 'Remote, India',
+        type: 'Full-time',
+        experienceLevel: 'Junior (1-2 yrs)',
+        salary: '₹7–12 LPA',
+        skills: levelData?.skillGroups.mustKnow.map((s) => s.name).slice(0, 3) || ['Git', 'Testing'],
+        postedDate: '1 day ago',
+      },
+      {
+        id: 'job-j03',
+        title: `Associate ${roleName}`,
+        company: 'InnoSpark Technologies',
+        location: 'Hyderabad, India (Hybrid)',
+        type: 'Full-time',
+        experienceLevel: 'Junior (1-3 yrs)',
+        salary: '₹9–15 LPA',
+        skills: levelData?.skillGroups.goodToKnow.map((s) => s.name).slice(0, 3) || ['APIs', 'Docker'],
+        postedDate: '3 days ago',
+      },
+    ];
+  }
+
+  // Default: Entry Level
   return [
     {
-      id: 'job-01',
-      title: `${roleName}`,
-      company: 'CloudScale Technologies',
+      id: 'job-e01',
+      title: `Associate ${roleName}`,
+      company: 'InnovateLab Tech',
       location: 'Bengaluru, India (Hybrid)',
       type: 'Full-time',
-      experienceLevel: 'Mid-Senior (2-4 yrs)',
-      salary: '₹12–18 LPA',
-      skills: career?.skillGroups.mustKnow.map((s) => s.name).slice(0, 3) || ['Linux', 'Cloud', 'Git'],
-      postedDate: '2 days ago',
-    },
-    {
-      id: 'job-02',
-      title: `Associate ${roleName}`,
-      company: 'NextGen Solutions',
-      location: 'Remote, India',
-      type: 'Full-time',
-      experienceLevel: 'Entry-Level (0-2 yrs)',
-      salary: '₹8–12 LPA',
-      skills: career?.skillGroups.mustKnow.map((s) => s.name).slice(0, 3) || ['Python', 'SQL', 'Docker'],
+      experienceLevel: 'Entry-Level (0-1 yrs)',
+      salary: '₹6–10 LPA',
+      skills: levelData?.skillGroups.mustKnow.map((s) => s.name).slice(0, 3) || ['Fundamentals', 'Git'],
       postedDate: 'Just now',
     },
     {
-      id: 'job-03',
-      title: `Senior ${roleName}`,
-      company: 'Apex Data Systems',
+      id: 'job-e02',
+      title: `Graduate Trainee - ${roleName}`,
+      company: 'TechCorp Solutions',
       location: 'Hyderabad, India (Onsite)',
       type: 'Full-time',
-      experienceLevel: 'Senior (5+ yrs)',
-      salary: '₹18–26 LPA',
-      skills: career?.skillGroups.advanced.map((s) => s.name).slice(0, 3) || ['Architecture', 'Scaling'],
+      experienceLevel: 'Entry-Level (0-1 yrs)',
+      salary: '₹5–8 LPA',
+      skills: levelData?.skillGroups.mustKnow.map((s) => s.name).slice(0, 3) || ['Core Concepts', 'Tools'],
+      postedDate: '2 days ago',
+    },
+    {
+      id: 'job-e03',
+      title: `Junior / Entry ${roleName}`,
+      company: 'PulseCraft Labs',
+      location: 'Remote, India',
+      type: 'Full-time',
+      experienceLevel: 'Entry-Level (0-1 yrs)',
+      salary: '₹6–9 LPA',
+      skills: levelData?.skillGroups.goodToKnow.map((s) => s.name).slice(0, 3) || ['Problem Solving'],
       postedDate: '3 days ago',
     },
   ];
 }
 
-export function findCareerSlugByTitle(roleTitle?: string): string | null {
-  if (!roleTitle) return null;
-  const normalized = roleTitle.toLowerCase().trim();
-  
-  // Direct slug or title match
-  const directMatch = CAREER_PATHS.find(
-    (c) => c.slug === normalized || c.title.toLowerCase() === normalized
-  );
-  if (directMatch) return directMatch.slug;
+export {
+  CURATED_ROLES,
+  findCareerSlugByTitle,
+  getSavedRoleBySlug,
+  getSavedTargetRoles,
+  setSavedTargetRole,
+  toggleTargetRole,
+  isTargetRoleSelected,
+  type SavedRoleItem,
+} from './saved-roles';
 
-  // Fuzzy / substring match
-  const fuzzyMatch = CAREER_PATHS.find((c) => {
-    const titleLower = c.title.toLowerCase();
-    return titleLower.includes(normalized) || normalized.includes(titleLower);
-  });
-  if (fuzzyMatch) return fuzzyMatch.slug;
-
-  // Keyword mapping fallbacks
-  if (normalized.includes('software') || normalized.includes('developer') || normalized.includes('full stack') || normalized.includes('frontend') || normalized.includes('backend')) {
-    return 'software-engineer';
-  }
-  if (normalized.includes('cloud') || normalized.includes('aws') || normalized.includes('azure')) {
-    return 'cloud-engineer';
-  }
-  if (normalized.includes('devops')) {
-    return 'devops-engineer';
-  }
-  if (normalized.includes('data analyst') || normalized.includes('analytics')) {
-    return 'data-analyst';
-  }
-  if (normalized.includes('data scientist') || normalized.includes('ai') || normalized.includes('machine learning') || normalized.includes('ml')) {
-    return 'data-scientist';
-  }
-  if (normalized.includes('ui') || normalized.includes('ux') || normalized.includes('designer')) {
-    return 'ui-ux-designer';
-  }
-  if (normalized.includes('product')) {
-    return 'product-manager';
-  }
-  if (normalized.includes('cyber')) {
-    return 'cybersecurity-engineer';
-  }
-
-  return null;
-}
-
-export interface SavedRoleItem {
-  slug: string;
-  title: string;
-  category?: string;
-}
-
-export function getSavedTargetRoles(): SavedRoleItem[] {
-  if (typeof window === 'undefined') return [];
-  try {
-    const raw = localStorage.getItem('pathway_selected_roles');
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-    }
-    const legacy = localStorage.getItem('pathway_selected_role');
-    if (legacy) {
-      const parsed = JSON.parse(legacy);
-      if (parsed?.slug && parsed?.title) return [parsed];
-    }
-  } catch {}
-  return [];
-}
-
-export function setSavedTargetRole(role: SavedRoleItem): SavedRoleItem[] {
-  if (typeof window === 'undefined') return [];
-  const roles = getSavedTargetRoles();
-  const existingIdx = roles.findIndex((r) => r.slug === role.slug);
-
-  let newRoles: SavedRoleItem[];
-  if (existingIdx >= 0) {
-    newRoles = [...roles];
-    // Move existing to the end so it's the primary active path
-    const [existing] = newRoles.splice(existingIdx, 1);
-    newRoles.push(existing);
-  } else {
-    newRoles = [...roles, { slug: role.slug, title: role.title, category: role.category }];
-  }
-
-  try {
-    localStorage.removeItem('pathway_user_explicitly_cleared_roles');
-    localStorage.setItem('pathway_selected_roles', JSON.stringify(newRoles));
-    localStorage.setItem('pathway_selected_role', JSON.stringify(role));
-    window.dispatchEvent(new Event('pathway_selected_roles_changed'));
-  } catch {}
-
-  return newRoles;
-}
-
-export function toggleTargetRole(role: SavedRoleItem): { isSelected: boolean; roles: SavedRoleItem[] } {
-  if (typeof window === 'undefined') return { isSelected: false, roles: [] };
-  const roles = getSavedTargetRoles();
-  const existingIdx = roles.findIndex((r) => r.slug === role.slug);
-
-  let newRoles: SavedRoleItem[];
-  let isSelected = false;
-
-  if (existingIdx >= 0) {
-    newRoles = roles.filter((r) => r.slug !== role.slug);
-    isSelected = false;
-  } else {
-    newRoles = [...roles, { slug: role.slug, title: role.title, category: role.category }];
-    isSelected = true;
-  }
-
-  try {
-    if (newRoles.length === 0) {
-      localStorage.setItem('pathway_user_explicitly_cleared_roles', 'true');
-    } else {
-      localStorage.removeItem('pathway_user_explicitly_cleared_roles');
-    }
-
-    localStorage.setItem('pathway_selected_roles', JSON.stringify(newRoles));
-    if (newRoles.length > 0) {
-      const active = newRoles[newRoles.length - 1];
-      localStorage.setItem('pathway_selected_role', JSON.stringify(active));
-    } else {
-      localStorage.removeItem('pathway_selected_role');
-    }
-    window.dispatchEvent(new Event('pathway_selected_roles_changed'));
-  } catch {}
-
-  return { isSelected, roles: newRoles };
-}
-
-export function isTargetRoleSelected(slug: string): boolean {
-  const roles = getSavedTargetRoles();
-  return roles.some((r) => r.slug === slug);
-}

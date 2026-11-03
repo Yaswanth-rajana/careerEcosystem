@@ -10,7 +10,7 @@ export async function GET(
 ) {
   try {
     const auth = await getAuthenticatedRecruiter();
-    const job = await RecruiterJobService.getJobDetail(params.id, auth.company.id);
+    const job = await RecruiterJobService.getJobDetail(params.id, auth.company.id, auth);
 
     return NextResponse.json({ success: true, data: job });
   } catch (error: any) {

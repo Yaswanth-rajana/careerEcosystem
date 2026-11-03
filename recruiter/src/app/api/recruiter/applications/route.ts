@@ -17,15 +17,19 @@ export async function GET(request: NextRequest) {
     const sortBy = searchParams.get('sortBy') || undefined;
     const sortDir = (searchParams.get('sortDir') as 'asc' | 'desc') || undefined;
 
-    const result = await RecruiterApplicationService.listApplications(auth.company.id, {
-      page,
-      limit,
-      q,
-      status,
-      jobId,
-      sortBy,
-      sortDir,
-    });
+    const result = await RecruiterApplicationService.listApplications(
+      auth.company.id,
+      {
+        page,
+        limit,
+        q,
+        status,
+        jobId,
+        sortBy,
+        sortDir,
+      },
+      auth
+    );
 
     return NextResponse.json({ success: true, ...result });
   } catch (error: any) {

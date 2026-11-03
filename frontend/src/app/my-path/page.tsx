@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useAuth } from '@/lib/AuthContext';
-import { getSavedTargetRoles } from '@/lib/careers/career-repository';
+import { getSavedTargetRoles } from '@/lib/careers/saved-roles';
 import { Compass, Sparkles, ArrowRight, HelpCircle } from 'lucide-react';
 
 export default function MyPathPage() {

@@ -32,6 +32,8 @@ export {
   type FullOnboardingPayload,
 } from './validations/onboardingSchemas';
 export * from './services/userService';
+export * from './services/onboardingService';
+export * from './services/onboardingLifecycleService';
 export * from './services/profileService';
 export * from './services/profileCompletion';
 export * from './types/profile';
@@ -61,6 +63,7 @@ export * from './services/mentorship/sessionService';
 export * from './services/mentorship/mentorStudentService';
 export * from './services/mentorship/reviewService';
 export * from './services/mentorship/mentorDashboardService';
+export * from './services/mentorship/mentorDiscoveryService';
 
 // Mentor Onboarding & Email Layer
 export * from './services/mentorApplicationService';
@@ -85,4 +88,28 @@ export * from './services/recruiter/recruiterOfferService';
 export * from './services/recruiter/recruiterCompanyService';
 export * from './services/recruiter/recruiterTeamService';
 export * from './services/recruiter/recruiterDashboardService';
+
+export {
+  type JobStatus,
+  type ApplicationStatus,
+  type WorkMode,
+  type EmploymentType,
+  type ExperienceLevel,
+  type JobSalaryDTO,
+  type JobCardDTO,
+  type JobDetailDTO,
+  type ApplicationDTO,
+  type CandidateInterviewDTO,
+  type CandidateOfferDTO,
+  type JobSearchParams,
+  formatSalary,
+} from './types/jobs';
+export * from './validations/jobSchemas';
+export * from './services/jobService';
+export * from './services/jobSearchService';
+export * from './services/jobMatchingService';
+export * from './services/savedJobService';
+export * from './services/applicationService';
+export * from './services/jobExpirationService';
+
 

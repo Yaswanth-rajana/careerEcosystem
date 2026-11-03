@@ -138,10 +138,22 @@ export const ResumeReviewModal: React.FC<ResumeReviewModalProps> = ({
                 <div className="space-y-2">
                   {data.education.map((edu, idx) => (
                     <div key={idx} className="p-3 rounded-xl bg-white border border-slate-200 text-xs flex justify-between items-start">
-                      <div>
+                      <div className="space-y-1">
                         <div className="font-semibold text-slate-900">{edu.institution}</div>
-                        <div className="text-slate-600">{edu.degree} in {edu.fieldOfStudy}</div>
-                        <div className="text-[11px] text-[#6366F1]">{edu.startYear} – {edu.endYear || 'Present'}</div>
+                        <div className="text-slate-600 font-medium">
+                          {edu.degree}
+                          {edu.fieldOfStudy ? (edu.degree.toLowerCase().includes(' in ') ? ` – ${edu.fieldOfStudy}` : ` in ${edu.fieldOfStudy}`) : ''}
+                        </div>
+                        {edu.gpa && (
+                          <div className="text-[11px] font-semibold text-emerald-700">
+                            CGPA / Score: {edu.gpa}
+                          </div>
+                        )}
+                        {(edu.startYear || edu.endYear) && (
+                          <div className="text-[11px] text-[#6366F1] font-mono">
+                            {edu.startYear || ''}{edu.endYear ? ` – ${edu.endYear}` : (edu.isCurrent ? ' – Present' : '')}
+                          </div>
+                        )}
                       </div>
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#6366F1]/10 text-[#6366F1]">
                         Source: RESUME
@@ -152,7 +164,43 @@ export const ResumeReviewModal: React.FC<ResumeReviewModalProps> = ({
               )}
             </div>
 
-            {/* Section 3: Experience */}
+            {/* Section 3: Certifications */}
+            <div className="space-y-3 p-4 rounded-2xl bg-slate-50/50 border border-slate-200/80">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 font-bold text-sm text-slate-900">
+                  <Award className="w-4 h-4 text-[#6366F1]" />
+                  <span>Certifications ({data.certifications.length})</span>
+                </div>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-semibold border border-emerald-200">
+                  <CheckCircle2 className="w-3 h-3" /> Imported
+                </span>
+              </div>
+
+              {data.certifications.length === 0 ? (
+                <p className="text-xs text-slate-500 italic">No certifications automatically detected.</p>
+              ) : (
+                <div className="space-y-2">
+                  {data.certifications.map((cert, idx) => (
+                    <div key={idx} className="p-3 rounded-xl bg-white border border-slate-200 text-xs flex justify-between items-start">
+                      <div className="space-y-0.5">
+                        <div className="font-semibold text-slate-900">{cert.name}</div>
+                        {cert.issuingOrganization && (
+                          <div className="text-slate-600 font-medium">{cert.issuingOrganization}</div>
+                        )}
+                        {cert.issueDate && (
+                          <div className="text-[11px] text-[#6366F1] font-mono">{cert.issueDate}</div>
+                        )}
+                      </div>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#6366F1]/10 text-[#6366F1]">
+                        Source: RESUME
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Section 4: Experience */}
             <div className="space-y-3 p-4 rounded-2xl bg-slate-50/50 border border-slate-200/80">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 font-bold text-sm text-slate-900">
@@ -169,23 +217,37 @@ export const ResumeReviewModal: React.FC<ResumeReviewModalProps> = ({
               ) : (
                 <div className="space-y-2">
                   {data.experience.map((exp, idx) => (
-                    <div key={idx} className="p-3 rounded-xl bg-white border border-slate-200 text-xs space-y-1">
+                    <div key={idx} className="p-3.5 rounded-xl bg-white border border-slate-200 text-xs space-y-2">
                       <div className="flex justify-between items-start">
                         <div>
-                          <span className="font-semibold text-slate-900">{exp.roleTitle}</span> @ <span className="text-[#6366F1]">{exp.company}</span>
+                          <span className="font-semibold text-slate-900 text-sm">{exp.roleTitle}</span>
+                          <span className="text-slate-500 font-medium"> — {exp.company}</span>
                         </div>
                         <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#6366F1]/10 text-[#6366F1]">
                           Source: RESUME
                         </span>
                       </div>
-                      <p className="text-slate-600 line-clamp-2 text-[11px]">{exp.description}</p>
+                      {(exp.startDate || exp.endDate) && (
+                        <div className="text-[11px] text-[#6366F1] font-mono">
+                          {exp.startDate || ''}{exp.endDate ? ` – ${exp.endDate}` : (exp.isCurrent ? ' – Present' : '')}
+                        </div>
+                      )}
+                      {exp.bullets && exp.bullets.length > 0 ? (
+                        <ul className="text-slate-600 text-[11px] list-disc list-inside space-y-1 pt-1">
+                          {exp.bullets.map((b, bIdx) => (
+                            <li key={bIdx} className="line-clamp-2">{b}</li>
+                          ))}
+                        </ul>
+                      ) : exp.description ? (
+                        <p className="text-slate-600 line-clamp-3 text-[11px]">{exp.description}</p>
+                      ) : null}
                     </div>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Section 4: Skills */}
+            {/* Section 5: Skills */}
             <div className="space-y-3 p-4 rounded-2xl bg-slate-50/50 border border-slate-200/80">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 font-bold text-sm text-slate-900">
@@ -212,7 +274,7 @@ export const ResumeReviewModal: React.FC<ResumeReviewModalProps> = ({
               </div>
             </div>
 
-            {/* Section 5: Projects & Links */}
+            {/* Section 6: Projects & Links */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2 p-4 rounded-2xl bg-slate-50/50 border border-slate-200/80 text-xs">
                 <div className="font-bold text-slate-900 flex items-center gap-2">
@@ -220,7 +282,21 @@ export const ResumeReviewModal: React.FC<ResumeReviewModalProps> = ({
                   <span>Projects ({data.projects.length})</span>
                 </div>
                 {data.projects.map((p, i) => (
-                  <div key={i} className="p-2 rounded bg-white border border-slate-200 text-slate-700 font-medium">{p.title}</div>
+                  <div key={i} className="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 space-y-1">
+                    <div className="font-semibold text-slate-900">{p.title}</div>
+                    {p.technologies && p.technologies.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {p.technologies.map((t, ti) => (
+                          <span key={ti} className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-mono">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    {p.description && (
+                      <p className="text-slate-600 line-clamp-2 text-[11px]">{p.description}</p>
+                    )}
+                  </div>
                 ))}
               </div>
 

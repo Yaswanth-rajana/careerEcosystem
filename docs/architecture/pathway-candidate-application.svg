@@ -1,0 +1,571 @@
+<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" viewBox="0 0 3840 2160" width="3840" height="2160" style="background:#F8FAFC; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+
+    <linearGradient id="bannerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4F46E5" />
+      <stop offset="100%" stop-color="#312E81" />
+    </linearGradient>
+
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F8FAFC" />
+    </linearGradient>
+
+    <linearGradient id="indigoBoxGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#EEF2FF" />
+      <stop offset="100%" stop-color="#E0E7FF" />
+    </linearGradient>
+
+    <!-- Shadows -->
+    <filter id="mainShadow" x="-2%" y="-2%" width="104%" height="106%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0F172A" flood-opacity="0.08" />
+    </filter>
+    <filter id="cardShadow" x="-3%" y="-4%" width="106%" height="110%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06" />
+    </filter>
+
+    <!-- Markers -->
+    <marker id="arrIndigo" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#4F46E5" />
+    </marker>
+    <marker id="arrGreen" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#10B981" />
+    </marker>
+    <marker id="arrRed" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#EF4444" />
+    </marker>
+
+    <!-- Grid Pattern -->
+    <pattern id="bgGrid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#E2E8F0" stroke-width="0.8" opacity="0.6"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="3840" height="2160" fill="url(#bgGrid)" />
+
+  <!-- TOP HEADER (80, 50, 3680 x 120) -->
+  <g transform="translate(80, 50)">
+    <rect width="3680" height="120" rx="16" fill="url(#headerGrad)" filter="url(#mainShadow)" />
+    
+    <text x="45" y="70" fill="#FFFFFF" font-size="36" font-weight="900" letter-spacing="-0.5">PATHWAY<tspan fill="#60A5FA">.ECO</tspan></text>
+    <line x1="340" y1="35" x2="340" y2="85" stroke="#475569" stroke-width="2" />
+    <text x="375" y="56" fill="#FFFFFF" font-size="26" font-weight="800">Workflow 1 — Candidate Job Application &amp; Resume Snapshot Architecture</text>
+    <text x="375" y="86" fill="#94A3B8" font-size="16" font-weight="500">Discovery → Eligibility Guard → Resume Ownership Check → Immutable Snapshot → ZeptoMail Dispatch → Recruiter Review &amp; Stage Updates</text>
+
+    <!-- Badges -->
+    <rect x="2960" y="42" width="220" height="38" rx="8" fill="#1E293B" stroke="#334155" />
+    <circle cx="2982" cy="61" r="6" fill="#4F46E5" />
+    <text x="3000" y="67" fill="#E2E8F0" font-size="14" font-weight="700">THEME: INDIGO</text>
+
+    <rect x="3200" y="42" width="220" height="38" rx="8" fill="#1E293B" stroke="#334155" />
+    <circle cx="3222" cy="61" r="6" fill="#10B981" />
+    <text x="3240" y="67" fill="#E2E8F0" font-size="14" font-weight="700">CODEBASE VERIFIED</text>
+
+    <rect x="3440" y="42" width="200" height="38" rx="8" fill="#1E293B" stroke="#334155" />
+    <circle cx="3460" cy="61" r="6" fill="#38BDF8" />
+    <text x="3478" y="67" fill="#E2E8F0" font-size="14" font-weight="700">PORTAL :3000 / :3002</text>
+  </g>
+
+  <!-- SECTION 1: END-TO-END WORKFLOW STEP PIPELINE (8 Sequential Cards) -->
+  <!-- Y = 200, Height = 580 -->
+  <g transform="translate(80, 200)">
+    <rect width="3680" height="580" rx="16" fill="#FFFFFF" stroke="#C7D2FE" stroke-width="2" filter="url(#mainShadow)" />
+    
+    <!-- Title Bar -->
+    <path d="M 0 16 Q 0 0 16 0 L 3664 0 Q 3680 0 3680 16 L 3680 60 L 0 60 Z" fill="url(#bannerGrad)" />
+    <text x="35" y="38" fill="#FFFFFF" font-size="22" font-weight="800">EXECUTION PIPELINE: 8 SEQUENTIAL PHASES FROM DISCOVERY TO RECRUITER PIPELINE</text>
+    <text x="3260" y="38" fill="#C7D2FE" font-size="15" font-weight="600">STRICT STEP ORDER &amp; ACTOR RESPONSIBILITIES</text>
+
+    <!-- 8 Cards: Each 420px wide, gap 37px. Total: 8*420 + 7*37 = 3360 + 259 = 3619. Margin x = 30 -->
+    <!-- Card 1: Job Discovery -->
+    <g transform="translate(30, 80)">
+      <rect width="420" height="470" rx="12" fill="#FFFFFF" stroke="#C7D2FE" stroke-width="2" filter="url(#cardShadow)" />
+      <rect x="18" y="18" width="55" height="32" rx="6" fill="#EEF2FF" stroke="#4F46E5" stroke-width="2" />
+      <text x="45" y="40" fill="#4F46E5" font-size="16" font-weight="900" text-anchor="middle">1.1</text>
+      <text x="85" y="40" fill="#1E1B4B" font-size="19" font-weight="800">Job Discovery</text>
+      <line x1="18" y1="62" x2="400" y2="62" stroke="#E2E8F0" stroke-width="1.5" />
+      
+      <rect x="18" y="75" width="85" height="24" rx="4" fill="#EEF2FF" />
+      <text x="60" y="92" fill="#4338CA" font-size="12" font-weight="800" text-anchor="middle">CANDIDATE</text>
+      <text x="115" y="92" fill="#64748B" font-size="13" font-weight="600">Candidate Portal (:3000)</text>
+
+      <text x="18" y="130" fill="#1E293B" font-size="15" font-weight="700">• Public Search &amp; Filter</text>
+      <text x="32" y="152" fill="#475569" font-size="14">Candidate browses /jobs with facets</text>
+      <text x="32" y="172" fill="#475569" font-size="14">(workMode, location, minSalary)</text>
+
+      <text x="18" y="205" fill="#1E293B" font-size="15" font-weight="700">• API Endpoint Invoked</text>
+      <text x="32" y="227" fill="#4338CA" font-size="14" font-weight="600">GET /api/jobs</text>
+      <text x="32" y="247" fill="#64748B" font-size="13">JobSearchService.searchJobs()</text>
+
+      <text x="18" y="280" fill="#1E293B" font-size="15" font-weight="700">• Publication Filtering</text>
+      <text x="32" y="302" fill="#475569" font-size="14">where: { status: 'PUBLISHED' }</text>
+      <text x="32" y="322" fill="#475569" font-size="14">publishedAt &gt; now - 30 days</text>
+
+      <rect x="18" y="360" width="384" height="85" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+      <text x="30" y="385" fill="#0F172A" font-size="13" font-weight="800">PRIMARY OUTCOME:</text>
+      <text x="30" y="410" fill="#334155" font-size="13">Active published jobs retrieved</text>
+      <text x="30" y="430" fill="#64748B" font-size="13">Matches computed via candidate skills</text>
+    </g>
+    <line x1="457" y1="315" x2="480" y2="315" stroke="#4F46E5" stroke-width="3" marker-end="url(#arrIndigo)" />
+
+    <!-- Card 2: Eligibility Validation -->
+    <g transform="translate(487, 0)">
+      <rect width="420" height="470" rx="12" fill="#FFFFFF" stroke="#C7D2FE" stroke-width="2" filter="url(#cardShadow)" />
+      <rect x="18" y="18" width="55" height="32" rx="6" fill="#EEF2FF" stroke="#4F46E5" stroke-width="2" />
+      <text x="45" y="40" fill="#4F46E5" font-size="16" font-weight="900" text-anchor="middle">1.2</text>
+      <text x="85" y="40" fill="#1E1B4B" font-size="19" font-weight="800">Eligibility Guard</text>
+      <line x1="18" y1="62" x2="400" y2="62" stroke="#E2E8F0" stroke-width="1.5" />
+
+      <rect x="18" y="75" width="85" height="24" rx="4" fill="#EEF2FF" />
+      <text x="60" y="92" fill="#4338CA" font-size="12" font-weight="800" text-anchor="middle">GATEWAY</text>
+      <text x="115" y="92" fill="#64748B" font-size="13" font-weight="600">ApplicationService Guards</text>
+
+      <text x="18" y="130" fill="#1E293B" font-size="15" font-weight="700">• Candidate Account Status</text>
+      <text x="32" y="152" fill="#475569" font-size="14">Verifies candidate.status === 'ACTIVE'</text>
+      <text x="32" y="172" fill="#EF4444" font-size="13">Inactive account throws 403 Forbidden</text>
+
+      <text x="18" y="205" fill="#1E293B" font-size="15" font-weight="700">• Job Lifespan Check</text>
+      <text x="32" y="227" fill="#475569" font-size="14">JobExpirationService.isJobExpired()</text>
+      <text x="32" y="247" fill="#EF4444" font-size="13">Expired job blocks application (400)</text>
+
+      <text x="18" y="280" fill="#1E293B" font-size="15" font-weight="700">• Company Status Check</text>
+      <text x="32" y="302" fill="#475569" font-size="14">Verifies companyRef !== 'SUSPENDED'</text>
+      <text x="32" y="322" fill="#64748B" font-size="13">Protects against rogue employers</text>
+
+      <rect x="18" y="360" width="384" height="85" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+      <text x="30" y="385" fill="#0F172A" font-size="13" font-weight="800">PRIMARY OUTCOME:</text>
+      <text x="30" y="410" fill="#334155" font-size="13">All preconditions verified</text>
+      <text x="30" y="430" fill="#64748B" font-size="13">Unauthorized submissions halted</text>
+    </g>
+    <line x1="914" y1="315" x2="937" y2="315" stroke="#4F46E5" stroke-width="3" marker-end="url(#arrIndigo)" />
+
+    <!-- Card 3: Resume Selection & Ownership -->
+    <g transform="translate(944, 0)">
+      <rect width="420" height="470" rx="12" fill="#FFFFFF" stroke="#C7D2FE" stroke-width="2" filter="url(#cardShadow)" />
+      <rect x="18" y="18" width="55" height="32" rx="6" fill="#EEF2FF" stroke="#4F46E5" stroke-width="2" />
+      <text x="45" y="40" fill="#4F46E5" font-size="16" font-weight="900" text-anchor="middle">1.3</text>
+      <text x="85" y="40" fill="#1E1B4B" font-size="19" font-weight="800">Resume Selection</text>
+      <line x1="18" y1="62" x2="400" y2="62" stroke="#E2E8F0" stroke-width="1.5" />
+
+      <rect x="18" y="75" width="85" height="24" rx="4" fill="#EEF2FF" />
+      <text x="60" y="92" fill="#4338CA" font-size="12" font-weight="800" text-anchor="middle">STORAGE</text>
+      <text x="115" y="92" fill="#64748B" font-size="13" font-weight="600">Resume Ownership Guard</text>
+
+      <text x="18" y="130" fill="#1E293B" font-size="15" font-weight="700">• Profile Selection vs Upload</text>
+      <text x="32" y="152" fill="#475569" font-size="14">Candidate selects active resume or</text>
+      <text x="32" y="172" fill="#475569" font-size="14">uploads new PDF/DOCX (max 10MB)</text>
+
+      <text x="18" y="205" fill="#1E293B" font-size="15" font-weight="700">• Ownership Verification</text>
+      <text x="32" y="227" fill="#4338CA" font-size="14" font-weight="600">resume.profile.userId === candidateId</text>
+      <text x="32" y="247" fill="#EF4444" font-size="13">Cross-account theft strictly blocked</text>
+
+      <text x="18" y="280" fill="#1E293B" font-size="15" font-weight="700">• Failure Cleanup Hook</text>
+      <text x="32" y="302" fill="#475569" font-size="14">cleanupNewlyUploadedResume()</text>
+      <text x="32" y="322" fill="#64748B" font-size="13">Orphaned files deleted on submission abort</text>
+
+      <rect x="18" y="360" width="384" height="85" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+      <text x="30" y="385" fill="#0F172A" font-size="13" font-weight="800">PRIMARY OUTCOME:</text>
+      <text x="30" y="410" fill="#334155" font-size="13">Resume identity guaranteed</text>
+      <text x="30" y="430" fill="#64748B" font-size="13">Zero orphaned disk storage files</text>
+    </g>
+    <line x1="1371" y1="315" x2="1394" y2="315" stroke="#4F46E5" stroke-width="3" marker-end="url(#arrIndigo)" />
+
+    <!-- Card 4: Submission & Snapshot -->
+    <g transform="translate(1401, 0)">
+      <rect width="420" height="470" rx="12" fill="#FFFFFF" stroke="#C7D2FE" stroke-width="2" filter="url(#cardShadow)" />
+      <rect x="18" y="18" width="55" height="32" rx="6" fill="#EEF2FF" stroke="#4F46E5" stroke-width="2" />
+      <text x="45" y="40" fill="#4F46E5" font-size="16" font-weight="900" text-anchor="middle">1.4</text>
+      <text x="85" y="40" fill="#1E1B4B" font-size="19" font-weight="800">Application Snapshot</text>
+      <line x1="18" y1="62" x2="400" y2="62" stroke="#E2E8F0" stroke-width="1.5" />
+
+      <rect x="18" y="75" width="85" height="24" rx="4" fill="#EEF2FF" />
+      <text x="60" y="92" fill="#4338CA" font-size="12" font-weight="800" text-anchor="middle">PERSIST</text>
+      <text x="115" y="92" fill="#64748B" font-size="13" font-weight="600">db.jobApplication</text>
+
+      <text x="18" y="130" fill="#1E293B" font-size="15" font-weight="700">• Idempotency &amp; Duplicate Check</text>
+      <text x="32" y="152" fill="#475569" font-size="14">where: { candidateId_jobId }</text>
+      <text x="32" y="172" fill="#EF4444" font-size="13">Duplicate re-application rejected (400)</text>
+
+      <text x="18" y="205" fill="#1E293B" font-size="15" font-weight="700">• Frozen Snapshot Fields</text>
+      <text x="32" y="227" fill="#4338CA" font-size="13" font-weight="600">resumeFilename, resumeFileSize</text>
+      <text x="32" y="247" fill="#4338CA" font-size="13" font-weight="600">resumeFileType, resumeId</text>
+
+      <text x="18" y="280" fill="#1E293B" font-size="15" font-weight="700">• Dedicated Recruiter URL</text>
+      <text x="32" y="302" fill="#475569" font-size="13">/api/recruiter/applications/[id]/resume</text>
+      <text x="32" y="322" fill="#64748B" font-size="13">Immutable snapshot locked forever</text>
+
+      <rect x="18" y="360" width="384" height="85" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+      <text x="30" y="385" fill="#0F172A" font-size="13" font-weight="800">PRIMARY OUTCOME:</text>
+      <text x="30" y="410" fill="#334155" font-size="13">Application record committed</text>
+      <text x="30" y="430" fill="#64748B" font-size="13">Candidate status: APPLIED</text>
+    </g>
+    <line x1="1828" y1="315" x2="1851" y2="315" stroke="#4F46E5" stroke-width="3" marker-end="url(#arrIndigo)" />
+
+    <!-- Card 5: Dual Confirmation Emails -->
+    <g transform="translate(1858, 0)">
+      <rect width="420" height="470" rx="12" fill="#FFFFFF" stroke="#C7D2FE" stroke-width="2" filter="url(#cardShadow)" />
+      <rect x="18" y="18" width="55" height="32" rx="6" fill="#EEF2FF" stroke="#4F46E5" stroke-width="2" />
+      <text x="45" y="40" fill="#4F46E5" font-size="16" font-weight="900" text-anchor="middle">1.5</text>
+      <text x="85" y="40" fill="#1E1B4B" font-size="19" font-weight="800">ZeptoMail Delivery</text>
+      <line x1="18" y1="62" x2="400" y2="62" stroke="#E2E8F0" stroke-width="1.5" />
+
+      <rect x="18" y="75" width="85" height="24" rx="4" fill="#EEF2FF" />
+      <text x="60" y="92" fill="#4338CA" font-size="12" font-weight="800" text-anchor="middle">EMAIL</text>
+      <text x="115" y="92" fill="#64748B" font-size="13" font-weight="600">ZeptoMail REST API</text>
+
+      <text x="18" y="130" fill="#1E293B" font-size="15" font-weight="700">• Candidate Confirmation</text>
+      <text x="32" y="152" fill="#475569" font-size="14">sendCandidateAppConfirmation()</text>
+      <text x="32" y="172" fill="#64748B" font-size="13">Job title, company name, timestamp</text>
+
+      <text x="18" y="205" fill="#1E293B" font-size="15" font-weight="700">• Recruiter Alert Email</text>
+      <text x="32" y="227" fill="#475569" font-size="14">sendRecruiterAppNotification()</text>
+      <text x="32" y="247" fill="#64748B" font-size="13">Alerts company hiring team</text>
+
+      <text x="18" y="280" fill="#1E293B" font-size="15" font-weight="700">• Non-Blocking Guarantee</text>
+      <text x="32" y="302" fill="#10B981" font-size="13" font-weight="600">Dispatched via Promise.resolve()</text>
+      <text x="32" y="322" fill="#64748B" font-size="13">Network failure never aborts DB save</text>
+
+      <rect x="18" y="360" width="384" height="85" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+      <text x="30" y="385" fill="#0F172A" font-size="13" font-weight="800">PRIMARY OUTCOME:</text>
+      <text x="30" y="410" fill="#334155" font-size="13">Both parties notified</text>
+      <text x="30" y="430" fill="#64748B" font-size="13">Delivery logged in db.emailDelivery</text>
+    </g>
+    <line x1="2285" y1="315" x2="2308" y2="315" stroke="#4F46E5" stroke-width="3" marker-end="url(#arrIndigo)" />
+
+    <!-- Card 6: Recruiter Review & Stream -->
+    <g transform="translate(2315, 0)">
+      <rect width="420" height="470" rx="12" fill="#FFFFFF" stroke="#C7D2FE" stroke-width="2" filter="url(#cardShadow)" />
+      <rect x="18" y="18" width="55" height="32" rx="6" fill="#EEF2FF" stroke="#4F46E5" stroke-width="2" />
+      <text x="45" y="40" fill="#4F46E5" font-size="16" font-weight="900" text-anchor="middle">1.6</text>
+      <text x="85" y="40" fill="#1E1B4B" font-size="19" font-weight="800">Recruiter Review</text>
+      <line x1="18" y1="62" x2="400" y2="62" stroke="#E2E8F0" stroke-width="1.5" />
+
+      <rect x="18" y="75" width="85" height="24" rx="4" fill="#EEF2FF" />
+      <text x="60" y="92" fill="#4338CA" font-size="12" font-weight="800" text-anchor="middle">RECRUITER</text>
+      <text x="115" y="92" fill="#64748B" font-size="13" font-weight="600">Recruiter Portal (:3002)</text>
+
+      <text x="18" y="130" fill="#1E293B" font-size="15" font-weight="700">• Pipeline Board View</text>
+      <text x="32" y="152" fill="#475569" font-size="14">Recruiter lists applications</text>
+      <text x="32" y="172" fill="#64748B" font-size="13">GET /api/recruiter/applications</text>
+
+      <text x="18" y="205" fill="#1E293B" font-size="15" font-weight="700">• Secure Resume Streaming</text>
+      <text x="32" y="227" fill="#4338CA" font-size="14" font-weight="600">GET /api/recruiter/.../resume</text>
+      <text x="32" y="247" fill="#64748B" font-size="13">Verifies caller belongs to company</text>
+
+      <text x="18" y="280" fill="#1E293B" font-size="15" font-weight="700">• Inline Content-Disposition</text>
+      <text x="32" y="302" fill="#475569" font-size="14">Streams binary PDF directly</text>
+      <text x="32" y="322" fill="#64748B" font-size="13">Inline preview in recruiter browser</text>
+
+      <rect x="18" y="360" width="384" height="85" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+      <text x="30" y="385" fill="#0F172A" font-size="13" font-weight="800">PRIMARY OUTCOME:</text>
+      <text x="30" y="410" fill="#334155" font-size="13">Tamper-proof resume inspection</text>
+      <text x="30" y="430" fill="#64748B" font-size="13">Full candidate profile loaded</text>
+    </g>
+    <line x1="2742" y1="315" x2="2765" y2="315" stroke="#4F46E5" stroke-width="3" marker-end="url(#arrIndigo)" />
+
+    <!-- Card 7: Pipeline Stage Updates -->
+    <g transform="translate(2772, 0)">
+      <rect width="420" height="470" rx="12" fill="#FFFFFF" stroke="#C7D2FE" stroke-width="2" filter="url(#cardShadow)" />
+      <rect x="18" y="18" width="55" height="32" rx="6" fill="#EEF2FF" stroke="#4F46E5" stroke-width="2" />
+      <text x="45" y="40" fill="#4F46E5" font-size="16" font-weight="900" text-anchor="middle">1.7</text>
+      <text x="85" y="40" fill="#1E1B4B" font-size="19" font-weight="800">Stage Transition</text>
+      <line x1="18" y1="62" x2="400" y2="62" stroke="#E2E8F0" stroke-width="1.5" />
+
+      <rect x="18" y="75" width="85" height="24" rx="4" fill="#EEF2FF" />
+      <text x="60" y="92" fill="#4338CA" font-size="12" font-weight="800" text-anchor="middle">RBAC</text>
+      <text x="115" y="92" fill="#64748B" font-size="13" font-weight="600">RecruiterApplicationService</text>
+
+      <text x="18" y="130" fill="#1E293B" font-size="15" font-weight="700">• Status Lifecycle</text>
+      <text x="32" y="152" fill="#475569" font-size="14">SHORTLISTED | INTERVIEW</text>
+      <text x="32" y="172" fill="#475569" font-size="14">OFFER | REJECTED</text>
+
+      <text x="18" y="205" fill="#1E293B" font-size="15" font-weight="700">• Permission Assertion</text>
+      <text x="32" y="227" fill="#4338CA" font-size="13" font-weight="600">assertPermission('pipeline:transition')</text>
+      <text x="32" y="247" fill="#64748B" font-size="13">assertApplicationAccess(auth, id)</text>
+
+      <text x="18" y="280" fill="#1E293B" font-size="15" font-weight="700">• Audit Logging</text>
+      <text x="32" y="302" fill="#475569" font-size="14">RECRUITER_APP_STATUS_UPDATED</text>
+      <text x="32" y="322" fill="#64748B" font-size="13">Records actorId, previous/new status</text>
+
+      <rect x="18" y="360" width="384" height="85" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+      <text x="30" y="385" fill="#0F172A" font-size="13" font-weight="800">PRIMARY OUTCOME:</text>
+      <text x="30" y="410" fill="#334155" font-size="13">Status persisted in db</text>
+      <text x="30" y="430" fill="#64748B" font-size="13">reviewedAt timestamp updated</text>
+    </g>
+    <line x1="3199" y1="315" x2="3222" y2="315" stroke="#4F46E5" stroke-width="3" marker-end="url(#arrIndigo)" />
+
+    <!-- Card 8: Candidate Visibility -->
+    <g transform="translate(3229, 0)">
+      <rect width="420" height="470" rx="12" fill="#FFFFFF" stroke="#C7D2FE" stroke-width="2" filter="url(#cardShadow)" />
+      <rect x="18" y="18" width="55" height="32" rx="6" fill="#EEF2FF" stroke="#4F46E5" stroke-width="2" />
+      <text x="45" y="40" fill="#4F46E5" font-size="16" font-weight="900" text-anchor="middle">1.8</text>
+      <text x="85" y="40" fill="#1E1B4B" font-size="19" font-weight="800">Candidate Visibility</text>
+      <line x1="18" y1="62" x2="400" y2="62" stroke="#E2E8F0" stroke-width="1.5" />
+
+      <rect x="18" y="75" width="85" height="24" rx="4" fill="#EEF2FF" />
+      <text x="60" y="92" fill="#4338CA" font-size="12" font-weight="800" text-anchor="middle">PORTAL</text>
+      <text x="115" y="92" fill="#64748B" font-size="13" font-weight="600">Candidate Portal (:3000)</text>
+
+      <text x="18" y="130" fill="#1E293B" font-size="15" font-weight="700">• Real-Time Dashboard</text>
+      <text x="32" y="152" fill="#475569" font-size="14">Candidate navigates /applications</text>
+      <text x="32" y="172" fill="#64748B" font-size="13">GET /api/candidate/applications</text>
+
+      <text x="18" y="205" fill="#1E293B" font-size="15" font-weight="700">• Transparent Feedback</text>
+      <text x="32" y="227" fill="#475569" font-size="14">Views recruiter feedback notes</text>
+      <text x="32" y="247" fill="#64748B" font-size="13">Interview schedules &amp; offer details</text>
+
+      <text x="18" y="280" fill="#1E293B" font-size="15" font-weight="700">• Status Update Email</text>
+      <text x="32" y="302" fill="#475569" font-size="14">sendCandidateStatusUpdatedEmail()</text>
+      <text x="32" y="322" fill="#64748B" font-size="13">Automatic email on stage advancement</text>
+
+      <rect x="18" y="360" width="384" height="85" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+      <text x="30" y="385" fill="#0F172A" font-size="13" font-weight="800">FINAL OUTCOME:</text>
+      <text x="30" y="410" fill="#059669" font-size="13" font-weight="700">Full candidate transparency</text>
+      <text x="30" y="430" fill="#64748B" font-size="13">Seamless progression to interviews</text>
+    </g>
+  </g>
+
+  <!-- SECTION 2: TECHNICAL ARCHITECTURE & DEEP DIVE PANELS (3 Columns) -->
+  <!-- Y = 810, Height = 1200 -->
+  <g transform="translate(80, 810)">
+    <!-- Column 1: API Route Handlers, Payload Schemas & Validation (Width: 1200) -->
+    <g transform="translate(0, 0)">
+      <rect width="1200" height="1200" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2" filter="url(#mainShadow)" />
+      
+      <!-- Panel Header -->
+      <rect width="1200" height="64" rx="16" fill="#1E293B" />
+      <text x="30" y="42" fill="#FFFFFF" font-size="20" font-weight="800">1. API ROUTE HANDLERS, PAYLOAD SCHEMAS &amp; VALIDATION GUARDS</text>
+
+      <g transform="translate(35, 90)">
+        <!-- Box 1: POST /api/jobs/[id]/apply -->
+        <rect width="1130" height="250" rx="12" fill="#F8FAFC" stroke="#C7D2FE" stroke-width="1.5" />
+        <rect x="25" y="20" width="85" height="28" rx="6" fill="#4F46E5" />
+        <text x="67" y="39" fill="#FFFFFF" font-size="13" font-weight="900" text-anchor="middle">POST</text>
+        <text x="125" y="40" fill="#0F172A" font-size="18" font-weight="800">/api/jobs/[id]/apply (Candidate Submission Endpoint)</text>
+        <line x1="25" y1="60" x2="1105" y2="60" stroke="#E2E8F0" stroke-width="1" />
+        
+        <text x="25" y="90" fill="#334155" font-size="15" font-weight="700">• Auth Guard: <tspan fill="#4338CA">career_session cookie</tspan> resolved by ServerAuth into candidate user entity</text>
+        <text x="25" y="120" fill="#334155" font-size="15" font-weight="700">• Zod Schema: <tspan fill="#059669">JobApplySchema.parse(body)</tspan></text>
+        <text x="50" y="145" fill="#64748B" font-size="14">Fields: { coverNote?: string, answers?: Record&lt;string, any&gt;, resumeId?: string, resumeUrl?: string, isNewUpload?: boolean }</text>
+        <text x="25" y="178" fill="#334155" font-size="15" font-weight="700">• Rejection Handlers: Returns HTTP 400 with structured JSON error details on malformed payload</text>
+        <text x="25" y="208" fill="#334155" font-size="15" font-weight="700">• Service Delegation: Invokes <tspan fill="#4338CA">ApplicationService.applyToJob(candidateId, jobId, payload)</tspan></text>
+      </g>
+
+      <g transform="translate(35, 370)">
+        <!-- Box 2: GET /api/recruiter/applications/[id]/resume -->
+        <rect width="1130" height="250" rx="12" fill="#F8FAFC" stroke="#C7D2FE" stroke-width="1.5" />
+        <rect x="25" y="20" width="85" height="28" rx="6" fill="#0284C7" />
+        <text x="67" y="39" fill="#FFFFFF" font-size="13" font-weight="900" text-anchor="middle">GET</text>
+        <text x="125" y="40" fill="#0F172A" font-size="18" font-weight="800">/api/recruiter/applications/[id]/resume (Secure Resume Stream)</text>
+        <line x1="25" y1="60" x2="1105" y2="60" stroke="#E2E8F0" stroke-width="1" />
+
+        <text x="25" y="90" fill="#334155" font-size="15" font-weight="700">• Auth Guard: <tspan fill="#0284C7">career_recruiter_session cookie</tspan> resolved by serverAuth</text>
+        <text x="25" y="120" fill="#334155" font-size="15" font-weight="700">• Tenant Verification: Verifies application's <tspan fill="#4338CA">job.companyId === auth.company.id</tspan></text>
+        <text x="50" y="145" fill="#EF4444" font-size="14">Cross-company resume access attempt immediately rejected with HTTP 403 Forbidden</text>
+        <text x="25" y="178" fill="#334155" font-size="15" font-weight="700">• Storage Provider: Resolves file via <tspan fill="#4338CA">StorageFactory.getProvider()</tspan> from local disk buffer</text>
+        <text x="25" y="208" fill="#334155" font-size="15" font-weight="700">• HTTP Headers: Streams with <tspan fill="#059669">Content-Type: application/pdf</tspan> &amp; Content-Disposition: inline</text>
+      </g>
+
+      <g transform="translate(35, 650)">
+        <!-- Box 3: PATCH /api/recruiter/applications/[id]/status -->
+        <rect width="1130" height="250" rx="12" fill="#F8FAFC" stroke="#C7D2FE" stroke-width="1.5" />
+        <rect x="25" y="20" width="85" height="28" rx="6" fill="#D97706" />
+        <text x="67" y="39" fill="#FFFFFF" font-size="13" font-weight="900" text-anchor="middle">PATCH</text>
+        <text x="125" y="40" fill="#0F172A" font-size="18" font-weight="800">/api/recruiter/applications/[id]/status (Pipeline Stage Transition)</text>
+        <line x1="25" y1="60" x2="1105" y2="60" stroke="#E2E8F0" stroke-width="1" />
+
+        <text x="25" y="90" fill="#334155" font-size="15" font-weight="700">• RBAC Permission Assertion: <tspan fill="#4338CA">RecruiterRbacService.assertPermission('pipeline:transition')</tspan></text>
+        <text x="25" y="120" fill="#334155" font-size="15" font-weight="700">• Job-Level Scoping: <tspan fill="#059669">assertApplicationAccess(auth, id)</tspan> checks assignedJobIds &amp; interviews</text>
+        <text x="25" y="150" fill="#334155" font-size="15" font-weight="700">• Permitted Stages: APPLIED → UNDER_REVIEW → SHORTLISTED → INTERVIEW → OFFER / REJECTED</text>
+        <text x="25" y="180" fill="#334155" font-size="15" font-weight="700">• Audit Emission: Emits <tspan fill="#4338CA">RECRUITER_APPLICATION_STATUS_UPDATED</tspan> event with actor details</text>
+        <text x="25" y="210" fill="#334155" font-size="15" font-weight="700">• Candidate Alert: Asynchronously dispatches <tspan fill="#059669">EmailService.sendCandidateStatusUpdatedEmail</tspan></text>
+      </g>
+
+      <g transform="translate(35, 930)">
+        <!-- Box 4: Safety & Idempotency Rules -->
+        <rect width="1130" height="230" rx="12" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="1.5" />
+        <text x="25" y="35" fill="#1E1B4B" font-size="17" font-weight="800">AUTOMATIC CLEANUP &amp; DUPLICATE PREVENTION RULES</text>
+        <line x1="25" y1="52" x2="1105" y2="52" stroke="#C7D2FE" stroke-width="1" />
+        
+        <text x="25" y="80" fill="#334155" font-size="14">• <tspan font-weight="700">Duplicate Submission Lock:</tspan> Prisma unique compound index [candidateId, jobId] halts concurrent duplicate calls.</text>
+        <text x="25" y="110" fill="#334155" font-size="14">• <tspan font-weight="700">Withdrawn Re-activation:</tspan> Withdrawn applications can be re-applied idempotently without creating duplicate IDs.</text>
+        <text x="25" y="140" fill="#334155" font-size="14">• <tspan font-weight="700">Orphan File Cleanup:</tspan> If candidate uploads a new PDF but application creation fails, disk storage and db.resume are wiped.</text>
+        <text x="25" y="170" fill="#334155" font-size="14">• <tspan font-weight="700">Non-Destructive Existing Resumes:</tspan> Pre-existing profile resumes are never deleted on application failure.</text>
+      </g>
+    </g>
+
+    <!-- Column 2: Data Persistence & Prisma Schema Group (Width: 1200) -->
+    <g transform="translate(1240, 0)">
+      <rect width="1200" height="1200" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2" filter="url(#mainShadow)" />
+      
+      <!-- Panel Header -->
+      <rect width="1200" height="64" rx="16" fill="#1E293B" />
+      <text x="30" y="42" fill="#FFFFFF" font-size="20" font-weight="800">2. DATA PERSISTENCE &amp; IMMUTABLE RESUME SNAPSHOT SCHEMA</text>
+
+      <g transform="translate(35, 90)">
+        <!-- Prisma Model: JobApplication -->
+        <rect width="1130" height="540" rx="12" fill="#F8FAFC" stroke="#C7D2FE" stroke-width="1.5" />
+        <rect x="25" y="20" width="130" height="28" rx="6" fill="#312E81" />
+        <text x="90" y="39" fill="#FFFFFF" font-size="13" font-weight="900" text-anchor="middle">PRISMA MODEL</text>
+        <text x="175" y="40" fill="#0F172A" font-size="18" font-weight="800">model JobApplication (MongoDB collection: "JobApplication")</text>
+        <line x1="25" y1="60" x2="1105" y2="60" stroke="#E2E8F0" stroke-width="1" />
+
+        <text x="25" y="90" fill="#334155" font-size="14" font-family="monospace">id               String             @id @default(auto()) @map("_id") @db.ObjectId</text>
+        <text x="25" y="115" fill="#334155" font-size="14" font-family="monospace">candidateId      String             @db.ObjectId (Foreign key -> User.id)</text>
+        <text x="25" y="140" fill="#334155" font-size="14" font-family="monospace">jobId            String             @db.ObjectId (Foreign key -> Job.id)</text>
+        <text x="25" y="165" fill="#4338CA" font-size="14" font-family="monospace">status           ApplicationStatus  @default(APPLIED) (Enum: APPLIED, SHORTLISTED...)</text>
+        <text x="25" y="190" fill="#334155" font-size="14" font-family="monospace">coverNote        String?</text>
+        <text x="25" y="215" fill="#334155" font-size="14" font-family="monospace">answers          Json?              (Custom job screening questions)</text>
+
+        <!-- Highlighted Snapshot Fields -->
+        <rect x="20" y="235" width="1090" height="150" rx="8" fill="#EEF2FF" stroke="#A5B4FC" />
+        <text x="35" y="260" fill="#1E1B4B" font-size="14" font-weight="800">IMMUTABLE RESUME SNAPSHOT FIELDS (Preserves Application State Forever):</text>
+        <text x="35" y="285" fill="#312E81" font-size="14" font-family="monospace">resumeId         String?            @db.ObjectId (Linked resume ID at application time)</text>
+        <text x="35" y="310" fill="#312E81" font-size="14" font-family="monospace">resumeFilename   String?            (Exact filename submitted: "John_Doe_CV.pdf")</text>
+        <text x="35" y="335" fill="#312E81" font-size="14" font-family="monospace">resumeFileSize   Int?               (Exact byte length at submission: 1,245,820)</text>
+        <text x="35" y="360" fill="#312E81" font-size="14" font-family="monospace">resumeFileType   String?            (MIME type: "application/pdf" / "application/vnd.openxml...")</text>
+        
+        <text x="25" y="415" fill="#334155" font-size="14" font-family="monospace">resumeUrl        String?            ("/api/recruiter/applications/:id/resume")</text>
+        <text x="25" y="440" fill="#334155" font-size="14" font-family="monospace">reviewedAt       DateTime?</text>
+        <text x="25" y="465" fill="#334155" font-size="14" font-family="monospace">feedback         String?</text>
+        <text x="25" y="490" fill="#334155" font-size="14" font-family="monospace">createdAt        DateTime           @default(now())</text>
+        
+        <rect x="25" y="505" width="1080" height="24" rx="4" fill="#FEF3C7" />
+        <text x="35" y="522" fill="#92400E" font-size="13" font-weight="700">INDEX CONSTRAINT: @@unique([candidateId, jobId]) — Guarantees atomic candidate submission uniqueness</text>
+      </g>
+
+      <g transform="translate(35, 660)">
+        <!-- Snapshot Integrity Analysis -->
+        <rect width="1130" height="500" rx="12" fill="#F8FAFC" stroke="#C7D2FE" stroke-width="1.5" />
+        <rect x="25" y="20" width="130" height="28" rx="6" fill="#0D9488" />
+        <text x="90" y="39" fill="#FFFFFF" font-size="13" font-weight="900" text-anchor="middle">INTEGRITY</text>
+        <text x="175" y="40" fill="#0F172A" font-size="18" font-weight="800">Snapshot Integrity &amp; Profile Mutation Independence</text>
+        <line x1="25" y1="60" x2="1105" y2="60" stroke="#E2E8F0" stroke-width="1" />
+
+        <text x="25" y="95" fill="#1E293B" font-size="16" font-weight="800">Why the Immutable Resume Snapshot is an Architectural Core:</text>
+        
+        <rect x="25" y="115" width="1080" height="90" rx="8" fill="#FFFFFF" stroke="#E2E8F0" />
+        <text x="45" y="145" fill="#334155" font-size="15" font-weight="700">1. Tamper-Proof Candidate Review</text>
+        <text x="45" y="175" fill="#64748B" font-size="14">If a candidate subsequently modifies, replaces, or deletes resumes in their profile, the recruiter still reviews</text>
+        <text x="45" y="195" fill="#64748B" font-size="14">the exact resume snapshot originally submitted with the job application.</text>
+
+        <rect x="25" y="225" width="1080" height="90" rx="8" fill="#FFFFFF" stroke="#E2E8F0" />
+        <text x="45" y="255" fill="#334155" font-size="15" font-weight="700">2. Legal &amp; Audit Compliance</text>
+        <text x="45" y="285" fill="#64748B" font-size="14">Hiring decisions and interview scorecards must correspond to verified historical credentials.</text>
+        <text x="45" y="305" fill="#64748B" font-size="14">Applications maintain permanent forensic integrity through the frozen fields.</text>
+
+        <rect x="25" y="335" width="1080" height="90" rx="8" fill="#FFFFFF" stroke="#E2E8F0" />
+        <text x="45" y="365" fill="#334155" font-size="15" font-weight="700">3. Isolated Document Streaming</text>
+        <text x="45" y="395" fill="#64748B" font-size="14">Recruiter resume streaming route reads directly from the frozen application snapshot parameters,</text>
+        <text x="45" y="415" fill="#64748B" font-size="14">completely decoupling recruiter access from candidate profile state mutations.</text>
+
+        <rect x="25" y="445" width="1080" height="40" rx="6" fill="#ECFDF5" stroke="#A7F3D0" />
+        <text x="45" y="470" fill="#065F46" font-size="14" font-weight="700">RESULT: 100% deterministic, immutable candidate submission audit trail in MongoDB.</text>
+      </g>
+    </g>
+
+    <!-- Column 3: Security, Multi-Tenant Boundaries & ZeptoMail Integration (Width: 1200) -->
+    <g transform="translate(2480, 0)">
+      <rect width="1200" height="1200" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2" filter="url(#mainShadow)" />
+      
+      <!-- Panel Header -->
+      <rect width="1200" height="64" rx="16" fill="#1E293B" />
+      <text x="30" y="42" fill="#FFFFFF" font-size="20" font-weight="800">3. SECURITY GUARDS, RBAC MATRIX &amp; NOTIFICATION DELIVERY</text>
+
+      <g transform="translate(35, 90)">
+        <!-- Security Guards -->
+        <rect width="1130" height="340" rx="12" fill="#F8FAFC" stroke="#C7D2FE" stroke-width="1.5" />
+        <rect x="25" y="20" width="130" height="28" rx="6" fill="#DC2626" />
+        <text x="90" y="39" fill="#FFFFFF" font-size="13" font-weight="900" text-anchor="middle">SECURITY</text>
+        <text x="175" y="40" fill="#0F172A" font-size="18" font-weight="800">Multi-Tenant Boundaries &amp; Defense in Depth</text>
+        <line x1="25" y1="60" x2="1105" y2="60" stroke="#E2E8F0" stroke-width="1" />
+
+        <text x="25" y="90" fill="#334155" font-size="15" font-weight="700">• Edge Route Protection (middleware.ts)</text>
+        <text x="50" y="115" fill="#64748B" font-size="14">Checks for session cookies before request reaches Node.js runtime, redirecting unauthenticated users.</text>
+
+        <text x="25" y="150" fill="#334155" font-size="15" font-weight="700">• ServerAuth Session Resolution (serverAuth.ts)</text>
+        <text x="50" y="175" fill="#64748B" font-size="14">Queries db.user and db.companyMember, rejecting suspended accounts with HTTP 401.</text>
+
+        <text x="25" y="210" fill="#334155" font-size="15" font-weight="700">• Cross-Tenant Isolation Scoping</text>
+        <text x="50" y="235" fill="#64748B" font-size="14">Recruiter endpoints strictly inject <tspan fill="#4338CA" font-weight="600">where: { job: { companyId: auth.company.id } }</tspan> on all DB queries.</text>
+
+        <text x="25" y="270" fill="#334155" font-size="15" font-weight="700">• Granular Interviewer / HM Access Restrictions</text>
+        <text x="50" y="295" fill="#64748B" font-size="14">Interviewers restricted to assigned candidate interviews; Hiring Managers restricted to assignedJobIds.</text>
+        
+        <rect x="25" y="305" width="1080" height="24" rx="4" fill="#FEE2E2" />
+        <text x="35" y="322" fill="#991B1B" font-size="13" font-weight="700">VIOLATION ENFORCEMENT: Any cross-company request fails immediately with HTTP 403 Forbidden</text>
+      </g>
+
+      <g transform="translate(35, 460)">
+        <!-- ZeptoMail Integration -->
+        <rect width="1130" height="380" rx="12" fill="#F8FAFC" stroke="#C7D2FE" stroke-width="1.5" />
+        <rect x="25" y="20" width="130" height="28" rx="6" fill="#4338CA" />
+        <text x="90" y="39" fill="#FFFFFF" font-size="13" font-weight="900" text-anchor="middle">ZEPTOMAIL</text>
+        <text x="175" y="40" fill="#0F172A" font-size="18" font-weight="800">ZeptoMail Transactional Email Delivery Architecture</text>
+        <line x1="25" y1="60" x2="1105" y2="60" stroke="#E2E8F0" stroke-width="1" />
+
+        <text x="25" y="90" fill="#334155" font-size="15" font-weight="700">• REST API Endpoint: <tspan fill="#4338CA">https://api.zeptomail.in/v1.1/email</tspan></text>
+        <text x="25" y="120" fill="#334155" font-size="15" font-weight="700">• Authentication: <tspan fill="#059669">Send-Mail-Token: Bearer &lt;ZEPTOMAIL_API_KEY&gt;</tspan></text>
+        <text x="25" y="150" fill="#334155" font-size="15" font-weight="700">• Candidate Template: <tspan font-family="monospace">candidateApplicationConfirmationTemplate</tspan></text>
+        <text x="50" y="175" fill="#64748B" font-size="14">Injects candidate name, job title, company logo, application timestamp, and tracking URL.</text>
+        <text x="25" y="210" fill="#334155" font-size="15" font-weight="700">• Recruiter Alert Template: <tspan font-family="monospace">recruiterNewApplicationAlertTemplate</tspan></text>
+        <text x="50" y="235" fill="#64748B" font-size="14">Informs hiring managers with direct review link to candidate application card.</text>
+        <text x="25" y="270" fill="#334155" font-size="15" font-weight="700">• Audit Logging: Saves messageId, recipient, and delivery status to <tspan fill="#4338CA">db.emailDelivery</tspan></text>
+        <text x="25" y="300" fill="#334155" font-size="15" font-weight="700">• Resilient Execution: Wrapped in try/catch — never throws or rollbacks valid DB commits</text>
+      </g>
+
+      <g transform="translate(35, 870)">
+        <!-- Recruiter Review Pipeline Box -->
+        <rect width="1130" height="290" rx="12" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="1.5" />
+        <text x="25" y="35" fill="#1E1B4B" font-size="17" font-weight="800">RECRUITER REVIEW PIPELINE STAGES &amp; STATUS CODES</text>
+        <line x1="25" y1="52" x2="1105" y2="52" stroke="#C7D2FE" stroke-width="1" />
+
+        <g transform="translate(25, 75)">
+          <rect width="200" height="40" rx="6" fill="#4F46E5" />
+          <text x="100" y="25" fill="#FFFFFF" font-size="14" font-weight="800" text-anchor="middle">APPLIED</text>
+
+          <line x1="205" y1="20" x2="225" y2="20" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrIndigo)" />
+
+          <rect x="230" width="200" height="40" rx="6" fill="#0284C7" />
+          <text x="330" y="25" fill="#FFFFFF" font-size="14" font-weight="800" text-anchor="middle">UNDER_REVIEW</text>
+
+          <line x1="435" y1="20" x2="455" y2="20" stroke="#0284C7" stroke-width="2" marker-end="url(#arrBlue)" />
+
+          <rect x="460" width="200" height="40" rx="6" fill="#059669" />
+          <text x="560" y="25" fill="#FFFFFF" font-size="14" font-weight="800" text-anchor="middle">SHORTLISTED</text>
+
+          <line x1="665" y1="20" x2="685" y2="20" stroke="#059669" stroke-width="2" marker-end="url(#arrGreen)" />
+
+          <rect x="690" width="180" height="40" rx="6" fill="#D97706" />
+          <text x="780" y="25" fill="#FFFFFF" font-size="14" font-weight="800" text-anchor="middle">INTERVIEW</text>
+
+          <line x1="875" y1="20" x2="895" y2="20" stroke="#D97706" stroke-width="2" marker-end="url(#arrIndigo)" />
+
+          <rect x="900" width="180" height="40" rx="6" fill="#10B981" />
+          <text x="990" y="25" fill="#FFFFFF" font-size="14" font-weight="800" text-anchor="middle">OFFER</text>
+        </g>
+
+        <text x="25" y="160" fill="#334155" font-size="14">• <tspan font-weight="700">Optional Technical Tasks:</tspan> Applications can enter TASK_PENDING and TASK_SUBMITTED phases.</text>
+        <text x="25" y="190" fill="#334155" font-size="14">• <tspan font-weight="700">Rejection Pathway:</tspan> Recruiter can transition to REJECTED at any phase with structured feedback notes.</text>
+        <text x="25" y="220" fill="#334155" font-size="14">• <tspan font-weight="700">Candidate Withdrawal:</tspan> Candidate can WITHDRAW their own application; withdrawn apps cannot be edited by recruiter.</text>
+        <text x="25" y="250" fill="#334155" font-size="14">• <tspan font-weight="700">Reviewed Timestamp:</tspan> reviewedAt field updated on every transition for recruiter SLA reporting.</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- FOOTER BAR -->
+  <g transform="translate(80, 2030)">
+    <rect width="3680" height="80" rx="12" fill="#0F172A" />
+    <text x="40" y="48" fill="#FFFFFF" font-size="18" font-weight="800">WORKFLOW 1 VERIFICATION &amp; CODEBASE GROUND TRUTH:</text>
+    
+    <text x="560" y="48" fill="#C7D2FE" font-size="15" font-weight="600">Services: ApplicationService · RecruiterApplicationService · EmailService · AuditService</text>
+    <text x="1600" y="48" fill="#94A3B8" font-size="15">Prisma Models: JobApplication · Resume · User · Job · EmailDelivery · AuditLog</text>
+    <text x="2700" y="48" fill="#34D399" font-size="15" font-weight="700">✓ Immutable Resume Snapshot Guaranteed · Zero Orphaned Disk Files · Non-Blocking Email Delivery</text>
+  </g>
+</svg>

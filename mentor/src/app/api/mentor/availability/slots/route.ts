@@ -17,11 +17,15 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'startDate and endDate query params are required' }, { status: 400 });
     }
 
+    const bufferMinutesParam = searchParams.get('bufferMinutes');
+    const bufferMinutes = bufferMinutesParam !== null ? parseInt(bufferMinutesParam, 10) : 15;
+
     const slots = await AvailabilityService.getAvailableSlots({
       mentorId: authMentor.mentor.id,
       startDate,
       endDate,
       durationMinutes: duration,
+      bufferMinutes,
     });
 
     return NextResponse.json({ slots });

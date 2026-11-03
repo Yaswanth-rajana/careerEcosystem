@@ -1,0 +1,55 @@
+sequenceDiagram
+    autonumber
+    %% PATHWAY.ECO — Workflow 1: Candidate Job Application & Resume Snapshot Architecture
+    
+    actor Candidate as Candidate Portal (:3000)
+    actor Recruiter as Recruiter Portal (:3002)
+    participant MW as Edge Middleware
+    participant Auth as ServerAuth Guard
+    participant Zod as Zod Validation
+    participant Service as ApplicationService
+    participant DB as Prisma / MongoDB
+    participant Storage as File Storage Provider
+    participant Zepto as ZeptoMail API
+
+    Candidate->>MW: GET /api/jobs (Search & Filter Query)
+    MW->>Service: Pass through public route
+    Service->>DB: Query jobs (status: 'PUBLISHED', publishedAt > now - 30d)
+    DB-->>Service: Active jobs list & skill matching
+    Service-->>Candidate: HTTP 200 OK (Render faceted search results)
+
+    Candidate->>MW: POST /api/jobs/:id/apply (Cookie: career_session)
+    MW->>Auth: Pass through route (valid cookie)
+    Auth->>DB: Query User session & status
+    DB-->>Auth: User active & authenticated (status: ACTIVE)
+    Auth->>Zod: Forward payload { coverNote, resumeId, answers }
+    Zod->>Service: JobApplySchema.parse(input)
+    
+    Service->>DB: Check Job (status == PUBLISHED, not expired, company not suspended)
+    DB-->>Service: Job open for applications
+    Service->>DB: Check Resume ownership (resume.profile.userId == candidateId)
+    DB-->>Service: Resume verified (blocks cross-user theft)
+    Service->>DB: Check duplicate application (findUnique candidateId_jobId)
+    DB-->>Service: No active application found
+
+    Service->>DB: Create JobApplication (status: APPLIED, freeze resumeFilename, fileSize, type)
+    DB-->>Service: Application persisted with snapshot metadata
+    
+    Service-)Zepto: Non-blocking sendCandidateApplicationConfirmationEmail()
+    Service-)Zepto: Non-blocking sendRecruiterApplicationNotificationEmail()
+    Service-->>Candidate: HTTP 201 Created { success: true, application: DTO }
+
+    Recruiter->>MW: GET /api/recruiter/applications/:id/resume (Cookie: career_recruiter_session)
+    MW->>Service: Route to RecruiterApplicationService
+    Service->>DB: Verify recruiter companyId == application.job.companyId
+    DB-->>Service: Scoped access authorized
+    Service->>Storage: Stream frozen binary file from disk
+    Storage-->>Recruiter: HTTP 200 (Content-Type: application/pdf, Content-Disposition: inline)
+
+    Recruiter->>Service: PATCH /api/recruiter/applications/:id/status { status: 'SHORTLISTED' }
+    Service->>DB: Verify recruiter permission ('pipeline:transition')
+    Service->>DB: Update application (status: 'SHORTLISTED', reviewedAt: now)
+    Service->>DB: AuditLog RECRUITER_APPLICATION_STATUS_UPDATED
+    Service-)Zepto: Non-blocking sendCandidateStatusUpdatedEmail()
+    Service-->>Recruiter: HTTP 200 OK (Application updated)
+    Candidate->>DB: GET /api/candidate/applications (Real-time status reflected)
