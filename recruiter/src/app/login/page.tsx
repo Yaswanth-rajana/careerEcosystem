@@ -135,7 +135,13 @@ function RecruiterLoginForm() {
               Not registered as an employer yet?
             </p>
             <a
-              href="http://localhost:3000/employers/apply"
+              href={
+                process.env.NEXT_PUBLIC_APP_URL
+                  ? `${process.env.NEXT_PUBLIC_APP_URL.replace(/\/+$/, '')}/employers/apply`
+                  : process.env.NODE_ENV === 'production'
+                  ? 'https://frontend-two-pi-85.vercel.app/employers/apply'
+                  : 'http://localhost:3000/employers/apply'
+              }
               className="inline-flex items-center gap-1 text-xs text-blue-600 font-semibold hover:underline"
             >
               Apply to Hire on PATHWAY.ECO &rarr;

@@ -53,6 +53,7 @@ async function runP0Tests() {
   // Preserve original environment
   const originalCronSecret = process.env.CRON_SECRET;
   const originalAppUrl = process.env.APP_URL;
+  const originalAppBaseUrl = process.env.APP_BASE_URL;
 
   try {
     // -------------------------------------------------------------------------
@@ -251,6 +252,11 @@ async function runP0Tests() {
       process.env.APP_URL = originalAppUrl;
     } else {
       delete process.env.APP_URL;
+    }
+    if (originalAppBaseUrl !== undefined) {
+      process.env.APP_BASE_URL = originalAppBaseUrl;
+    } else {
+      delete process.env.APP_BASE_URL;
     }
   }
 

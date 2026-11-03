@@ -10,6 +10,7 @@ import { AuthenticatedAdmin } from './adminAuthService';
 import { AuditService } from './auditService';
 import { EmailService } from './email/emailService';
 import { PasswordSetupTokenService } from './passwordSetupTokenService';
+import { resolveMentorPortalUrl } from './email/templates/urlHelper';
 
 export interface SubmitMentorApplicationInput {
   fullName: string;
@@ -545,7 +546,7 @@ export class MentorApplicationService {
 
     // 5. Generate secure one-time password setup token (valid 24h)
     const { rawToken } = await PasswordSetupTokenService.createSetupToken(user.id);
-    const portalBaseUrl = process.env.MENTOR_PORTAL_URL || 'http://localhost:3003';
+    const portalBaseUrl = resolveMentorPortalUrl();
     const setupUrl = `${portalBaseUrl}/setup-password?token=${rawToken}`;
 
     // 6. Audit application approval
@@ -694,7 +695,7 @@ export class MentorApplicationService {
 
     // Generate new token (invalidates previous ones)
     const { rawToken } = await PasswordSetupTokenService.createSetupToken(targetUserId);
-    const portalBaseUrl = process.env.MENTOR_PORTAL_URL || 'http://localhost:3003';
+    const portalBaseUrl = resolveMentorPortalUrl();
     const setupUrl = `${portalBaseUrl}/setup-password?token=${rawToken}`;
 
     const emailResult = await EmailService.sendMentorApplicationApprovedEmail({

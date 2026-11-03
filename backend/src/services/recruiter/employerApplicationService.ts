@@ -10,6 +10,7 @@ import { AuditService } from '../auditService';
 import { EmailService } from '../email/emailService';
 import { PasswordSetupTokenService } from '../passwordSetupTokenService';
 import { AuthenticatedAdmin } from '../adminAuthService';
+import { resolveRecruiterPortalUrl } from '../email/templates/urlHelper';
 
 export interface ListEmployerApplicationsParams {
   page?: number;
@@ -471,7 +472,7 @@ export class EmployerApplicationService {
 
     // 7. Generate secure one-time password setup token (valid 24h)
     const { rawToken } = await PasswordSetupTokenService.createSetupToken(user.id);
-    const portalBaseUrl = process.env.RECRUITER_PORTAL_URL || 'http://localhost:3004';
+    const portalBaseUrl = resolveRecruiterPortalUrl();
     const setupUrl = `${portalBaseUrl}/setup-password?token=${rawToken}`;
 
     // 8. Audit log approval
@@ -588,7 +589,7 @@ export class EmployerApplicationService {
     }
 
     const { rawToken } = await PasswordSetupTokenService.createSetupToken(user.id);
-    const portalBaseUrl = process.env.RECRUITER_PORTAL_URL || 'http://localhost:3004';
+    const portalBaseUrl = resolveRecruiterPortalUrl();
     const setupUrl = `${portalBaseUrl}/setup-password?token=${rawToken}`;
 
     await EmailService.sendEmployerApplicationApprovedEmail({

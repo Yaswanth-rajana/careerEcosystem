@@ -8,6 +8,8 @@ import {
   renderJobApplicationConfirmationEmail,
   renderRecruiterTeamInvitationEmail,
   resolveAppUrl,
+  resolveMentorPortalUrl,
+  resolveRecruiterPortalUrl,
   renderBookingConfirmedStudentEmail,
   renderBookingConfirmedMentorEmail,
   renderRescheduleRequestedMentorEmail,
@@ -167,7 +169,7 @@ export class EmailService {
     userId: string;
   }): Promise<{ success: boolean; deliveryId?: string }> {
     const subject = 'Your PATHWAY.ECO Mentor Application Has Been Approved 🎉';
-    const portalUrl = process.env.MENTOR_PORTAL_URL || 'http://localhost:3003';
+    const portalUrl = resolveMentorPortalUrl();
     const appIdDisplay = params.referenceId || params.applicationId;
 
     const mergeInfo = {

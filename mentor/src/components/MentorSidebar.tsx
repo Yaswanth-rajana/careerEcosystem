@@ -126,7 +126,13 @@ export function MentorSidebar({
             Manage your schedule, guide aspiring talents, and share feedback.
           </p>
           <a
-            href="http://localhost:3000/mentors"
+            href={
+              process.env.NEXT_PUBLIC_APP_URL
+                ? `${process.env.NEXT_PUBLIC_APP_URL.replace(/\/+$/, '')}/mentors`
+                : process.env.NODE_ENV === 'production'
+                ? 'https://frontend-two-pi-85.vercel.app/mentors'
+                : 'http://localhost:3000/mentors'
+            }
             target="_blank"
             rel="noopener noreferrer"
             className="text-[11px] font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1"
