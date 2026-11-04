@@ -284,8 +284,16 @@ export const OnboardingShell: React.FC = () => {
       if (!payload.aboutYou.name || payload.aboutYou.name.trim().length < 2) {
         newErrors.name = 'Name is required (at least 2 characters)';
       }
-      if (!payload.aboutYou.phone || payload.aboutYou.phone.trim().length < 5) {
-        newErrors.phone = 'Phone number is required';
+      const rawDigits = (payload.aboutYou.phone || '').replace(/\D/g, '');
+      const phoneDigits = (rawDigits.length > 10 && rawDigits.startsWith('91'))
+        ? rawDigits.slice(2)
+        : (rawDigits.length > 10 && rawDigits.startsWith('0'))
+        ? rawDigits.slice(1)
+        : rawDigits;
+      if (!phoneDigits || phoneDigits.length !== 10) {
+        newErrors.phone = 'Please enter a valid 10-digit Indian mobile number';
+      } else if (!/^[6-9]\d{9}$/.test(phoneDigits)) {
+        newErrors.phone = 'Indian mobile number should start with 6, 7, 8, or 9';
       }
       if (!payload.aboutYou.location || payload.aboutYou.location.trim().length < 2) {
         newErrors.location = 'Location is required';

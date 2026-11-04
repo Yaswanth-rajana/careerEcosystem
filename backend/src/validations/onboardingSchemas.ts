@@ -25,8 +25,8 @@ export const SkillSourceEnum = z.enum([
 
 export const Step1AboutYouSchema = z.object({
   name: z.string().min(2, 'Full name is required (at least 2 characters)'),
-  phone: z.string().min(5, 'Phone number is required (include country code)'),
-  location: z.string().min(2, 'Current location is required (e.g. San Francisco, CA or London, UK)'),
+  phone: z.string().min(5, 'Phone number is required'),
+  location: z.string().min(2, 'Current location is required'),
   candidateType: CandidateTypeEnum,
   headline: z.string().optional(),
   bio: z.string().optional(),

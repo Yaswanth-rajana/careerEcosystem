@@ -24,6 +24,26 @@ export const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
   onChange,
   errors,
 }) => {
+  // Extract clean 10 digits without country code or leading zero
+  const cleanDigits = (formData.phone || '').replace(/\D/g, '');
+  const displayPhone = (
+    cleanDigits.length > 10 && cleanDigits.startsWith('91')
+      ? cleanDigits.slice(2)
+      : cleanDigits.length > 10 && cleanDigits.startsWith('0')
+      ? cleanDigits.slice(1)
+      : cleanDigits
+  ).slice(0, 10);
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let digits = e.target.value.replace(/\D/g, '');
+    if (digits.length === 12 && digits.startsWith('91')) {
+      digits = digits.slice(2);
+    } else if (digits.length === 11 && digits.startsWith('0')) {
+      digits = digits.slice(1);
+    }
+    const limited = digits.slice(0, 10);
+    onChange({ phone: limited ? `+91 ${limited}` : '' });
+  };
   return (
     <div className="space-y-6 text-left">
       {/* Header text */}
@@ -70,18 +90,37 @@ export const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
         {/* Two column layout: Phone & Location */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
-            <label htmlFor="input-phone" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-              <Phone className="w-3.5 h-3.5 text-[#6366F1]" /> Phone Number (Intl format) <span className="text-rose-500">*</span>
-            </label>
-            <input
-              id="input-phone"
-              type="tel"
-              placeholder="+1 (555) 019-2834"
-              value={formData.phone || ''}
-              onChange={(e) => onChange({ phone: e.target.value })}
-              className="w-full h-12 px-4 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 text-sm focus:outline-none focus:border-[#6366F1] focus:ring-1 focus:ring-[#6366F1] transition-all"
-            />
-            {errors.phone && <p className="text-xs text-rose-500 font-medium">{errors.phone}</p>}
+            <div className="flex items-center justify-between">
+              <label htmlFor="input-phone" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <Phone className="w-3.5 h-3.5 text-[#6366F1]" /> Phone Number (India) <span className="text-rose-500">*</span>
+              </label>
+              <span className={`text-[10px] font-mono font-medium ${displayPhone.length === 10 ? 'text-emerald-600' : 'text-slate-400'}`}>
+                {displayPhone.length}/10 digits
+              </span>
+            </div>
+            <div className="relative flex items-center">
+              <div className="absolute left-3.5 flex items-center gap-1.5 text-xs font-bold text-slate-700 select-none pointer-events-none">
+                <span className="text-sm leading-none">🇮🇳</span>
+                <span>+91</span>
+                <span className="text-slate-300 font-normal">|</span>
+              </div>
+              <input
+                id="input-phone"
+                type="tel"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                maxLength={10}
+                placeholder="98765 43210"
+                value={displayPhone}
+                onChange={handlePhoneChange}
+                className="w-full h-12 pl-20 pr-4 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 text-sm focus:outline-none focus:border-[#6366F1] focus:ring-1 focus:ring-[#6366F1] transition-all font-mono tracking-wide"
+              />
+            </div>
+            {errors.phone ? (
+              <p className="text-xs text-rose-500 font-medium">{errors.phone}</p>
+            ) : (
+              <p className="text-[11px] text-slate-500">10-digit mobile number</p>
+            )}
           </div>
 
           <div className="space-y-1.5">
