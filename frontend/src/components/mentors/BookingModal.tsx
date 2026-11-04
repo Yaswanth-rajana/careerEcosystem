@@ -605,12 +605,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 </span>
               </p>
               <p className="text-slate-600"><span className="font-medium text-slate-800">Duration:</span> {selectedOption.durationMin} minutes</p>
-              {confirmedBooking?.session?.meetingUrl && (
-                <p className="text-slate-600 pt-1 border-t border-slate-200 truncate">
-                  <span className="font-medium text-slate-800">Meeting Room:</span>{' '}
-                  <span className="text-blue-600 font-mono text-[11px]">{confirmedBooking.session.meetingUrl}</span>
-                </p>
-              )}
             </div>
 
             <div className="pt-4 border-t border-slate-200">
