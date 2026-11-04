@@ -1,3 +1,5 @@
+import zlib from 'zlib';
+
 export interface ParsedResumeData {
   rawText: string;
   personalInfo: {
@@ -116,9 +118,6 @@ export class ResumeParserService {
     }
 
     if (isPdf) {
-      if (buffer.subarray(0, 1024).includes(Buffer.from('%PDF-'))) {
-        return await this.extractFromPdf(buffer);
-      }
       try {
         return await this.extractFromPdf(buffer);
       } catch (err: any) {
@@ -140,7 +139,15 @@ export class ResumeParserService {
 
     // Fallback: If buffer contains %PDF- signature regardless of filename
     if (buffer.subarray(0, 1024).includes(Buffer.from('%PDF-'))) {
-      return await this.extractFromPdf(buffer);
+      try {
+        return await this.extractFromPdf(buffer);
+      } catch (err: any) {
+        const utf8Str = buffer.toString('utf-8');
+        if (utf8Str.length > 20 && /[a-zA-Z0-9]/.test(utf8Str)) {
+          return utf8Str;
+        }
+        throw err;
+      }
     }
 
     // Fallback: UTF-8 readable text check (for test runners or plain buffers)
@@ -153,9 +160,16 @@ export class ResumeParserService {
   }
 
   /**
-   * PDF text extraction via pdf-parse.
+   * PDF text extraction via resilient multi-tier strategy:
+   * Tier 1: pdf-parse library
+   * Tier 2: Zero-dependency native PDF stream decompressor with ToUnicode CMap support
+   * Tier 3: Scan printable text sequences from raw buffer
+   * Tier 4: UTF-8 string fallback
    */
   private static async extractFromPdf(buffer: Buffer): Promise<string> {
+    let pdfParsePasswordError = false;
+
+    // Tier 1: Attempt pdf-parse library extraction
     try {
       let pdfModule: any;
       try {
@@ -172,23 +186,308 @@ export class ResumeParserService {
         if (parser.destroy) {
           await parser.destroy().catch(() => {});
         }
-        return textResult?.text || '';
+        const text = textResult?.text || '';
+        if (text && text.trim().length >= 10) {
+          return text;
+        }
       }
 
       const parseFn = typeof pdfModule === 'function' ? pdfModule : pdfModule?.default;
       if (typeof parseFn === 'function') {
         const result = await parseFn(buffer);
-        return result?.text || '';
+        const text = result?.text || '';
+        if (text && text.trim().length >= 10) {
+          return text;
+        }
+      }
+    } catch (err: any) {
+      if (err?.message && err.message.toLowerCase().includes('password')) {
+        pdfParsePasswordError = true;
+      }
+      console.warn('[Resume Parser] pdf-parse library failed, falling back to native stream extractor:', err?.message || err);
+    }
+
+    // Tier 2: Zero-dependency native PDF stream decompressor with CMap support & operator parser
+    try {
+      const streamText = this.extractTextFromPdfStreams(buffer);
+      if (streamText && streamText.trim().length >= 10) {
+        console.log(`[Resume Parser] Native PDF stream extraction succeeded (${streamText.length} chars)`);
+        return streamText;
+      }
+    } catch (streamErr: any) {
+      console.warn('[Resume Parser] Native PDF stream extraction failed:', streamErr?.message || streamErr);
+    }
+
+    // Tier 3: Printable chunk scanner for uncompressed/hybrid streams
+    try {
+      const printableText = this.extractPrintableChunks(buffer);
+      if (printableText && printableText.trim().length >= 20) {
+        console.log(`[Resume Parser] Printable chunk extraction succeeded (${printableText.length} chars)`);
+        return printableText;
+      }
+    } catch (chunkErr: any) {
+      console.warn('[Resume Parser] Printable chunk extraction failed:', chunkErr?.message || chunkErr);
+    }
+
+    // Tier 4: Buffer UTF-8 string fallback
+    try {
+      const rawUtf8 = buffer.toString('utf-8');
+      const cleanRaw = rawUtf8.replace(/[^\x20-\x7E\n\r\t]/g, ' ').replace(/\s+/g, ' ').trim();
+      if (cleanRaw.length >= 30 && /[a-zA-Z]{3,}/.test(cleanRaw)) {
+        return cleanRaw;
+      }
+    } catch {
+      // ignore
+    }
+
+    if (pdfParsePasswordError) {
+      throw new Error('Password-protected PDFs are not supported. Please upload an unlocked PDF.');
+    }
+
+    throw new Error('Unable to read this PDF. Please upload a text-based PDF or another supported resume format.');
+  }
+
+  /**
+   * Unescape standard PDF literal string escape sequences.
+   */
+  private static unescapePdfString(str: string): string {
+    return str
+      .replace(/\\n/g, '\n')
+      .replace(/\\r/g, '\r')
+      .replace(/\\t/g, '\t')
+      .replace(/\\b/g, '\b')
+      .replace(/\\f/g, '\f')
+      .replace(/\\\(/g, '(')
+      .replace(/\\\)/g, ')')
+      .replace(/\\\\/g, '\\')
+      .replace(/\\([0-7]{1,3})/g, (_, oct) => String.fromCharCode(parseInt(oct, 8)));
+  }
+
+  /**
+   * Decode hex-encoded PDF string, supporting ToUnicode CMap, UTF-16BE (with/without BOM), and UTF-8/Latin1.
+   */
+  private static decodeHexPdfString(hex: string, cmap?: Map<string, string>): string {
+    const clean = hex.replace(/\s+/g, '');
+    if (!clean) return '';
+
+    // If CMap is available, try mapping glyphs
+    if (cmap && cmap.size > 0) {
+      let mapped = '';
+      let matchedAll = true;
+      const step = clean.length % 4 === 0 ? 4 : 2;
+      for (let i = 0; i < clean.length; i += step) {
+        const token = clean.slice(i, i + step).toLowerCase();
+        if (cmap.has(token)) {
+          mapped += cmap.get(token);
+        } else {
+          matchedAll = false;
+          break;
+        }
+      }
+      if (matchedAll && mapped.length > 0) {
+        return mapped;
+      }
+    }
+
+    const padded = clean.length % 2 !== 0 ? clean + '0' : clean;
+    try {
+      const buf = Buffer.from(padded, 'hex');
+      // UTF-16BE with BOM
+      if (buf.length >= 2 && buf[0] === 0xfe && buf[1] === 0xff) {
+        return buf.subarray(2).swap16().toString('utf16le');
+      }
+      // UTF-16BE without BOM (alternating zero bytes)
+      if (buf.length >= 4 && buf[0] === 0 && buf[2] === 0) {
+        return buf.swap16().toString('utf16le');
+      }
+      const utf8 = buf.toString('utf8');
+      return /[\uFFFD]/.test(utf8) ? buf.toString('latin1') : utf8;
+    } catch {
+      return '';
+    }
+  }
+
+  /**
+   * Parses ToUnicode CMap blocks (beginbfchar / beginbfrange) from a PDF stream into character mappings.
+   */
+  private static parseCMap(streamStr: string, cmap: Map<string, string>): void {
+    const bfcharRegex = /beginbfchar([\s\S]*?)endbfchar/g;
+    let match: RegExpExecArray | null;
+    while ((match = bfcharRegex.exec(streamStr)) !== null) {
+      const lines = match[1].trim().split(/\r?\n/);
+      for (const line of lines) {
+        const parts = line.trim().match(/<([0-9a-fA-F]+)>\s*<([0-9a-fA-F]+)>/);
+        if (parts) {
+          const src = parts[1].toLowerCase();
+          const dstHex = parts[2];
+          try {
+            const dstBuf = Buffer.from(dstHex, 'hex');
+            const dstChar = dstBuf.length === 2 ? dstBuf.swap16().toString('utf16le') : dstBuf.toString('utf8');
+            cmap.set(src, dstChar);
+          } catch {
+            // continue
+          }
+        }
+      }
+    }
+
+    const bfrangeRegex = /beginbfrange([\s\S]*?)endbfrange/g;
+    while ((match = bfrangeRegex.exec(streamStr)) !== null) {
+      const lines = match[1].trim().split(/\r?\n/);
+      for (const line of lines) {
+        const parts = line.trim().match(/<([0-9a-fA-F]+)>\s*<([0-9a-fA-F]+)>\s*<([0-9a-fA-F]+)>/);
+        if (parts) {
+          const start = parseInt(parts[1], 16);
+          const end = parseInt(parts[2], 16);
+          let dest = parseInt(parts[3], 16);
+          const hexLen = parts[1].length;
+          for (let code = start; code <= end; code++, dest++) {
+            const srcHex = code.toString(16).padStart(hexLen, '0').toLowerCase();
+            try {
+              cmap.set(srcHex, String.fromCodePoint(dest));
+            } catch {
+              // continue
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Pure Node.js zero-dependency PDF stream decompressor and text operator extractor.
+   */
+  private static extractTextFromPdfStreams(buffer: Buffer): string {
+    let extractedText = '';
+    const cmap = new Map<string, string>();
+    const decompressedStreams: string[] = [];
+
+    let searchPos = 0;
+    const streamKeyword = Buffer.from('stream');
+    const endstreamKeyword = Buffer.from('endstream');
+
+    // First pass: locate and decompress all streams
+    while (searchPos < buffer.length) {
+      const streamStart = buffer.indexOf(streamKeyword, searchPos);
+      if (streamStart === -1) break;
+
+      let dataStart = streamStart + 6;
+      if (buffer[dataStart] === 13 && buffer[dataStart + 1] === 10) {
+        dataStart += 2;
+      } else if (buffer[dataStart] === 10 || buffer[dataStart] === 13) {
+        dataStart += 1;
       }
 
-      throw new Error('PDF parser not initialized');
-    } catch (err: any) {
-      console.error('[Resume Parser] PDF extraction failed:', err?.message || err);
-      if (err.message && err.message.toLowerCase().includes('password')) {
-        throw new Error('Password-protected PDFs are not supported. Please upload an unlocked PDF.');
+      const streamEnd = buffer.indexOf(endstreamKeyword, dataStart);
+      if (streamEnd === -1) break;
+
+      let dataEnd = streamEnd;
+      if (dataEnd > dataStart && (buffer[dataEnd - 1] === 10 || buffer[dataEnd - 1] === 13)) {
+        dataEnd -= 1;
+        if (dataEnd > dataStart && (buffer[dataEnd - 1] === 10 || buffer[dataEnd - 1] === 13)) {
+          dataEnd -= 1;
+        }
       }
-      throw new Error('Unable to read this PDF. Please upload a text-based PDF or another supported resume format.');
+
+      const rawStream = buffer.subarray(dataStart, dataEnd);
+      searchPos = streamEnd + 9;
+
+      let decompressed: Buffer;
+      try {
+        decompressed = zlib.inflateSync(rawStream);
+      } catch {
+        try {
+          decompressed = zlib.unzipSync(rawStream);
+        } catch {
+          try {
+            decompressed = zlib.inflateRawSync(rawStream);
+          } catch {
+            decompressed = rawStream;
+          }
+        }
+      }
+
+      const streamStr = decompressed.toString('latin1');
+      decompressedStreams.push(streamStr);
+
+      if (streamStr.includes('beginbfchar') || streamStr.includes('beginbfrange')) {
+        this.parseCMap(streamStr, cmap);
+      }
     }
+
+    // Second pass: parse BT ... ET and text operators
+    for (const streamStr of decompressedStreams) {
+      const btRegex = /BT([\s\S]*?)ET/g;
+      let btMatch: RegExpExecArray | null;
+      let foundBt = false;
+
+      while ((btMatch = btRegex.exec(streamStr)) !== null) {
+        foundBt = true;
+        const block = btMatch[1];
+
+        // TJ arrays: [(text) -120 (more text)] TJ
+        const arrayRegex = /\[([\s\S]*?)\]\s*TJ/g;
+        let arrMatch: RegExpExecArray | null;
+        while ((arrMatch = arrayRegex.exec(block)) !== null) {
+          const arrContent = arrMatch[1];
+          const innerLiteralRegex = /\(([\s\S]*?)\)/g;
+          let litMatch: RegExpExecArray | null;
+          while ((litMatch = innerLiteralRegex.exec(arrContent)) !== null) {
+            extractedText += this.unescapePdfString(litMatch[1]);
+          }
+          const innerHexRegex = /<([0-9a-fA-F\s]+)>/g;
+          let hexMatch: RegExpExecArray | null;
+          while ((hexMatch = innerHexRegex.exec(arrContent)) !== null) {
+            extractedText += this.decodeHexPdfString(hexMatch[1], cmap);
+          }
+          extractedText += ' ';
+        }
+
+        // Standalone Tj, ', "
+        const tjRegex = /\(([\s\S]*?)\)\s*(?:Tj|'|")/g;
+        let tjMatch: RegExpExecArray | null;
+        while ((tjMatch = tjRegex.exec(block)) !== null) {
+          extractedText += this.unescapePdfString(tjMatch[1]) + ' ';
+        }
+
+        const hexTjRegex = /<([0-9a-fA-F\s]+)>\s*(?:Tj|'|")/g;
+        let hMatch: RegExpExecArray | null;
+        while ((hMatch = hexTjRegex.exec(block)) !== null) {
+          extractedText += this.decodeHexPdfString(hMatch[1], cmap) + ' ';
+        }
+
+        extractedText += '\n';
+      }
+
+      if (!foundBt) {
+        const tjRegex = /\(([\s\S]*?)\)\s*(?:Tj|'|")/g;
+        let tjMatch: RegExpExecArray | null;
+        while ((tjMatch = tjRegex.exec(streamStr)) !== null) {
+          extractedText += this.unescapePdfString(tjMatch[1]) + ' ';
+        }
+        const hexTjRegex = /<([0-9a-fA-F\s]+)>\s*(?:Tj|'|")/g;
+        let hMatch: RegExpExecArray | null;
+        while ((hMatch = hexTjRegex.exec(streamStr)) !== null) {
+          extractedText += this.decodeHexPdfString(hMatch[1], cmap) + ' ';
+        }
+      }
+    }
+
+    return extractedText.replace(/\r/g, '').replace(/[ \t]+/g, ' ').trim();
+  }
+
+  /**
+   * Scans printable ASCII/Latin character sequences from raw buffer as a fallback.
+   */
+  private static extractPrintableChunks(buffer: Buffer): string {
+    const content = buffer.toString('latin1');
+    const matches = content.match(/[\x20-\x7E]{4,}/g);
+    if (!matches) return '';
+    return matches
+      .filter((m) => !m.startsWith('/') && !m.startsWith('<<') && !m.startsWith('obj') && !m.startsWith('endobj'))
+      .join(' ')
+      .replace(/\s+/g, ' ')
+      .trim();
   }
 
   /**
