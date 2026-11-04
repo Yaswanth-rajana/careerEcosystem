@@ -44,6 +44,7 @@ export const ResumeUploadBanner: React.FC<ResumeUploadBannerProps> = ({
 
       onResumeExtracted(result.parsedSuggestions, file.name);
     } catch (err: any) {
+      console.error('[ResumeUpload] failed:', err?.message || err);
       setError(err.message || 'An unexpected error occurred.');
     } finally {
       setIsUploading(false);

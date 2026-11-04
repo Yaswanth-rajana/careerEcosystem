@@ -229,7 +229,18 @@ export class ResumeParserService {
       console.warn('[Resume Parser] Printable chunk extraction failed:', chunkErr?.message || chunkErr);
     }
 
-    // Tier 4: Buffer UTF-8 string fallback
+    // Tier 4: Document heuristics scanner (metadata, email patterns, literal parenthesized strings)
+    try {
+      const heuristicText = this.extractTextHeuristics(buffer);
+      if (heuristicText && heuristicText.trim().length >= 15) {
+        console.log(`[Resume Parser] Heuristic text extraction succeeded (${heuristicText.length} chars)`);
+        return heuristicText;
+      }
+    } catch (heurErr: any) {
+      console.warn('[Resume Parser] Heuristic extraction failed:', heurErr?.message || heurErr);
+    }
+
+    // Tier 5: Buffer UTF-8 string fallback
     try {
       const rawUtf8 = buffer.toString('utf-8');
       const cleanRaw = rawUtf8.replace(/[^\x20-\x7E\n\r\t]/g, ' ').replace(/\s+/g, ' ').trim();
@@ -355,6 +366,180 @@ export class ResumeParserService {
   }
 
   /**
+   * Resilient zero-dependency stream decompressor handling raw, trimmed, and offset zlib streams.
+   */
+  private static decompressPdfStream(raw: Buffer): Buffer {
+    // 1. Direct standard decompress attempts
+    try { return zlib.inflateSync(raw); } catch {}
+    try { return zlib.unzipSync(raw); } catch {}
+    try { return zlib.inflateRawSync(raw); } catch {}
+
+    // 2. Trim leading & trailing whitespace/newlines
+    let start = 0;
+    while (start < raw.length && (raw[start] <= 0x20 || raw[start] === 0x0A || raw[start] === 0x0D)) {
+      start++;
+    }
+    let end = raw.length;
+    while (end > start && (raw[end - 1] <= 0x20 || raw[end - 1] === 0x0A || raw[end - 1] === 0x0D)) {
+      end--;
+    }
+    if (start < end) {
+      const trimmed = raw.subarray(start, end);
+      try { return zlib.inflateSync(trimmed); } catch {}
+      try { return zlib.unzipSync(trimmed); } catch {}
+      try { return zlib.inflateRawSync(trimmed); } catch {}
+    }
+
+    // 3. Scan for zlib header byte 0x78 (common headers: 78 9c, 78 01, 78 da, 78 5e, 78 bb)
+    for (let i = start; i < Math.min(raw.length - 2, start + 64); i++) {
+      if (raw[i] === 0x78 && (raw[i + 1] === 0x9c || raw[i + 1] === 0x01 || raw[i + 1] === 0xda || raw[i + 1] === 0x5e || raw[i + 1] === 0x20 || raw[i + 1] === 0x7e)) {
+        try { return zlib.inflateSync(raw.subarray(i, end)); } catch {}
+        try { return zlib.inflateRawSync(raw.subarray(i, end)); } catch {}
+      }
+    }
+
+    return raw;
+  }
+
+  /**
+   * Stateful text stream content parser handling nested parentheses, escaped characters,
+   * TJ kerning array offsets (inserting spaces between words), and font CMaps.
+   */
+  private static parseStreamTextContent(streamStr: string, cmap: Map<string, string>): string {
+    let text = '';
+    let i = 0;
+    const len = streamStr.length;
+
+    while (i < len) {
+      const ch = streamStr[i];
+
+      // Literal string: (...)
+      if (ch === '(') {
+        let depth = 1;
+        i++;
+        let raw = '';
+        while (i < len && depth > 0) {
+          if (streamStr[i] === '\\') {
+            raw += streamStr[i] + (streamStr[i + 1] || '');
+            i += 2;
+          } else if (streamStr[i] === '(') {
+            depth++;
+            raw += '(';
+            i++;
+          } else if (streamStr[i] === ')') {
+            depth--;
+            if (depth > 0) raw += ')';
+            i++;
+          } else {
+            raw += streamStr[i];
+            i++;
+          }
+        }
+        let k = i;
+        while (k < len && (streamStr[k] === ' ' || streamStr[k] === '\t' || streamStr[k] === '\r' || streamStr[k] === '\n')) k++;
+        let op = '';
+        while (k < len && !' \t\r\n(<['.includes(streamStr[k])) { op += streamStr[k]; k++; }
+        if (['Tj', "'", '"', 'TJ'].includes(op)) {
+          text += this.unescapePdfString(raw) + (op === "'" || op === '"' ? '\n' : ' ');
+        }
+        continue;
+      }
+
+      // Hex string: <...>
+      if (ch === '<' && streamStr[i + 1] !== '<') {
+        const end = streamStr.indexOf('>', i);
+        if (end !== -1) {
+          const hex = streamStr.slice(i + 1, end);
+          let k = end + 1;
+          while (k < len && (streamStr[k] === ' ' || streamStr[k] === '\t' || streamStr[k] === '\r' || streamStr[k] === '\n')) k++;
+          let op = '';
+          while (k < len && !' \t\r\n(<['.includes(streamStr[k])) { op += streamStr[k]; k++; }
+          if (['Tj', "'", '"', 'TJ'].includes(op)) {
+            text += this.decodeHexPdfString(hex, cmap) + (op === "'" || op === '"' ? '\n' : ' ');
+          }
+          i = end + 1;
+          continue;
+        }
+      }
+
+      // TJ kerning array: [...] TJ
+      if (ch === '[') {
+        const end = streamStr.indexOf(']', i);
+        if (end !== -1) {
+          const arrayBody = streamStr.slice(i + 1, end);
+          let k = end + 1;
+          while (k < len && (streamStr[k] === ' ' || streamStr[k] === '\t' || streamStr[k] === '\r' || streamStr[k] === '\n')) k++;
+          if (streamStr.slice(k, k + 2) === 'TJ') {
+            let p = 0;
+            const aLen = arrayBody.length;
+            while (p < aLen) {
+              const aCh = arrayBody[p];
+              if (aCh === '(') {
+                let depth = 1;
+                p++;
+                let raw = '';
+                while (p < aLen && depth > 0) {
+                  if (arrayBody[p] === '\\') {
+                    raw += arrayBody[p] + (arrayBody[p + 1] || '');
+                    p += 2;
+                  } else if (arrayBody[p] === '(') {
+                    depth++;
+                    raw += '(';
+                    p++;
+                  } else if (arrayBody[p] === ')') {
+                    depth--;
+                    if (depth > 0) raw += ')';
+                    p++;
+                  } else {
+                    raw += arrayBody[p];
+                    p++;
+                  }
+                }
+                text += this.unescapePdfString(raw);
+              } else if (aCh === '<' && arrayBody[p + 1] !== '<') {
+                const hEnd = arrayBody.indexOf('>', p);
+                if (hEnd !== -1) {
+                  text += this.decodeHexPdfString(arrayBody.slice(p + 1, hEnd), cmap);
+                  p = hEnd + 1;
+                } else {
+                  p++;
+                }
+              } else if (aCh === '-' || (aCh >= '0' && aCh <= '9')) {
+                let numStr = '';
+                while (p < aLen && (arrayBody[p] === '-' || (arrayBody[p] >= '0' && arrayBody[p] <= '9') || arrayBody[p] === '.')) {
+                  numStr += arrayBody[p];
+                  p++;
+                }
+                const offset = parseFloat(numStr);
+                // In PDF TJ, negative offsets >= 150 units represent word boundary spacing
+                if (offset <= -150) {
+                  text += ' ';
+                }
+              } else {
+                p++;
+              }
+            }
+            text += ' ';
+            i = k + 2;
+            continue;
+          }
+        }
+      }
+
+      // Newline and positioning operators
+      if (streamStr.slice(i, i + 2) === 'T*' || streamStr.slice(i, i + 2) === 'TD') {
+        text += '\n';
+        i += 2;
+        continue;
+      }
+
+      i++;
+    }
+
+    return text;
+  }
+
+  /**
    * Pure Node.js zero-dependency PDF stream decompressor and text operator extractor.
    */
   private static extractTextFromPdfStreams(buffer: Buffer): string {
@@ -392,21 +577,7 @@ export class ResumeParserService {
       const rawStream = buffer.subarray(dataStart, dataEnd);
       searchPos = streamEnd + 9;
 
-      let decompressed: Buffer;
-      try {
-        decompressed = zlib.inflateSync(rawStream);
-      } catch {
-        try {
-          decompressed = zlib.unzipSync(rawStream);
-        } catch {
-          try {
-            decompressed = zlib.inflateRawSync(rawStream);
-          } catch {
-            decompressed = rawStream;
-          }
-        }
-      }
-
+      const decompressed = this.decompressPdfStream(rawStream);
       const streamStr = decompressed.toString('latin1');
       decompressedStreams.push(streamStr);
 
@@ -415,7 +586,7 @@ export class ResumeParserService {
       }
     }
 
-    // Second pass: parse BT ... ET and text operators
+    // Second pass: extract text from streams using stateful parser
     for (const streamStr of decompressedStreams) {
       const btRegex = /BT([\s\S]*?)ET/g;
       let btMatch: RegExpExecArray | null;
@@ -423,57 +594,47 @@ export class ResumeParserService {
 
       while ((btMatch = btRegex.exec(streamStr)) !== null) {
         foundBt = true;
-        const block = btMatch[1];
-
-        // TJ arrays: [(text) -120 (more text)] TJ
-        const arrayRegex = /\[([\s\S]*?)\]\s*TJ/g;
-        let arrMatch: RegExpExecArray | null;
-        while ((arrMatch = arrayRegex.exec(block)) !== null) {
-          const arrContent = arrMatch[1];
-          const innerLiteralRegex = /\(([\s\S]*?)\)/g;
-          let litMatch: RegExpExecArray | null;
-          while ((litMatch = innerLiteralRegex.exec(arrContent)) !== null) {
-            extractedText += this.unescapePdfString(litMatch[1]);
-          }
-          const innerHexRegex = /<([0-9a-fA-F\s]+)>/g;
-          let hexMatch: RegExpExecArray | null;
-          while ((hexMatch = innerHexRegex.exec(arrContent)) !== null) {
-            extractedText += this.decodeHexPdfString(hexMatch[1], cmap);
-          }
-          extractedText += ' ';
-        }
-
-        // Standalone Tj, ', "
-        const tjRegex = /\(([\s\S]*?)\)\s*(?:Tj|'|")/g;
-        let tjMatch: RegExpExecArray | null;
-        while ((tjMatch = tjRegex.exec(block)) !== null) {
-          extractedText += this.unescapePdfString(tjMatch[1]) + ' ';
-        }
-
-        const hexTjRegex = /<([0-9a-fA-F\s]+)>\s*(?:Tj|'|")/g;
-        let hMatch: RegExpExecArray | null;
-        while ((hMatch = hexTjRegex.exec(block)) !== null) {
-          extractedText += this.decodeHexPdfString(hMatch[1], cmap) + ' ';
-        }
-
-        extractedText += '\n';
+        extractedText += this.parseStreamTextContent(btMatch[1], cmap) + '\n';
       }
 
       if (!foundBt) {
-        const tjRegex = /\(([\s\S]*?)\)\s*(?:Tj|'|")/g;
-        let tjMatch: RegExpExecArray | null;
-        while ((tjMatch = tjRegex.exec(streamStr)) !== null) {
-          extractedText += this.unescapePdfString(tjMatch[1]) + ' ';
-        }
-        const hexTjRegex = /<([0-9a-fA-F\s]+)>\s*(?:Tj|'|")/g;
-        let hMatch: RegExpExecArray | null;
-        while ((hMatch = hexTjRegex.exec(streamStr)) !== null) {
-          extractedText += this.decodeHexPdfString(hMatch[1], cmap) + ' ';
-        }
+        extractedText += this.parseStreamTextContent(streamStr, cmap) + ' ';
       }
     }
 
     return extractedText.replace(/\r/g, '').replace(/[ \t]+/g, ' ').trim();
+  }
+
+  /**
+   * Recovers text, metadata, and contact info from PDF structure using heuristic pattern matching.
+   */
+  private static extractTextHeuristics(buffer: Buffer): string {
+    const latin = buffer.toString('latin1');
+    const parts: string[] = [];
+
+    // 1. Email pattern matching
+    const emails = latin.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g) || [];
+    parts.push(...emails);
+
+    // 2. Metadata dictionary fields (/Author, /Title, /Subject)
+    const metaRegex = /\/(?:Author|Title|Subject|Creator)\s*\(([\s\S]*?)\)/g;
+    let m: RegExpExecArray | null;
+    while ((m = metaRegex.exec(latin)) !== null) {
+      if (m[1] && m[1].trim().length > 1) {
+        parts.push(this.unescapePdfString(m[1].trim()));
+      }
+    }
+
+    // 3. Literal text strings across document: (Some text)
+    const parenRegex = /\(([A-Za-z0-9 ,.\-–—()/@&:+]{4,})\)/g;
+    while ((m = parenRegex.exec(latin)) !== null) {
+      const str = m[1].trim();
+      if (str && !str.startsWith('/') && !str.includes('Identity-H') && !str.includes('FontName')) {
+        parts.push(this.unescapePdfString(str));
+      }
+    }
+
+    return Array.from(new Set(parts)).join(' ').trim();
   }
 
   /**

@@ -32,8 +32,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`scroll-smooth ${inter.variable} ${outfit.variable}`}>
-      <body className="bg-[#F7F8FC] text-slate-900 antialiased min-h-screen flex flex-col selection:bg-brand-indigo/20 selection:text-brand-indigo font-sans">
+    <html lang="en" className={`scroll-smooth ${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
+      <body suppressHydrationWarning className="bg-[#F7F8FC] text-slate-900 antialiased min-h-screen flex flex-col selection:bg-brand-indigo/20 selection:text-brand-indigo font-sans">
         <AuthProvider>
           {children}
         </AuthProvider>
