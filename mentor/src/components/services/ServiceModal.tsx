@@ -53,7 +53,7 @@ export function ServiceModal({ isOpen, onClose, service, onSave }: ServiceModalP
         description,
         category,
         duration: Number(duration),
-        price: Number(price),
+        price: Number(price) || 0,
         currency: 'INR',
         active,
       });
@@ -166,10 +166,13 @@ export function ServiceModal({ isOpen, onClose, service, onSave }: ServiceModalP
               <input
                 type="number"
                 min={0}
-                step={50}
+                step={1}
                 required
                 value={price}
-                onChange={(e) => setPrice(Number(e.target.value))}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setPrice(val === '' ? ('' as any) : Math.max(0, parseInt(val, 10) || 0));
+                }}
                 className="w-full px-3.5 py-2 text-sm bg-slate-50/50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition"
               />
               <span className="text-[10px] text-slate-400 mt-1 block">Set 0 for free pro-bono sessions</span>
