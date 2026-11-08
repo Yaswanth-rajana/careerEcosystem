@@ -1,0 +1,71 @@
+{
+  "personalInfo": {
+    "name": "Nandita Roy",
+    "email": "nandita.roy@mockmgmt.com",
+    "phone": "+91 9711224455",
+    "location": "Bengaluru, Karnataka, India"
+  },
+  "education": [
+    {
+      "institution": "Jadavpur University",
+      "degree": "Bachelor of Engineering in Computer Science",
+      "fieldOfStudy": "Computer Science",
+      "startYear": 2012,
+      "endYear": 2016,
+      "isCurrent": false,
+      "gpa": "8.8/10",
+      "educationLevel": "UNDERGRADUATE"
+    }
+  ],
+  "experience": [
+    {
+      "company": "OmniPlatform Cloud",
+      "roleTitle": "Engineering Manager",
+      "employmentType": "Full-time",
+      "location": "Bengaluru, India",
+      "startDate": "August 2021",
+      "endDate": null,
+      "isCurrent": true,
+      "bulletsCount": 3
+    },
+    {
+      "company": "CloudScale Systems",
+      "roleTitle": "Technical Lead",
+      "employmentType": "Full-time",
+      "location": "Bengaluru, India",
+      "startDate": "March 2018",
+      "endDate": "July 2021",
+      "isCurrent": false,
+      "bulletsCount": 1
+    }
+  ],
+  "internships": [],
+  "projects": [],
+  "certifications": [],
+  "technicalSkills": [
+    "Node.js",
+    "TypeScript",
+    "AWS",
+    "Microservices",
+    "System Architecture"
+  ],
+  "softSkills": [
+    "Leadership",
+    "Agile Methodologies",
+    "Scrum",
+    "Team Collaboration",
+    "Hiring"
+  ],
+  "achievements": [],
+  "professionalLinks": [
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/nandita-roy-em"
+    },
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/nanditaroy-mgmt"
+    }
+  ],
+  "languages": []
+}

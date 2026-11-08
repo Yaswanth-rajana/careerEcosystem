@@ -6,7 +6,10 @@ import { useAuth } from '@/lib/AuthContext';
 import { OnboardingHeader } from './OnboardingHeader';
 import { OnboardingProgress } from './OnboardingProgress';
 import { ResumeUploadBanner } from './ResumeUploadBanner';
-import { ResumeReviewModal } from './ResumeReviewModal';
+import {
+  autofillResumeToPayload,
+  AutofillSummary,
+} from './resume-review/autofillResumeToPayload';
 
 import { PersonalInfoStep } from './steps/PersonalInfoStep';
 import { EducationStep } from './steps/EducationStep';
@@ -42,10 +45,14 @@ export const OnboardingShell: React.FC = () => {
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [isResumed, setIsResumed] = useState<boolean>(false);
 
-  // Resume Modal State
-  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
-  const [parsedResumeData, setParsedResumeData] = useState<ParsedResumeData | null>(null);
-  const [resumeFilename, setResumeFilename] = useState('');
+  // Resume Autofill State
+  const [autofillSummary, setAutofillSummary] = useState<AutofillSummary | null>(null);
+  const autofillSummaryRef = useRef<AutofillSummary | null>(null);
+
+  const updateAutofillSummary = useCallback((summary: AutofillSummary | null) => {
+    autofillSummaryRef.current = summary;
+    setAutofillSummary(summary);
+  }, []);
 
   // Main Form Payload
   const [payload, setPayload] = useState<FullOnboardingPayload>({
@@ -197,6 +204,37 @@ export const OnboardingShell: React.FC = () => {
               professionalLinks: data.profile?.professionalLinks || [],
             });
           }
+
+          const draftData = data.progress?.draftData;
+          if (draftData && typeof draftData === 'object') {
+            const isEnvelope = Boolean(
+              draftData.payload && typeof draftData.payload === 'object'
+            );
+            const draftPayload = isEnvelope ? draftData.payload : draftData;
+            const draftSavedAt = draftData._savedAt
+              ? new Date(draftData._savedAt).getTime()
+              : null;
+            const progressSavedAt = data.progress?.lastSavedAt
+              ? new Date(data.progress.lastSavedAt).getTime()
+              : null;
+            const draftIsStale = Boolean(
+              draftSavedAt !== null &&
+                progressSavedAt !== null &&
+                progressSavedAt > draftSavedAt
+            );
+
+            if (draftPayload && !draftIsStale) {
+              setPayload((previous) => ({ ...previous, ...draftPayload }));
+            }
+
+            if (
+              draftData.autofillSummary &&
+              typeof draftData.autofillSummary === 'object' &&
+              !data.isOnboarded
+            ) {
+              updateAutofillSummary(draftData.autofillSummary);
+            }
+          }
         }
       } catch (err) {
         console.error('Failed to load onboarding state:', err);
@@ -209,24 +247,33 @@ export const OnboardingShell: React.FC = () => {
     return () => {
       isMounted = false;
     };
-  }, [router, user]);
+  }, [router, user, updateAutofillSummary]);
 
   // Debounced progressive auto-save engine
   const triggerAutoSave = useCallback(
-    (currentPayload: FullOnboardingPayload, step: number) => {
+    (
+      currentPayload: FullOnboardingPayload,
+      step: number,
+      summaryState: AutofillSummary | null = autofillSummaryRef.current
+    ) => {
       setSaveStatus('saving');
       if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
 
       saveTimeoutRef.current = setTimeout(async () => {
         try {
-          await fetch('/api/onboarding', {
+          const res = await fetch('/api/onboarding', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               currentStep: step,
-              draftData: currentPayload,
+              draftData: {
+                version: 2,
+                payload: currentPayload,
+                autofillSummary: summaryState,
+              },
             }),
           });
+          if (!res.ok) throw new Error('Autosave failed');
           setSaveStatus('saved');
         } catch {
           setSaveStatus('error');
@@ -244,35 +291,12 @@ export const OnboardingShell: React.FC = () => {
     });
   };
 
-  // Resume Handler
+  // Resume Autofill Handler
   const handleResumeExtracted = (parsedData: ParsedResumeData, filename: string) => {
-    setParsedResumeData(parsedData);
-    setResumeFilename(filename);
-    setIsResumeModalOpen(true);
-  };
-
-  const handleApplyResumeSuggestions = (approved: ParsedResumeData) => {
-    setPayload((prev) => {
-      const updated: FullOnboardingPayload = {
-        ...prev,
-        aboutYou: {
-          ...prev.aboutYou,
-          name: approved.personalInfo.name || prev.aboutYou.name,
-          phone: approved.personalInfo.phone || prev.aboutYou.phone,
-          location: approved.personalInfo.location || prev.aboutYou.location,
-          headline: approved.personalInfo.headline || prev.aboutYou.headline,
-        },
-        education: approved.education.length > 0 ? (approved.education as any) : prev.education,
-        hasNoExperience: approved.experience.length > 0 ? false : prev.hasNoExperience,
-        experience: approved.experience.length > 0 ? (approved.experience as any) : prev.experience,
-        skills: approved.skills.length > 0 ? (approved.skills as any) : prev.skills,
-        projects: approved.projects.length > 0 ? (approved.projects as any) : prev.projects,
-        certifications: approved.certifications && approved.certifications.length > 0 ? (approved.certifications as any) : prev.certifications,
-        professionalLinks: approved.professionalLinks.length > 0 ? (approved.professionalLinks as any) : prev.professionalLinks,
-      };
-      triggerAutoSave(updated, currentStep);
-      return updated;
-    });
+    const { updatedPayload, summary } = autofillResumeToPayload(payload, parsedData, filename);
+    setPayload(updatedPayload);
+    updateAutofillSummary(summary);
+    triggerAutoSave(updatedPayload, currentStep, summary);
   };
 
   // Step Validation & Save
@@ -495,6 +519,8 @@ export const OnboardingShell: React.FC = () => {
               <ResumeUploadBanner
                 onResumeExtracted={handleResumeExtracted}
                 onContinueManually={() => {}}
+                autofillSummary={autofillSummary}
+                onClearAutofillSummary={() => updateAutofillSummary(null)}
               />
             )}
 
@@ -614,16 +640,6 @@ export const OnboardingShell: React.FC = () => {
         </div>
       </main>
 
-      {/* Extracted Resume Review Modal */}
-      {parsedResumeData && (
-        <ResumeReviewModal
-          parsedData={parsedResumeData}
-          filename={resumeFilename}
-          isOpen={isResumeModalOpen}
-          onClose={() => setIsResumeModalOpen(false)}
-          onApplySuggestions={handleApplyResumeSuggestions}
-        />
-      )}
 
       {/* Footer Notice */}
       <footer className="w-full py-3 text-center text-xs text-slate-500 border-t border-slate-200/80 shrink-0">

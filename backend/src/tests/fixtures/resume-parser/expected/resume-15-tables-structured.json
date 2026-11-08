@@ -1,0 +1,68 @@
+{
+  "personalInfo": {
+    "name": "Sandeep Reddy",
+    "email": "sandeep.reddy@mockdb.org",
+    "phone": "+91 9848011223",
+    "location": "Visakhapatnam, Andhra Pradesh, India"
+  },
+  "education": [
+    {
+      "institution": "Andhra University",
+      "degree": "B.Tech in Computer Science",
+      "fieldOfStudy": "Computer Science",
+      "startYear": 2019,
+      "endYear": 2023,
+      "isCurrent": false,
+      "gpa": "8.5 CGPA"
+    }
+  ],
+  "experience": [
+    {
+      "company": "CoreData Systems",
+      "roleTitle": "Database Administrator",
+      "employmentType": "Full-time",
+      "location": "Visakhapatnam, India",
+      "startDate": "July 2023",
+      "endDate": null,
+      "isCurrent": true,
+      "bulletsCount": 1
+    }
+  ],
+  "internships": [],
+  "projects": [],
+  "certifications": [
+    {
+      "name": "AWS Certified Database – Specialty",
+      "issuingOrganization": "Amazon Web Services",
+      "issueDate": "2023"
+    },
+    {
+      "name": "Oracle Database SQL Certified Associate",
+      "issuingOrganization": "Oracle",
+      "issueDate": "2022"
+    }
+  ],
+  "technicalSkills": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle SQL",
+    "Redis",
+    "AWS",
+    "Docker",
+    "Linux",
+    "Bash Scripting"
+  ],
+  "softSkills": [],
+  "achievements": [],
+  "professionalLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/sandeep-reddy-db"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/sandeep-reddy-dba"
+    }
+  ],
+  "languages": []
+}

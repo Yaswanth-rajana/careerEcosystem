@@ -1,0 +1,105 @@
+{
+  "personalInfo": {
+    "name": "Kavya Ramesh",
+    "email": "kavya.ramesh@fictional-apex.org",
+    "phone": null,
+    "location": "Bengaluru, Karnataka, India",
+    "headline": null,
+    "bio": null
+  },
+  "education": [
+    {
+      "institution": "Apex Institute of Technology",
+      "degree": "B.Tech in Computer Science",
+      "fieldOfStudy": "IoT & Cyber Security",
+      "startYear": 2023,
+      "endYear": 2027,
+      "isCurrent": true,
+      "gpa": "9.1/10",
+      "educationLevel": "UNDERGRADUATE"
+    },
+    {
+      "institution": "Vidya Mandir Junior College",
+      "degree": "Intermediate (MPC)",
+      "fieldOfStudy": "MPC",
+      "startYear": 2021,
+      "endYear": 2023,
+      "isCurrent": false,
+      "gpa": "96.4%",
+      "educationLevel": "INTERMEDIATE"
+    }
+  ],
+  "experience": [],
+  "internships": [],
+  "projects": [
+    {
+      "title": "Campus Smart Waste Segregator",
+      "technologies": [
+        "Python",
+        "TensorFlow",
+        "OpenCV",
+        "Raspberry Pi"
+      ],
+      "bulletsCount": 3
+    },
+    {
+      "title": "Decentralized Attendance Register",
+      "technologies": [
+        "Solidity",
+        "Node.js",
+        "React.js",
+        "Ethereum"
+      ],
+      "bulletsCount": 2
+    }
+  ],
+  "certifications": [],
+  "technicalSkills": [
+    "Python",
+    "C++",
+    "Java",
+    "Solidity",
+    "JavaScript",
+    "React.js",
+    "Node.js",
+    "Express.js",
+    "HTML5",
+    "CSS3",
+    "Git",
+    "GitHub",
+    "Linux",
+    "Docker"
+  ],
+  "softSkills": [],
+  "achievements": [
+    {
+      "title": "First Place — Campus Innovation Hackathon 2024 at Apex Institute of Technology.",
+      "organization": "Apex Institute of Technology",
+      "date": "2024"
+    }
+  ],
+  "professionalLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/kavya-ramesh"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/kavya-ramesh-mock"
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "proficiency": "FLUENT"
+    },
+    {
+      "language": "Kannada",
+      "proficiency": "NATIVE"
+    },
+    {
+      "language": "Hindi",
+      "proficiency": "CONVERSATIONAL"
+    }
+  ]
+}

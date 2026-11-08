@@ -1,0 +1,73 @@
+{
+  "personalInfo": {
+    "name": "Vikram Joshi",
+    "email": "vikram.joshi@mockjava.com",
+    "phone": "+91 9820011223",
+    "location": "Bengaluru, Karnataka, India"
+  },
+  "education": [
+    {
+      "institution": "Bangalore University",
+      "degree": "Bachelor of Engineering in Computer Science",
+      "fieldOfStudy": "Computer Science",
+      "startYear": 2018,
+      "endYear": 2022,
+      "isCurrent": false,
+      "gpa": "82.5%",
+      "educationLevel": "UNDERGRADUATE"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Infosys Technologies",
+      "roleTitle": "Java Backend Developer",
+      "employmentType": "Full-time",
+      "location": "Bengaluru, India",
+      "startDate": "July 2022",
+      "endDate": null,
+      "isCurrent": true,
+      "bulletsCount": 2
+    }
+  ],
+  "internships": [],
+  "projects": [],
+  "certifications": [
+    {
+      "name": "Java with Data Structures & Algorithms",
+      "issuingOrganization": "Apna College"
+    },
+    {
+      "name": "Java Full Stack Development",
+      "issuingOrganization": "Wipro TalentNext"
+    },
+    {
+      "name": "Oracle Certified Professional: Java SE 11 Developer",
+      "issuingOrganization": "Oracle",
+      "issueDate": "2023"
+    }
+  ],
+  "technicalSkills": [
+    "Java",
+    "Spring Boot",
+    "Microservices",
+    "Hibernate",
+    "Oracle SQL",
+    "MySQL",
+    "Maven",
+    "Docker",
+    "REST API"
+  ],
+  "softSkills": [],
+  "achievements": [],
+  "professionalLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/vikramj-java"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/vikram-joshi-java"
+    }
+  ],
+  "languages": []
+}

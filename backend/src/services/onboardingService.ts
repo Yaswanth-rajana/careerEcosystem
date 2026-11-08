@@ -146,6 +146,9 @@ export class OnboardingService {
         : existing?.completedSteps || [];
 
       const now = new Date();
+      const draftDataToStore = data.draftData
+        ? JSON.stringify({ ...data.draftData, _savedAt: now.toISOString() })
+        : null;
       const updated = await db.onboardingProgress.upsert({
         where: { userId },
         create: {
@@ -156,7 +159,7 @@ export class OnboardingService {
           lastSavedAt: now,
           onboardingStartedAt: now,
           onboardingLastActivityAt: now,
-          draftData: data.draftData ? JSON.stringify(data.draftData) : null,
+          draftData: draftDataToStore,
         },
         update: {
           status: existing?.status === 'COMPLETED' ? 'COMPLETED' : 'IN_PROGRESS',
@@ -164,7 +167,7 @@ export class OnboardingService {
           completedSteps: updatedCompletedSteps,
           lastSavedAt: now,
           onboardingLastActivityAt: now,
-          draftData: data.draftData ? JSON.stringify(data.draftData) : existing?.draftData,
+          draftData: draftDataToStore ?? existing?.draftData,
         },
       });
 
@@ -195,17 +198,26 @@ export class OnboardingService {
         filename,
         fileType: mimeType,
         fileSize: fileBuffer.length,
-        status: 'READY',
+        status: 'PROCESSING',
         extractedData: JSON.stringify(parsedData),
       },
     });
 
+    const storage = StorageFactory.getProvider();
+    const storageKey = `resumes/${resume.id}/${filename}`;
+
     try {
-      const storage = StorageFactory.getProvider();
-      const storageKey = `resumes/${resume.id}/${filename}`;
       await storage.upload(storageKey, fileBuffer, mimeType);
-    } catch (storageErr) {
-      console.warn('[OnboardingService] Warning: failed to store raw resume buffer:', storageErr);
+      await db.resume.update({
+        where: { id: resume.id },
+        data: { status: 'READY' },
+      });
+    } catch (err) {
+      await storage.delete(storageKey).catch(() => {});
+      await db.resume.delete({ where: { id: resume.id } }).catch((cleanupErr) => {
+        console.error('[OnboardingService] Failed to clean up resume record after upload failure:', cleanupErr);
+      });
+      throw err;
     }
 
     return {

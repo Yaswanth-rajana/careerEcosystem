@@ -1,0 +1,71 @@
+{
+  "personalInfo": {
+    "name": "Shalini Verma",
+    "email": "shalini.verma@mockcloud.io",
+    "phone": "+91 9789012345",
+    "location": "Hyderabad, Telangana, India"
+  },
+  "education": [
+    {
+      "institution": "Osmania University",
+      "degree": "Bachelor of Engineering in Electronics and Communication",
+      "fieldOfStudy": "Electronics and Communication",
+      "startYear": 2017,
+      "endYear": 2021,
+      "isCurrent": false,
+      "gpa": "8.92/10",
+      "educationLevel": "UNDERGRADUATE"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Apex Cloud Technologies",
+      "roleTitle": "Senior Cloud Infrastructure Engineer",
+      "employmentType": "Full-time",
+      "location": "Hyderabad, India",
+      "startDate": "May 2021",
+      "endDate": null,
+      "isCurrent": true,
+      "bulletsCount": 2
+    }
+  ],
+  "internships": [],
+  "projects": [
+    {
+      "title": "Kubernetes Multi-Cluster Operator — Hybrid Cloud Ingress",
+      "technologies": [
+        "Go",
+        "Kubernetes",
+        "Docker"
+      ],
+      "bulletsCount": 1
+    }
+  ],
+  "certifications": [],
+  "technicalSkills": [
+    "Terraform",
+    "AWS",
+    "Kubernetes",
+    "Docker",
+    "Go",
+    "Python",
+    "Cassandra",
+    "PostgreSQL",
+    "Linux",
+    "CI/CD",
+    "Git"
+  ],
+  "softSkills": [],
+  "achievements": [],
+  "professionalLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/shaliniv-cloud"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/shalini-verma-cloud"
+    }
+  ],
+  "languages": []
+}

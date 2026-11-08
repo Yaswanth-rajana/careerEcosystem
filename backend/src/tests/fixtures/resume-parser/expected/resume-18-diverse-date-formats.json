@@ -1,0 +1,67 @@
+{
+  "personalInfo": {
+    "name": "Divya Menon",
+    "email": "divya.menon@mockdates.com",
+    "phone": "+91 9846012345",
+    "location": "Thiruvananthapuram, Kerala, India"
+  },
+  "education": [
+    {
+      "institution": "College of Engineering Trivandrum",
+      "degree": "B.Tech in IT",
+      "fieldOfStudy": "IT",
+      "startYear": 2015,
+      "endYear": 2019,
+      "isCurrent": false,
+      "gpa": "8.6/10",
+      "educationLevel": "UNDERGRADUATE"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Kerala InfoTech",
+      "roleTitle": "Senior Developer",
+      "employmentType": "Full-time",
+      "location": "Thiruvananthapuram, India",
+      "startDate": "06/2021",
+      "endDate": null,
+      "isCurrent": true,
+      "bulletsCount": 1
+    },
+    {
+      "company": "CyberPark Systems",
+      "roleTitle": "Junior Programmer",
+      "employmentType": "Full-time",
+      "location": "Kozhikode, India",
+      "startDate": "2019",
+      "endDate": "2021",
+      "isCurrent": false,
+      "bulletsCount": 1
+    }
+  ],
+  "internships": [],
+  "projects": [],
+  "certifications": [],
+  "technicalSkills": [
+    "Node.js",
+    "PostgreSQL",
+    "AWS",
+    "Python",
+    "Git",
+    "Docker",
+    "REST API"
+  ],
+  "softSkills": [],
+  "achievements": [],
+  "professionalLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/divyamenon-code"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/divya-menon-dev"
+    }
+  ],
+  "languages": []
+}

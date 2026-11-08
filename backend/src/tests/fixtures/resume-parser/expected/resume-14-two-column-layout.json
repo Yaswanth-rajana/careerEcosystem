@@ -1,0 +1,67 @@
+{
+  "personalInfo": {
+    "name": "Ritu Sharma",
+    "email": "ritu.sharma@mockprofile.in",
+    "phone": "+91 9654123456",
+    "location": "Jaipur, Rajasthan, India"
+  },
+  "education": [
+    {
+      "institution": "MNIT Jaipur",
+      "degree": "B.Tech in Computer Science",
+      "fieldOfStudy": "Computer Science",
+      "startYear": 2018,
+      "endYear": 2022,
+      "isCurrent": false,
+      "gpa": "8.6/10",
+      "educationLevel": "UNDERGRADUATE"
+    }
+  ],
+  "experience": [
+    {
+      "company": "WebCraft Interactive",
+      "roleTitle": "Frontend Engineer",
+      "employmentType": "Full-time",
+      "location": "Jaipur, India",
+      "startDate": "June 2022",
+      "endDate": null,
+      "isCurrent": true,
+      "bulletsCount": 2
+    }
+  ],
+  "internships": [],
+  "projects": [
+    {
+      "title": "Interactive Portfolio Showcase",
+      "technologies": [
+        "React.js",
+        "Tailwind CSS"
+      ],
+      "bulletsCount": 1
+    }
+  ],
+  "certifications": [],
+  "technicalSkills": [
+    "React.js",
+    "TypeScript",
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS",
+    "Webpack",
+    "Git",
+    "Jest"
+  ],
+  "softSkills": [],
+  "achievements": [],
+  "professionalLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/ritusharma-ui"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/ritu-sharma-ui"
+    }
+  ],
+  "languages": []
+}

@@ -1,0 +1,82 @@
+{
+  "personalInfo": {
+    "name": "Ananya Sen",
+    "email": "ananya.sen@mockresearch.org",
+    "phone": "+91 9830112233",
+    "location": "Kolkata, West Bengal, India"
+  },
+  "education": [
+    {
+      "institution": "Indian Statistical Institute Kolkata",
+      "degree": "M.Tech in Computer Science",
+      "fieldOfStudy": "Computer Science",
+      "startYear": 2019,
+      "endYear": 2021,
+      "isCurrent": false,
+      "gpa": "9.4/10",
+      "educationLevel": "POSTGRADUATE"
+    },
+    {
+      "institution": "Jadavpur University",
+      "degree": "B.E. in Information Technology",
+      "fieldOfStudy": "Information Technology",
+      "startYear": 2015,
+      "endYear": 2019,
+      "isCurrent": false,
+      "gpa": "9.1/10",
+      "educationLevel": "UNDERGRADUATE"
+    }
+  ],
+  "experience": [
+    {
+      "company": "DeepMind Labs Affiliate",
+      "roleTitle": "Machine Learning Research Engineer",
+      "employmentType": "Full-time",
+      "location": "Kolkata, India",
+      "startDate": "August 2021",
+      "endDate": null,
+      "isCurrent": true,
+      "bulletsCount": 2
+    }
+  ],
+  "internships": [],
+  "projects": [
+    {
+      "title": "Quantized LLM Inference Runtime",
+      "technologies": [
+        "Python",
+        "PyTorch",
+        "CUDA",
+        "C++"
+      ],
+      "bulletsCount": 1
+    }
+  ],
+  "certifications": [],
+  "technicalSkills": [
+    "Python",
+    "PyTorch",
+    "TensorFlow",
+    "DeepSpeed",
+    "CUDA",
+    "Transformers",
+    "HuggingFace",
+    "Linux",
+    "C++",
+    "Docker",
+    "Git"
+  ],
+  "softSkills": [],
+  "achievements": [],
+  "professionalLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/ananya-sen-ai"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/ananya-sen-research"
+    }
+  ],
+  "languages": []
+}

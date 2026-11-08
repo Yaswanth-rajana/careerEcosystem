@@ -1,0 +1,93 @@
+{
+  "personalInfo": {
+    "name": "Sneha Deshmukh",
+    "email": "sneha.deshmukh@mocktalent.io",
+    "phone": "+91 9123456780",
+    "location": "Pune, Maharashtra, India"
+  },
+  "education": [
+    {
+      "institution": "Pune Institute of Computer Technology",
+      "degree": "B.E. in Computer Engineering",
+      "fieldOfStudy": "Computer Engineering",
+      "startYear": 2020,
+      "endYear": 2024,
+      "isCurrent": false,
+      "gpa": "9.35/10",
+      "educationLevel": "UNDERGRADUATE"
+    }
+  ],
+  "experience": [],
+  "internships": [
+    {
+      "company": "Zylker Solutions",
+      "roleTitle": "Software Engineering Intern",
+      "employmentType": "Internship",
+      "location": "Pune, India",
+      "startDate": "Jan 2024",
+      "endDate": "June 2024",
+      "isCurrent": false,
+      "bulletsCount": 3
+    },
+    {
+      "company": "Quanta Labs",
+      "roleTitle": "Frontend Developer Intern",
+      "employmentType": "Internship",
+      "location": "Remote",
+      "startDate": "May 2023",
+      "endDate": "July 2023",
+      "isCurrent": false,
+      "bulletsCount": 2
+    }
+  ],
+  "projects": [
+    {
+      "title": "Distributed Key-Value Store",
+      "technologies": [
+        "Go",
+        "Raft Consensus",
+        "gRPC"
+      ],
+      "bulletsCount": 2
+    }
+  ],
+  "certifications": [],
+  "technicalSkills": [
+    "Node.js",
+    "Express.js",
+    "React.js",
+    "TypeScript",
+    "Go",
+    "PostgreSQL",
+    "Redis",
+    "Docker",
+    "Git",
+    "REST API"
+  ],
+  "softSkills": [],
+  "achievements": [],
+  "professionalLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/snehad-dev"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/sneha-deshmukh-eng"
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "proficiency": "FLUENT"
+    },
+    {
+      "language": "Marathi",
+      "proficiency": "NATIVE"
+    },
+    {
+      "language": "Hindi",
+      "proficiency": "PROFESSIONAL"
+    }
+  ]
+}

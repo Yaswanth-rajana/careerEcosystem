@@ -1,7 +1,14 @@
 import zlib from 'zlib';
+import { DocumentExtractionService, DocumentExtractionMetadata } from './resume/documentExtractionService';
+import { TextNormalizer } from './resume/textNormalizer';
+import { StructuredResumeEngine } from './resume/structuredResumeEngine';
+import { AiResumeExtractor } from './resume/aiResumeExtractor';
+import { StructuredResumeData } from './resume/types';
 
 export interface ParsedResumeData {
   rawText: string;
+  extractionMetadata?: DocumentExtractionMetadata;
+  structuredData?: StructuredResumeData;
   personalInfo: {
     name?: string;
     email?: string;
@@ -48,6 +55,7 @@ export interface ParsedResumeData {
     technologies: string[];
     projectUrl?: string;
     githubUrl?: string;
+    demoUrl?: string;
     bullets?: string[];
     source: 'RESUME';
   }>;
@@ -55,6 +63,9 @@ export interface ParsedResumeData {
     name: string;
     issuingOrganization: string;
     issueDate?: string;
+    expiryDate?: string;
+    credentialId?: string;
+    credentialUrl?: string;
     source: 'RESUME';
   }>;
   professionalLinks: Array<{
@@ -81,82 +92,117 @@ export class ResumeParserService {
    */
   static async parseResume(fileBuffer: Buffer, filename: string, mimeType: string): Promise<ParsedResumeData> {
     console.log(`[Resume Upload] parsing started: filename="${filename}", mimeType="${mimeType}"`);
-    const rawText = await this.extractTextFromBuffer(fileBuffer, filename, mimeType);
-    const cleanedText = this.normalizeExtractedText(rawText);
-
-    if (!cleanedText || cleanedText.replace(/\s+/g, '').length < 10) {
-      console.warn('[Resume Upload] Rejected: document contains no readable text (<10 characters)');
-      throw new Error('No readable text was found in this resume.');
-    }
-    
-    console.log(`[Resume Upload] parsing completed: extracted ${cleanedText.length} characters`);
-    const sections = this.splitIntoSections(cleanedText);
-
-    return {
-      rawText: cleanedText,
-      personalInfo: this.extractPersonalInfo(cleanedText, filename),
-      education: this.extractEducation(sections, cleanedText),
-      experience: this.extractExperience(sections, cleanedText),
-      skills: this.extractSkills(sections, cleanedText),
-      projects: this.extractProjects(sections, cleanedText),
-      certifications: this.extractCertifications(sections, cleanedText),
-      professionalLinks: this.extractLinks(cleanedText),
-    };
-  }
-
-  /**
-   * Safe extraction of text from PDF / DOCX / TXT buffers using real parsers.
-   */
-  private static async extractTextFromBuffer(buffer: Buffer, filename: string, mimeType: string): Promise<string> {
     const ext = (filename.split('.').pop() || '').toLowerCase();
-    const isPdf = ext === 'pdf' || mimeType === 'application/pdf' || buffer.subarray(0, 1024).includes(Buffer.from('%PDF-'));
-    const isDocx = ext === 'docx' || mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-    const isTxt = ext === 'txt' || mimeType === 'text/plain';
-
     if (ext === 'doc' || mimeType === 'application/msword') {
       throw new Error('Legacy .doc format is not supported. Please upload a PDF, DOCX, or TXT file.');
     }
 
-    if (isPdf) {
-      try {
-        return await this.extractFromPdf(buffer);
-      } catch (err: any) {
-        const utf8Str = buffer.toString('utf-8');
-        if (utf8Str.length > 20 && /[a-zA-Z0-9]/.test(utf8Str)) {
-          return utf8Str;
-        }
-        throw err;
+    const extractionResult = await DocumentExtractionService.extractDocument(fileBuffer, filename, mimeType);
+    const cleanedText = extractionResult.text;
+
+    if (!cleanedText || cleanedText.replace(/\s+/g, '').length < 10) {
+      console.warn('[Resume Upload] Rejected: document contains no readable text (<10 characters)');
+      const pdfFailWarning = extractionResult.metadata.warnings.find(
+        (w) => w.includes('Unable to read this PDF') || w.includes('Password-protected')
+      );
+      if (pdfFailWarning) {
+        throw new Error(pdfFailWarning);
       }
+      throw new Error('No readable text was found in this resume.');
     }
+    
+    console.log(`[Resume Upload] parsing completed: extracted ${cleanedText.length} characters (method: ${extractionResult.metadata.extractionMethod}, quality: ${extractionResult.metadata.qualityStatus})`);
 
-    if (isDocx) {
-      return await this.extractFromDocx(buffer);
-    }
+    // Run Phase 3 & 4 Structured Resume Intelligence Engine (with AI fallback)
+    const structured = await AiResumeExtractor.extractWithAi(
+      cleanedText,
+      filename,
+      extractionResult.metadata
+    );
 
-    if (isTxt) {
-      return this.extractFromTxt(buffer);
-    }
-
-    // Fallback: If buffer contains %PDF- signature regardless of filename
-    if (buffer.subarray(0, 1024).includes(Buffer.from('%PDF-'))) {
-      try {
-        return await this.extractFromPdf(buffer);
-      } catch (err: any) {
-        const utf8Str = buffer.toString('utf-8');
-        if (utf8Str.length > 20 && /[a-zA-Z0-9]/.test(utf8Str)) {
-          return utf8Str;
+    return {
+      rawText: cleanedText,
+      extractionMetadata: extractionResult.metadata,
+      structuredData: structured,
+      personalInfo: {
+        name: structured.personalInfo.name?.value,
+        email: structured.personalInfo.email?.value,
+        phone: structured.personalInfo.phone?.value,
+        location: structured.personalInfo.location?.value,
+        headline: structured.personalInfo.headline?.value,
+        bio: structured.personalInfo.bio?.value,
+      },
+      education: structured.education.map((e) => ({
+        institution: e.institution,
+        degree: e.degree,
+        fieldOfStudy: e.fieldOfStudy,
+        location: e.location,
+        startYear: e.startYear,
+        endYear: e.endYear,
+        isCurrent: e.isCurrent,
+        gpa: e.gpa,
+        source: 'RESUME',
+      })),
+      experience: (() => {
+        const combined = [...structured.experience];
+        for (const internship of structured.internships) {
+          if (!combined.some((e) => e.company.toLowerCase() === internship.company.toLowerCase() && e.roleTitle.toLowerCase() === internship.roleTitle.toLowerCase())) {
+            combined.push(internship);
+          }
         }
-        throw err;
-      }
-    }
+        return combined.map((e) => ({
+          company: e.company,
+          roleTitle: e.roleTitle,
+          jobTitle: e.jobTitle,
+          employmentType: e.employmentType,
+          location: e.location,
+          startDate: e.startDate,
+          endDate: e.endDate,
+          isCurrent: e.isCurrent,
+          description: e.description,
+          bullets: e.bullets,
+          section: e.section,
+          source: 'RESUME' as const,
+        }));
+      })(),
+      skills: structured.skills,
+      projects: structured.projects.map((p) => ({
+        title: p.title,
+        description: p.description,
+        role: p.role,
+        technologies: p.technologies,
+        projectUrl: p.projectUrl,
+        githubUrl: p.githubUrl,
+        demoUrl: p.demoUrl,
+        bullets: p.bullets,
+        source: 'RESUME',
+      })),
+      certifications: structured.certifications.map((c) => ({
+        name: c.name,
+        issuingOrganization: c.issuingOrganization,
+        issueDate: c.issueDate,
+        expiryDate: c.expiryDate,
+        credentialId: c.credentialId,
+        credentialUrl: c.credentialUrl,
+        source: 'RESUME',
+      })),
+      professionalLinks: structured.professionalLinks.map((l) => ({
+        platform: l.platform,
+        url: l.url,
+      })),
+    };
+  }
 
-    // Fallback: UTF-8 readable text check (for test runners or plain buffers)
-    const utf8Str = buffer.toString('utf-8');
-    if (utf8Str.length > 20 && /[a-zA-Z0-9]/.test(utf8Str)) {
-      return utf8Str;
+  /**
+   * Safe extraction of text from PDF / DOCX / TXT buffers using DocumentExtractionService.
+   */
+  private static async extractTextFromBuffer(buffer: Buffer, filename: string, mimeType: string): Promise<string> {
+    const ext = (filename.split('.').pop() || '').toLowerCase();
+    if (ext === 'doc' || mimeType === 'application/msword') {
+      throw new Error('Legacy .doc format is not supported. Please upload a PDF, DOCX, or TXT file.');
     }
-
-    throw new Error('Unsupported resume format. Please upload PDF, DOCX, or TXT.');
+    const result = await DocumentExtractionService.extractDocument(buffer, filename, mimeType);
+    return result.text;
   }
 
   /**
@@ -681,17 +727,10 @@ export class ResumeParserService {
   }
 
   /**
-   * Normalizes line breaks and removes page footer noise.
+   * Normalizes line breaks, encoding, bullets, and removes page footer noise via TextNormalizer.
    */
   private static normalizeExtractedText(text: string): string {
-    return text
-      .replace(/\r\n/g, '\n')
-      .replace(/\r/g, '\n')
-      .replace(/--\s*\d+\s+of\s+\d+\s*--/gi, '') // Remove pdf-parse page markers
-      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ') // Strip control characters
-      .replace(/[ \t]+/g, ' ')
-      .replace(/\n{3,}/g, '\n\n')
-      .trim();
+    return TextNormalizer.normalize(text);
   }
 
   private static splitIntoSections(text: string): Array<{

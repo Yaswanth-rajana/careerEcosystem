@@ -1,0 +1,82 @@
+{
+  "personalInfo": {
+    "name": "Meera Iyer",
+    "email": "meera.iyer@mockbackend.org",
+    "phone": "+91 9445566778",
+    "location": "Chennai, Tamil Nadu, India"
+  },
+  "education": [
+    {
+      "institution": "IIT Madras",
+      "degree": "B.Tech in Computer Science",
+      "fieldOfStudy": "Computer Science",
+      "startYear": 2014,
+      "endYear": 2018,
+      "isCurrent": false,
+      "gpa": "9.0/10",
+      "educationLevel": "UNDERGRADUATE"
+    }
+  ],
+  "experience": [
+    {
+      "company": "CloudStream Networks",
+      "roleTitle": "Backend Systems Engineer",
+      "employmentType": "Full-time",
+      "location": "Chennai, India",
+      "startDate": "March 2022",
+      "endDate": null,
+      "isCurrent": true,
+      "bulletsCount": 2
+    },
+    {
+      "company": "HyperScale Solutions",
+      "roleTitle": "Backend Developer",
+      "employmentType": "Full-time",
+      "location": "Bengaluru, India",
+      "startDate": "June 2020",
+      "endDate": "February 2022",
+      "isCurrent": false,
+      "bulletsCount": 2
+    },
+    {
+      "company": "MicroData Analytics",
+      "roleTitle": "Junior Software Engineer",
+      "employmentType": "Full-time",
+      "location": "Chennai, India",
+      "startDate": "July 2018",
+      "endDate": "May 2020",
+      "isCurrent": false,
+      "bulletsCount": 2
+    }
+  ],
+  "internships": [],
+  "projects": [],
+  "certifications": [],
+  "technicalSkills": [
+    "Go",
+    "Python",
+    "Java",
+    "Spring Boot",
+    "PostgreSQL",
+    "Cassandra",
+    "Redis",
+    "RabbitMQ",
+    "gRPC",
+    "Docker",
+    "Kubernetes",
+    "AWS"
+  ],
+  "softSkills": [],
+  "achievements": [],
+  "professionalLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/meera-iyer-backend"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/meera-iyer-tech"
+    }
+  ],
+  "languages": []
+}

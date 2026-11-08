@@ -76,7 +76,7 @@ async function runTests() {
     const step1Payload = {
       aboutYou: {
         name: 'Alex J. Johnson',
-        phone: '+1 555-0199',
+        phone: '+91 98765 43210',
         location: 'San Francisco, CA',
         candidateType: 'STUDENT' as const,
         headline: 'Aspiring Full Stack Engineer',
@@ -94,7 +94,7 @@ async function runTests() {
     const userInDbAfter1 = await db.user.findUnique({ where: { id: user1.id } });
     const profileInDbAfter1 = await db.profile.findUnique({ where: { userId: user1.id } });
     assert(userInDbAfter1?.name === 'Alex J. Johnson', 'User.name updated in database');
-    assert(profileInDbAfter1?.phone === '+1 555-0199', 'Profile.phone persisted in MongoDB');
+    assert(profileInDbAfter1?.phone === '+919876543210', 'Profile.phone persisted in MongoDB');
     assert(profileInDbAfter1?.location === 'San Francisco, CA', 'Profile.location persisted in MongoDB');
     assert(profileInDbAfter1?.headline === 'Aspiring Full Stack Engineer', 'Profile.headline persisted');
 
@@ -171,7 +171,7 @@ async function runTests() {
         restored.progress.completedSteps.includes(3),
       'completedSteps contains [1, 2, 3]'
     );
-    assert(restored.profile.phone === '+1 555-0199', 'Phone restored from MongoDB');
+    assert(restored.profile.phone === '+919876543210', 'Phone restored from MongoDB');
     assert(restored.profile.education.length === 1, 'Education restored from MongoDB');
     assert(restored.profile.experience.length === 1, 'Experience restored from MongoDB');
 

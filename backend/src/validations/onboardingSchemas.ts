@@ -1,5 +1,30 @@
 import { z } from 'zod';
 
+export function normalizeIndianMobile(value: unknown): string | null {
+  const digits = String(value ?? '').replace(/\D/g, '');
+  const national =
+    digits.length === 12 && digits.startsWith('91')
+      ? digits.slice(2)
+      : digits.length === 11 && digits.startsWith('0')
+        ? digits.slice(1)
+        : digits.length === 10
+          ? digits
+          : '';
+  return /^[6-9]\d{9}$/.test(national) ? national : null;
+}
+
+export const IndianMobileSchema = z.string().transform((value, ctx) => {
+  const normalized = normalizeIndianMobile(value);
+  if (!normalized) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Please enter a valid 10-digit Indian mobile number',
+    });
+    return value;
+  }
+  return `+91${normalized}`;
+});
+
 export const CandidateTypeEnum = z.enum([
   'STUDENT',
   'GRADUATE',
@@ -25,7 +50,7 @@ export const SkillSourceEnum = z.enum([
 
 export const Step1AboutYouSchema = z.object({
   name: z.string().min(2, 'Full name is required (at least 2 characters)'),
-  phone: z.string().min(5, 'Phone number is required'),
+  phone: IndianMobileSchema,
   location: z.string().min(2, 'Current location is required'),
   candidateType: CandidateTypeEnum,
   headline: z.string().optional(),

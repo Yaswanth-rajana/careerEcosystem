@@ -1,0 +1,68 @@
+{
+  "personalInfo": {
+    "name": "Manish Agarwal",
+    "email": "manish.agarwal@mockcode.io",
+    "phone": "+91 9922334455",
+    "location": "Noida, Uttar Pradesh, India"
+  },
+  "education": [
+    {
+      "institution": "Amity University",
+      "degree": "B.Tech in Computer Science",
+      "fieldOfStudy": "Computer Science",
+      "startYear": 2018,
+      "endYear": 2022,
+      "isCurrent": false,
+      "gpa": "8.3/10",
+      "educationLevel": "UNDERGRADUATE"
+    }
+  ],
+  "experience": [
+    {
+      "company": "CloudNine Software",
+      "roleTitle": "Software Engineer",
+      "employmentType": "Full-time",
+      "location": "Noida, India",
+      "startDate": "May 2022",
+      "endDate": null,
+      "isCurrent": true,
+      "bulletsCount": 1
+    }
+  ],
+  "internships": [],
+  "projects": [
+    {
+      "title": "Distributed Distributed Task Worker",
+      "technologies": [
+        "Go",
+        "Redis",
+        "Docker"
+      ],
+      "bulletsCount": 1
+    }
+  ],
+  "certifications": [],
+  "technicalSkills": [
+    "Go",
+    "Python",
+    "Docker",
+    "Kubernetes",
+    "Redis",
+    "PostgreSQL",
+    "Git",
+    "Linux"
+  ],
+  "softSkills": [],
+  "achievements": [],
+  "professionalLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/manisha-code"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/manish-agarwal-sde"
+    }
+  ],
+  "languages": []
+}

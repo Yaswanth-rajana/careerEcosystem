@@ -1,0 +1,85 @@
+{
+  "personalInfo": {
+    "name": "Aarav Mehta",
+    "email": "aarav.mehta@mockui.design",
+    "phone": "+91 9321456789",
+    "location": "Mumbai, India"
+  },
+  "education": [
+    {
+      "institution": "DesignTech Institute of Technology",
+      "degree": "B.Des in Interaction Design",
+      "fieldOfStudy": "Interaction Design",
+      "startYear": 2017,
+      "endYear": 2021,
+      "isCurrent": false,
+      "gpa": "3.8/4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Self-Employed",
+      "roleTitle": "Freelance Frontend Developer",
+      "employmentType": "Freelance",
+      "location": "Mumbai, India",
+      "startDate": "Jan 2022",
+      "endDate": null,
+      "isCurrent": true,
+      "bulletsCount": 3
+    },
+    {
+      "company": "PixelCraft Studios",
+      "roleTitle": "Contract UI Developer",
+      "employmentType": "Contract",
+      "location": "Remote",
+      "startDate": "June 2021",
+      "endDate": "Dec 2021",
+      "isCurrent": false,
+      "bulletsCount": 1
+    }
+  ],
+  "internships": [],
+  "projects": [
+    {
+      "title": "NeoDesign UI Kit",
+      "technologies": [
+        "React.js",
+        "Tailwind CSS",
+        "TypeScript",
+        "Figma"
+      ],
+      "demoUrl": "https://aarav-designs.dev/neokit",
+      "bulletsCount": 1
+    }
+  ],
+  "certifications": [],
+  "technicalSkills": [
+    "React.js",
+    "Next.js",
+    "TypeScript",
+    "Tailwind CSS",
+    "Three.js",
+    "Figma",
+    "UI/UX Design",
+    "HTML5",
+    "CSS3",
+    "Webpack"
+  ],
+  "softSkills": [],
+  "achievements": [],
+  "professionalLinks": [
+    {
+      "platform": "Portfolio",
+      "url": "https://aarav-designs.dev"
+    },
+    {
+      "platform": "Behance",
+      "url": "https://behance.net/aaravmehta"
+    },
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/aaravm-frontend"
+    }
+  ],
+  "languages": []
+}

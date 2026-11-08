@@ -1,0 +1,81 @@
+{
+  "personalInfo": {
+    "name": "Tarun Singhania",
+    "email": "tarun.singhania@mocktech.org",
+    "phone": "+91 9811223344",
+    "location": "Gurugram, Haryana, India"
+  },
+  "education": [
+    {
+      "institution": "Delhi Technological University",
+      "degree": "Bachelor of Technology in Computer Engineering",
+      "fieldOfStudy": "Computer Engineering",
+      "startYear": 2013,
+      "endYear": 2017,
+      "isCurrent": false,
+      "gpa": "8.9/10",
+      "educationLevel": "UNDERGRADUATE"
+    }
+  ],
+  "experience": [
+    {
+      "company": "FinServe Technologies",
+      "roleTitle": "Lead Systems Architect",
+      "employmentType": "Full-time",
+      "location": "Gurugram, India",
+      "startDate": "Jan 2022",
+      "endDate": null,
+      "isCurrent": true,
+      "bulletsCount": 2
+    },
+    {
+      "company": "FinServe Technologies",
+      "roleTitle": "Senior Backend Engineer",
+      "employmentType": "Full-time",
+      "location": "Gurugram, India",
+      "startDate": "Jan 2020",
+      "endDate": "Dec 2021",
+      "isCurrent": false,
+      "bulletsCount": 1
+    },
+    {
+      "company": "Global Retail Systems",
+      "roleTitle": "Software Engineer",
+      "employmentType": "Full-time",
+      "location": "Bengaluru, India",
+      "startDate": "July 2017",
+      "endDate": "Dec 2019",
+      "isCurrent": false,
+      "bulletsCount": 1
+    }
+  ],
+  "internships": [],
+  "projects": [],
+  "certifications": [],
+  "technicalSkills": [
+    "Java",
+    "Go",
+    "Spring Boot",
+    "Kubernetes",
+    "AWS",
+    "PostgreSQL",
+    "Redis",
+    "Kafka",
+    "System Design",
+    "CI/CD",
+    "Microservices"
+  ],
+  "softSkills": [],
+  "achievements": [],
+  "professionalLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/taruns-tech"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/tarun-singhania-lead"
+    }
+  ],
+  "languages": []
+}

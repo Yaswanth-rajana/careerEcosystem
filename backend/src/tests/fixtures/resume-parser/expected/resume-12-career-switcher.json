@@ -1,0 +1,76 @@
+{
+  "personalInfo": {
+    "name": "Deepak Chawla",
+    "email": "deepak.chawla@mockswitch.net",
+    "phone": "+91 9867012345",
+    "location": "Mumbai, Maharashtra, India"
+  },
+  "education": [
+    {
+      "institution": "University of Mumbai",
+      "degree": "Bachelor of Commerce (B.Com)",
+      "fieldOfStudy": "Commerce",
+      "startYear": 2017,
+      "endYear": 2020,
+      "isCurrent": false,
+      "gpa": "74.2%",
+      "educationLevel": "UNDERGRADUATE"
+    }
+  ],
+  "experience": [
+    {
+      "company": "FastLogistics Pvt. Ltd.",
+      "roleTitle": "Operations Manager",
+      "employmentType": "Full-time",
+      "location": "Mumbai, India",
+      "startDate": "June 2020",
+      "endDate": "July 2023",
+      "isCurrent": false,
+      "bulletsCount": 2
+    }
+  ],
+  "internships": [],
+  "projects": [
+    {
+      "title": "SupplyChain Express — Logistics Portal",
+      "technologies": [
+        "React.js",
+        "Node.js",
+        "Express.js",
+        "MongoDB"
+      ],
+      "bulletsCount": 1
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Full Stack Web Development Intensive Bootcamp",
+      "issuingOrganization": "Masai School"
+    }
+  ],
+  "technicalSkills": [
+    "JavaScript",
+    "TypeScript",
+    "React.js",
+    "Node.js",
+    "Express.js",
+    "MongoDB",
+    "Git",
+    "HTML5",
+    "CSS3",
+    "Python"
+  ],
+  "softSkills": [],
+  "achievements": [],
+  "professionalLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/deepakc-dev"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/deepak-chawla-sde"
+    }
+  ],
+  "languages": []
+}

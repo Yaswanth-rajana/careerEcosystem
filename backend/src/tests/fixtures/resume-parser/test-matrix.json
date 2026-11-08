@@ -1,0 +1,699 @@
+{
+  "version": "1.0.0",
+  "totalScenarios": 20,
+  "formatsPerScenario": [
+    "pdf",
+    "docx"
+  ],
+  "totalGeneratedDocuments": 40,
+  "createdAt": "2026-11-07T17:39:44.781Z",
+  "scenarios": [
+    {
+      "scenarioNumber": 1,
+      "scenarioId": "resume-01-student-no-exp",
+      "candidateName": "Kavya Ramesh",
+      "category": "student_no_experience",
+      "formattingStyle": "clean_single_column",
+      "fontFamily": "Helvetica",
+      "isTwoColumn": false,
+      "intentionalOmissions": [
+        "phone",
+        "experience",
+        "internships",
+        "certifications"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-01-student-no-exp.pdf",
+        "docx": "resumes/resume-01-student-no-exp.docx",
+        "expectedJson": "expected/resume-01-student-no-exp.json"
+      },
+      "expectedCounts": {
+        "education": 2,
+        "experience": 0,
+        "internships": 0,
+        "projects": 2,
+        "certifications": 0,
+        "technicalSkills": 14,
+        "softSkills": 0,
+        "achievements": 1,
+        "professionalLinks": 2,
+        "languages": 3
+      },
+      "validationGoal": "Verify 0 work experience or internships extracted (no false positives); education and academic projects captured; missing phone handled gracefully without hallucination."
+    },
+    {
+      "scenarioNumber": 2,
+      "scenarioId": "resume-02-fresher-academic-projects",
+      "candidateName": "Rohan Varma",
+      "category": "fresher_academic_projects",
+      "formattingStyle": "academic_serif",
+      "fontFamily": "Times",
+      "isTwoColumn": false,
+      "intentionalOmissions": [
+        "experience",
+        "internships"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-02-fresher-academic-projects.pdf",
+        "docx": "resumes/resume-02-fresher-academic-projects.docx",
+        "expectedJson": "expected/resume-02-fresher-academic-projects.json"
+      },
+      "expectedCounts": {
+        "education": 1,
+        "experience": 0,
+        "internships": 0,
+        "projects": 2,
+        "certifications": 2,
+        "technicalSkills": 11,
+        "softSkills": 0,
+        "achievements": 0,
+        "professionalLinks": 2,
+        "languages": 3
+      },
+      "validationGoal": "Verify academic coursework projects properly extracted; project URLs and GitHub links correctly associated; no work experience fabricated."
+    },
+    {
+      "scenarioNumber": 3,
+      "scenarioId": "resume-03-fresher-multi-internships",
+      "candidateName": "Sneha Deshmukh",
+      "category": "fresher_multiple_internships",
+      "formattingStyle": "modern_tech",
+      "fontFamily": "Helvetica",
+      "isTwoColumn": false,
+      "intentionalOmissions": [
+        "experience"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-03-fresher-multi-internships.pdf",
+        "docx": "resumes/resume-03-fresher-multi-internships.docx",
+        "expectedJson": "expected/resume-03-fresher-multi-internships.json"
+      },
+      "expectedCounts": {
+        "education": 1,
+        "experience": 0,
+        "internships": 2,
+        "projects": 1,
+        "certifications": 0,
+        "technicalSkills": 10,
+        "softSkills": 0,
+        "achievements": 0,
+        "professionalLinks": 2,
+        "languages": 3
+      },
+      "validationGoal": "Verify multiple internship records classified into internships section; not contaminated into full-time work experience; no duplicate entries."
+    },
+    {
+      "scenarioNumber": 4,
+      "scenarioId": "resume-04-recent-grad-intern-fulltime",
+      "candidateName": "Aditya Kulkarni",
+      "category": "recent_grad_intern_fulltime",
+      "formattingStyle": "standard_chronological",
+      "fontFamily": "Helvetica",
+      "isTwoColumn": false,
+      "intentionalOmissions": [],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-04-recent-grad-intern-fulltime.pdf",
+        "docx": "resumes/resume-04-recent-grad-intern-fulltime.docx",
+        "expectedJson": "expected/resume-04-recent-grad-intern-fulltime.json"
+      },
+      "expectedCounts": {
+        "education": 1,
+        "experience": 2,
+        "internships": 0,
+        "projects": 1,
+        "certifications": 0,
+        "technicalSkills": 8,
+        "softSkills": 0,
+        "achievements": 0,
+        "professionalLinks": 2,
+        "languages": 0
+      },
+      "validationGoal": "Verify proper section-first separation of full-time role into experience and internship role into internships."
+    },
+    {
+      "scenarioNumber": 5,
+      "scenarioId": "resume-05-fullstack-2y-exp",
+      "candidateName": "Pranav Nair",
+      "category": "fullstack_2y_exp",
+      "formattingStyle": "compact_single_column",
+      "fontFamily": "Helvetica",
+      "isTwoColumn": false,
+      "intentionalOmissions": [
+        "internships"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-05-fullstack-2y-exp.pdf",
+        "docx": "resumes/resume-05-fullstack-2y-exp.docx",
+        "expectedJson": "expected/resume-05-fullstack-2y-exp.json"
+      },
+      "expectedCounts": {
+        "education": 1,
+        "experience": 1,
+        "internships": 0,
+        "projects": 1,
+        "certifications": 1,
+        "technicalSkills": 14,
+        "softSkills": 0,
+        "achievements": 0,
+        "professionalLinks": 2,
+        "languages": 0
+      },
+      "validationGoal": "Verify single-company full-time tenure, role titles, bullet reconstruction, and professional portfolio link classification."
+    },
+    {
+      "scenarioNumber": 6,
+      "scenarioId": "resume-06-backend-multi-employer",
+      "candidateName": "Meera Iyer",
+      "category": "backend_multi_employer",
+      "formattingStyle": "company_first",
+      "fontFamily": "Helvetica",
+      "isTwoColumn": false,
+      "intentionalOmissions": [
+        "internships"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-06-backend-multi-employer.pdf",
+        "docx": "resumes/resume-06-backend-multi-employer.docx",
+        "expectedJson": "expected/resume-06-backend-multi-employer.json"
+      },
+      "expectedCounts": {
+        "education": 1,
+        "experience": 3,
+        "internships": 0,
+        "projects": 0,
+        "certifications": 0,
+        "technicalSkills": 12,
+        "softSkills": 0,
+        "achievements": 0,
+        "professionalLinks": 2,
+        "languages": 0
+      },
+      "validationGoal": "Verify 3 distinct employment records with correct date ranges; no cross-contamination of bullets or technologies across employers."
+    },
+    {
+      "scenarioNumber": 7,
+      "scenarioId": "resume-07-frontend-freelance",
+      "candidateName": "Aarav Mehta",
+      "category": "frontend_freelance",
+      "formattingStyle": "creative_portfolio",
+      "fontFamily": "Helvetica",
+      "isTwoColumn": false,
+      "intentionalOmissions": [
+        "internships"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-07-frontend-freelance.pdf",
+        "docx": "resumes/resume-07-frontend-freelance.docx",
+        "expectedJson": "expected/resume-07-frontend-freelance.json"
+      },
+      "expectedCounts": {
+        "education": 1,
+        "experience": 2,
+        "internships": 0,
+        "projects": 1,
+        "certifications": 0,
+        "technicalSkills": 10,
+        "softSkills": 0,
+        "achievements": 0,
+        "professionalLinks": 3,
+        "languages": 0
+      },
+      "validationGoal": "Verify freelance and contractual projects accurately captured; client projects distinguished from core employment."
+    },
+    {
+      "scenarioNumber": 8,
+      "scenarioId": "resume-08-java-certified",
+      "candidateName": "Vikram Joshi",
+      "category": "java_certified",
+      "formattingStyle": "corporate_standard",
+      "fontFamily": "Helvetica",
+      "isTwoColumn": false,
+      "intentionalOmissions": [
+        "internships"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-08-java-certified.pdf",
+        "docx": "resumes/resume-08-java-certified.docx",
+        "expectedJson": "expected/resume-08-java-certified.json"
+      },
+      "expectedCounts": {
+        "education": 1,
+        "experience": 1,
+        "internships": 0,
+        "projects": 0,
+        "certifications": 3,
+        "technicalSkills": 9,
+        "softSkills": 0,
+        "achievements": 0,
+        "professionalLinks": 2,
+        "languages": 0
+      },
+      "validationGoal": "Verify multiple professional certifications extracted with issuer, date, and credential ID; no false certification records from bullet lines."
+    },
+    {
+      "scenarioNumber": 9,
+      "scenarioId": "resume-09-python-ai-research",
+      "candidateName": "Ananya Sen",
+      "category": "python_ai_research",
+      "formattingStyle": "research_academic",
+      "fontFamily": "Times",
+      "isTwoColumn": false,
+      "intentionalOmissions": [
+        "internships"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-09-python-ai-research.pdf",
+        "docx": "resumes/resume-09-python-ai-research.docx",
+        "expectedJson": "expected/resume-09-python-ai-research.json"
+      },
+      "expectedCounts": {
+        "education": 2,
+        "experience": 1,
+        "internships": 0,
+        "projects": 1,
+        "certifications": 0,
+        "technicalSkills": 11,
+        "softSkills": 0,
+        "achievements": 0,
+        "professionalLinks": 2,
+        "languages": 0
+      },
+      "validationGoal": "Verify AI/ML research projects, Kaggle/GitHub links, and high-density technical skills extracted without data loss."
+    },
+    {
+      "scenarioNumber": 10,
+      "scenarioId": "resume-10-senior-engineer-7y",
+      "candidateName": "Tarun Singhania",
+      "category": "senior_engineer_7y",
+      "formattingStyle": "dense_multipage",
+      "fontFamily": "Helvetica",
+      "isTwoColumn": false,
+      "intentionalOmissions": [
+        "internships"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-10-senior-engineer-7y.pdf",
+        "docx": "resumes/resume-10-senior-engineer-7y.docx",
+        "expectedJson": "expected/resume-10-senior-engineer-7y.json"
+      },
+      "expectedCounts": {
+        "education": 1,
+        "experience": 3,
+        "internships": 0,
+        "projects": 0,
+        "certifications": 0,
+        "technicalSkills": 11,
+        "softSkills": 0,
+        "achievements": 0,
+        "professionalLinks": 2,
+        "languages": 0
+      },
+      "validationGoal": "Verify long-tenure progressive career history, promotion detection, and multi-year date range normalization."
+    },
+    {
+      "scenarioNumber": 11,
+      "scenarioId": "resume-11-engineering-manager",
+      "candidateName": "Nandita Roy",
+      "category": "engineering_manager",
+      "formattingStyle": "executive_layout",
+      "fontFamily": "Helvetica",
+      "isTwoColumn": false,
+      "intentionalOmissions": [
+        "internships"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-11-engineering-manager.pdf",
+        "docx": "resumes/resume-11-engineering-manager.docx",
+        "expectedJson": "expected/resume-11-engineering-manager.json"
+      },
+      "expectedCounts": {
+        "education": 1,
+        "experience": 2,
+        "internships": 0,
+        "projects": 0,
+        "certifications": 0,
+        "technicalSkills": 5,
+        "softSkills": 5,
+        "achievements": 0,
+        "professionalLinks": 2,
+        "languages": 0
+      },
+      "validationGoal": "Verify leadership/engineering management roles, team size metrics in bullets, and soft skills classification."
+    },
+    {
+      "scenarioNumber": 12,
+      "scenarioId": "resume-12-career-switcher",
+      "candidateName": "Deepak Chawla",
+      "category": "career_switcher",
+      "formattingStyle": "hybrid_functional",
+      "fontFamily": "Helvetica",
+      "isTwoColumn": false,
+      "intentionalOmissions": [
+        "internships"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-12-career-switcher.pdf",
+        "docx": "resumes/resume-12-career-switcher.docx",
+        "expectedJson": "expected/resume-12-career-switcher.json"
+      },
+      "expectedCounts": {
+        "education": 1,
+        "experience": 1,
+        "internships": 0,
+        "projects": 1,
+        "certifications": 1,
+        "technicalSkills": 10,
+        "softSkills": 0,
+        "achievements": 0,
+        "professionalLinks": 2,
+        "languages": 0
+      },
+      "validationGoal": "Verify prior non-technical employment preserved in work experience, coding bootcamp in education, and no fabricated technical tenure."
+    },
+    {
+      "scenarioNumber": 13,
+      "scenarioId": "resume-13-traditional-single-column",
+      "candidateName": "Harish Patel",
+      "category": "traditional_single_column",
+      "formattingStyle": "classic_times",
+      "fontFamily": "Times",
+      "isTwoColumn": false,
+      "intentionalOmissions": [
+        "internships"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-13-traditional-single-column.pdf",
+        "docx": "resumes/resume-13-traditional-single-column.docx",
+        "expectedJson": "expected/resume-13-traditional-single-column.json"
+      },
+      "expectedCounts": {
+        "education": 1,
+        "experience": 1,
+        "internships": 0,
+        "projects": 1,
+        "certifications": 0,
+        "technicalSkills": 8,
+        "softSkills": 0,
+        "achievements": 0,
+        "professionalLinks": 2,
+        "languages": 0
+      },
+      "validationGoal": "Verify traditional Times Roman single-column layout parsing, standard headings, and clean bullet extraction."
+    },
+    {
+      "scenarioNumber": 14,
+      "scenarioId": "resume-14-two-column-layout",
+      "candidateName": "Ritu Sharma",
+      "category": "two_column_layout",
+      "formattingStyle": "two_column_visual",
+      "fontFamily": "Helvetica",
+      "isTwoColumn": true,
+      "intentionalOmissions": [
+        "internships"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-14-two-column-layout.pdf",
+        "docx": "resumes/resume-14-two-column-layout.docx",
+        "expectedJson": "expected/resume-14-two-column-layout.json"
+      },
+      "expectedCounts": {
+        "education": 1,
+        "experience": 1,
+        "internships": 0,
+        "projects": 1,
+        "certifications": 0,
+        "technicalSkills": 8,
+        "softSkills": 0,
+        "achievements": 0,
+        "professionalLinks": 2,
+        "languages": 0
+      },
+      "validationGoal": "Verify two-column layout parsing without horizontal interleaving of sidebar skills/education and main experience column."
+    },
+    {
+      "scenarioNumber": 15,
+      "scenarioId": "resume-15-tables-structured",
+      "candidateName": "Sandeep Reddy",
+      "category": "tables_structured",
+      "formattingStyle": "tabular_grid",
+      "fontFamily": "Helvetica",
+      "isTwoColumn": false,
+      "intentionalOmissions": [
+        "internships"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-15-tables-structured.pdf",
+        "docx": "resumes/resume-15-tables-structured.docx",
+        "expectedJson": "expected/resume-15-tables-structured.json"
+      },
+      "expectedCounts": {
+        "education": 1,
+        "experience": 1,
+        "internships": 0,
+        "projects": 0,
+        "certifications": 2,
+        "technicalSkills": 8,
+        "softSkills": 0,
+        "achievements": 0,
+        "professionalLinks": 2,
+        "languages": 0
+      },
+      "validationGoal": "Verify tabular formatting in DOCX and aligned table text in PDF parsed into structured records without cell corruption."
+    },
+    {
+      "scenarioNumber": 16,
+      "scenarioId": "resume-16-multi-project-inline-repos",
+      "candidateName": "Pooja Hegde",
+      "category": "multi_project_inline_repos",
+      "formattingStyle": "clean_projects_centric",
+      "fontFamily": "Helvetica",
+      "isTwoColumn": false,
+      "intentionalOmissions": [
+        "experience",
+        "internships"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-16-multi-project-inline-repos.pdf",
+        "docx": "resumes/resume-16-multi-project-inline-repos.docx",
+        "expectedJson": "expected/resume-16-multi-project-inline-repos.json"
+      },
+      "expectedCounts": {
+        "education": 1,
+        "experience": 0,
+        "internships": 0,
+        "projects": 2,
+        "certifications": 0,
+        "technicalSkills": 9,
+        "softSkills": 0,
+        "achievements": 0,
+        "professionalLinks": 2,
+        "languages": 0
+      },
+      "validationGoal": "Verify standalone GitHub/Live Demo labels are not parsed as project titles, and URLs are mapped to their respective project records."
+    },
+    {
+      "scenarioNumber": 17,
+      "scenarioId": "resume-17-unusual-headings",
+      "candidateName": "Manish Agarwal",
+      "category": "unusual_headings",
+      "formattingStyle": "creative_headings",
+      "fontFamily": "Helvetica",
+      "isTwoColumn": false,
+      "intentionalOmissions": [
+        "internships"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-17-unusual-headings.pdf",
+        "docx": "resumes/resume-17-unusual-headings.docx",
+        "expectedJson": "expected/resume-17-unusual-headings.json"
+      },
+      "expectedCounts": {
+        "education": 1,
+        "experience": 1,
+        "internships": 0,
+        "projects": 1,
+        "certifications": 0,
+        "technicalSkills": 8,
+        "softSkills": 0,
+        "achievements": 0,
+        "professionalLinks": 2,
+        "languages": 0
+      },
+      "validationGoal": "Verify non-standard section headings (e.g. \"Where I've Made an Impact\", \"Technical Toolbox\") correctly classified by section normalizer."
+    },
+    {
+      "scenarioNumber": 18,
+      "scenarioId": "resume-18-diverse-date-formats",
+      "candidateName": "Divya Menon",
+      "category": "diverse_date_formats",
+      "formattingStyle": "varied_dates",
+      "fontFamily": "Helvetica",
+      "isTwoColumn": false,
+      "intentionalOmissions": [
+        "internships"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-18-diverse-date-formats.pdf",
+        "docx": "resumes/resume-18-diverse-date-formats.docx",
+        "expectedJson": "expected/resume-18-diverse-date-formats.json"
+      },
+      "expectedCounts": {
+        "education": 1,
+        "experience": 2,
+        "internships": 0,
+        "projects": 0,
+        "certifications": 0,
+        "technicalSkills": 7,
+        "softSkills": 0,
+        "achievements": 0,
+        "professionalLinks": 2,
+        "languages": 0
+      },
+      "validationGoal": "Verify diverse date formatting patterns (\"05/2021 – 11/2023\", \"Spring 2020\", \"'21 - '24\") standardized without throwing."
+    },
+    {
+      "scenarioNumber": 19,
+      "scenarioId": "resume-19-missing-info",
+      "candidateName": "Karthik Swaminathan",
+      "category": "missing_info",
+      "formattingStyle": "sparse_minimal",
+      "fontFamily": "Helvetica",
+      "isTwoColumn": false,
+      "intentionalOmissions": [
+        "phone",
+        "location",
+        "gpa",
+        "internships",
+        "certifications"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-19-missing-info.pdf",
+        "docx": "resumes/resume-19-missing-info.docx",
+        "expectedJson": "expected/resume-19-missing-info.json"
+      },
+      "expectedCounts": {
+        "education": 1,
+        "experience": 1,
+        "internships": 0,
+        "projects": 0,
+        "certifications": 0,
+        "technicalSkills": 3,
+        "softSkills": 0,
+        "achievements": 0,
+        "professionalLinks": 0,
+        "languages": 0
+      },
+      "validationGoal": "Verify intentional missing fields (no phone, no degree field, missing company location) are handled cleanly without fabrication."
+    },
+    {
+      "scenarioNumber": 20,
+      "scenarioId": "resume-20-complex-wrapped-bullets",
+      "candidateName": "Shalini Verma",
+      "category": "complex_wrapped_bullets",
+      "formattingStyle": "dense_wrapped_bullets",
+      "fontFamily": "Helvetica",
+      "isTwoColumn": false,
+      "intentionalOmissions": [
+        "internships"
+      ],
+      "formats": [
+        "pdf",
+        "docx"
+      ],
+      "files": {
+        "pdf": "resumes/resume-20-complex-wrapped-bullets.pdf",
+        "docx": "resumes/resume-20-complex-wrapped-bullets.docx",
+        "expectedJson": "expected/resume-20-complex-wrapped-bullets.json"
+      },
+      "expectedCounts": {
+        "education": 1,
+        "experience": 1,
+        "internships": 0,
+        "projects": 1,
+        "certifications": 0,
+        "technicalSkills": 11,
+        "softSkills": 0,
+        "achievements": 0,
+        "professionalLinks": 2,
+        "languages": 0
+      },
+      "validationGoal": "Verify wrapped multi-line bullet points in PDF are stitched cleanly into complete sentences without orphan bullets."
+    }
+  ]
+}

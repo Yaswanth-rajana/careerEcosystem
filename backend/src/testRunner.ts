@@ -61,7 +61,7 @@ async function runTests() {
   // 2. Zod Validation Tests
   const step1Valid = Step1AboutYouSchema.safeParse({
     name: 'Alex Morgan',
-    phone: '+1 (555) 019-2834',
+    phone: '9876543210',
     location: 'San Francisco, CA',
     candidateType: 'STUDENT',
   });

@@ -1,0 +1,68 @@
+{
+  "personalInfo": {
+    "name": "Harish Patel",
+    "email": "harish.patel@mockpatel.com",
+    "phone": "+91 9911223344",
+    "location": "Ahmedabad, Gujarat, India"
+  },
+  "education": [
+    {
+      "institution": "Nirma University",
+      "degree": "Bachelor of Technology in Computer Engineering",
+      "fieldOfStudy": "Computer Engineering",
+      "startYear": 2018,
+      "endYear": 2022,
+      "isCurrent": false,
+      "gpa": "8.4/10",
+      "educationLevel": "UNDERGRADUATE"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Crest Data Systems",
+      "roleTitle": "Software Engineer",
+      "employmentType": "Full-time",
+      "location": "Ahmedabad, India",
+      "startDate": "July 2022",
+      "endDate": null,
+      "isCurrent": true,
+      "bulletsCount": 2
+    }
+  ],
+  "internships": [],
+  "projects": [
+    {
+      "title": "Network Packet Inspector",
+      "technologies": [
+        "Go",
+        "libpcap",
+        "Docker"
+      ],
+      "bulletsCount": 1
+    }
+  ],
+  "certifications": [],
+  "technicalSkills": [
+    "Python",
+    "Go",
+    "Linux",
+    "Docker",
+    "Elasticsearch",
+    "Splunk",
+    "Git",
+    "REST API"
+  ],
+  "softSkills": [],
+  "achievements": [],
+  "professionalLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/harishp-eng"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/harish-patel-eng"
+    }
+  ],
+  "languages": []
+}

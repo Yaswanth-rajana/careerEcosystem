@@ -1,0 +1,43 @@
+{
+  "personalInfo": {
+    "name": "Karthik Swaminathan",
+    "email": "karthik.swaminathan@fictional-domain.org",
+    "phone": null,
+    "location": null
+  },
+  "education": [
+    {
+      "institution": "Anna University",
+      "degree": "B.E. in Computer Science",
+      "fieldOfStudy": "Computer Science",
+      "startYear": 2020,
+      "endYear": null,
+      "isCurrent": false,
+      "gpa": null
+    }
+  ],
+  "experience": [
+    {
+      "company": "Alpha Systems",
+      "roleTitle": "Software Engineer",
+      "employmentType": "Full-time",
+      "location": null,
+      "startDate": "2022",
+      "endDate": null,
+      "isCurrent": true,
+      "bulletsCount": 1
+    }
+  ],
+  "internships": [],
+  "projects": [],
+  "certifications": [],
+  "technicalSkills": [
+    "Java",
+    "Python",
+    "Git"
+  ],
+  "softSkills": [],
+  "achievements": [],
+  "professionalLinks": [],
+  "languages": []
+}

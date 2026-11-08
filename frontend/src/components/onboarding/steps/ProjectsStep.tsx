@@ -141,10 +141,11 @@ export const ProjectsStep: React.FC<ProjectsStepProps> = ({ projectsList, onChan
                   </label>
                   <select
                     id={`proj-type-${idx}`}
-                    value={proj.projectType || 'Personal'}
+                    value={proj.projectType || ''}
                     onChange={(e) => handleUpdate(idx, { projectType: e.target.value })}
                     className="w-full h-11 px-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                   >
+                    <option value="">Select project type (Optional)</option>
                     {PROJECT_TYPES.map((t) => (
                       <option key={t} value={t}>
                         {t}

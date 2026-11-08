@@ -1,0 +1,81 @@
+{
+  "personalInfo": {
+    "name": "Pranav Nair",
+    "email": "pranav.nair@fictionaldev.co",
+    "phone": "+91 9988776655",
+    "location": "Kochi, Kerala, India"
+  },
+  "education": [
+    {
+      "institution": "National Institute of Technology Calicut",
+      "degree": "B.Tech in Computer Science and Engineering",
+      "fieldOfStudy": "Computer Science and Engineering",
+      "startYear": 2018,
+      "endYear": 2022,
+      "isCurrent": false,
+      "gpa": "8.5/10",
+      "educationLevel": "UNDERGRADUATE"
+    }
+  ],
+  "experience": [
+    {
+      "company": "SMVEN Technologies",
+      "roleTitle": "Full Stack Engineer",
+      "employmentType": "Full-time",
+      "location": "Kochi, India",
+      "startDate": "August 2022",
+      "endDate": null,
+      "isCurrent": true,
+      "bulletsCount": 4
+    }
+  ],
+  "internships": [],
+  "projects": [
+    {
+      "title": "Multi-Tenant CRM Platform",
+      "technologies": [
+        "React.js",
+        "Node.js",
+        "MongoDB",
+        "Redis"
+      ],
+      "bulletsCount": 2
+    }
+  ],
+  "certifications": [
+    {
+      "name": "AWS Certified Solutions Architect – Associate",
+      "issuingOrganization": "Amazon Web Services",
+      "issueDate": "2023"
+    }
+  ],
+  "technicalSkills": [
+    "React.js",
+    "Next.js",
+    "TypeScript",
+    "Tailwind CSS",
+    "Redux",
+    "Node.js",
+    "Express.js",
+    "REST API",
+    "GraphQL",
+    "MongoDB",
+    "Redis",
+    "PostgreSQL",
+    "AWS",
+    "Docker"
+  ],
+  "softSkills": [],
+  "achievements": [],
+  "professionalLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/pranavnair-fullstack"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/pranav-nair-dev"
+    }
+  ],
+  "languages": []
+}

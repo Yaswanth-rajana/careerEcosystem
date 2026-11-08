@@ -128,7 +128,7 @@ async function runOnboardingLifecycleTests() {
     await OnboardingService.saveStepData(emailUserId, 1, {
       aboutYou: {
         name: 'Sarah Connor',
-        phone: '+1 (555) 019-4820',
+        phone: '+91 98765 43210',
         location: 'Los Angeles, CA',
         candidateType: 'STUDENT',
         headline: 'Aspiring AI Security Engineer',
@@ -164,7 +164,7 @@ async function runOnboardingLifecycleTests() {
     // Simulate Exit & Exact Resume
     const resumedState = await OnboardingService.getOnboardingState(emailUserId);
     assert(resumedState.progress.currentStep === 3, 'Exact current step preserved upon resume');
-    assert(resumedState.profile.phone === '+1 (555) 019-4820', 'Preserved personal phone information upon resume');
+    assert(resumedState.profile.phone === '+919876543210', 'Preserved personal phone information upon resume');
     assert(resumedState.profile.education[0].institution === 'UCLA', 'Preserved education institution upon resume');
 
     // ----------------------------------------------------
@@ -268,7 +268,7 @@ async function runOnboardingLifecycleTests() {
     const fullPayload = {
       aboutYou: {
         name: 'Sarah Connor',
-        phone: '+1 (555) 019-4820',
+        phone: '+91 98765 43210',
         location: 'Los Angeles, CA',
         candidateType: 'STUDENT' as const,
         headline: 'Cyber Systems Analyst',

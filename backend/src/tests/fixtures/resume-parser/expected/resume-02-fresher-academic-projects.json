@@ -1,0 +1,91 @@
+{
+  "personalInfo": {
+    "name": "Rohan Varma",
+    "email": "rohan.varma@mock-univ.edu",
+    "phone": "+91 9845123456",
+    "location": "Hyderabad, Telangana, India",
+    "headline": null
+  },
+  "education": [
+    {
+      "institution": "SRKR Engineering Institute",
+      "degree": "Bachelor of Technology in Information Technology",
+      "fieldOfStudy": "Information Technology",
+      "startYear": 2020,
+      "endYear": 2024,
+      "isCurrent": false,
+      "gpa": "8.72/10",
+      "educationLevel": "UNDERGRADUATE"
+    }
+  ],
+  "experience": [],
+  "internships": [],
+  "projects": [
+    {
+      "title": "Automated Radiology Diagnostics Tool — Final Year Capstone",
+      "technologies": [
+        "Python",
+        "PyTorch",
+        "FastAPI",
+        "Docker"
+      ],
+      "bulletsCount": 3
+    },
+    {
+      "title": "Cloud Resource Anomaly Detector — Mini Project",
+      "technologies": [
+        "Go",
+        "Prometheus",
+        "Grafana",
+        "Docker"
+      ],
+      "bulletsCount": 2
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Deep Learning Specialization",
+      "issuingOrganization": "DeepLearning.AI"
+    },
+    {
+      "name": "Foundational Go Programming",
+      "issuingOrganization": "Coursera"
+    }
+  ],
+  "technicalSkills": [
+    "Python",
+    "Go",
+    "SQL",
+    "C++",
+    "PyTorch",
+    "FastAPI",
+    "Flask",
+    "Docker",
+    "PostgreSQL",
+    "MongoDB",
+    "Redis"
+  ],
+  "softSkills": [],
+  "achievements": [],
+  "professionalLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/rohanvarma-dev"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/rohan-varma-dev"
+    }
+  ],
+  "languages": [
+    {
+      "language": "English"
+    },
+    {
+      "language": "Telugu"
+    },
+    {
+      "language": "Hindi"
+    }
+  ]
+}

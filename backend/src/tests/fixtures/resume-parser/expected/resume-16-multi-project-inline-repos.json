@@ -1,0 +1,69 @@
+{
+  "personalInfo": {
+    "name": "Pooja Hegde",
+    "email": "pooja.hegde@mockdeveloper.org",
+    "phone": "+91 9482123456",
+    "location": "Mangalore, Karnataka, India"
+  },
+  "education": [
+    {
+      "institution": "NITK Surathkal",
+      "degree": "B.Tech in Information Technology",
+      "fieldOfStudy": "Information Technology",
+      "startYear": 2020,
+      "endYear": 2024,
+      "isCurrent": false,
+      "gpa": "8.8/10",
+      "educationLevel": "UNDERGRADUATE"
+    }
+  ],
+  "experience": [],
+  "internships": [],
+  "projects": [
+    {
+      "title": "NeuralFlow – AI Analytics Engine",
+      "technologies": [
+        "React.js",
+        "Node.js",
+        "Redis"
+      ],
+      "githubUrl": "https://github.com/poojahegde-dev/neuralflow-ai",
+      "demoUrl": "https://neuralflow.mockdomain.app",
+      "bulletsCount": 3
+    },
+    {
+      "title": "Offline-First Order Processing System",
+      "technologies": [
+        "IndexedDB",
+        "JavaScript"
+      ],
+      "githubUrl": "https://github.com/poojahegde-dev/offline-order-system",
+      "bulletsCount": 2
+    }
+  ],
+  "certifications": [],
+  "technicalSkills": [
+    "JavaScript",
+    "TypeScript",
+    "React.js",
+    "Node.js",
+    "Express.js",
+    "Redis",
+    "IndexedDB",
+    "Git",
+    "Docker"
+  ],
+  "softSkills": [],
+  "achievements": [],
+  "professionalLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/poojahegde-dev"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/pooja-hegde-dev"
+    }
+  ],
+  "languages": []
+}

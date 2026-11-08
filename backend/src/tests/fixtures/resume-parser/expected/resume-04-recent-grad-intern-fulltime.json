@@ -1,0 +1,78 @@
+{
+  "personalInfo": {
+    "name": "Aditya Kulkarni",
+    "email": "aditya.kulkarni@mockcorp.net",
+    "phone": "+91 9765432109",
+    "location": "Bengaluru, Karnataka, India"
+  },
+  "education": [
+    {
+      "institution": "BITS Pilani",
+      "degree": "B.E. in Computer Science",
+      "fieldOfStudy": "Computer Science",
+      "startYear": 2020,
+      "endYear": 2024,
+      "isCurrent": false,
+      "gpa": "8.85/10",
+      "educationLevel": "UNDERGRADUATE"
+    }
+  ],
+  "experience": [
+    {
+      "company": "NovaTech Systems",
+      "roleTitle": "Associate Software Engineer",
+      "employmentType": "Full-time",
+      "location": "Bengaluru, India",
+      "startDate": "July 2024",
+      "endDate": null,
+      "isCurrent": true,
+      "bulletsCount": 2
+    },
+    {
+      "company": "Zylker Technologies",
+      "roleTitle": "Software Engineering Intern",
+      "employmentType": "Internship",
+      "location": "Hyderabad, India",
+      "startDate": "Jan 2024",
+      "endDate": "June 2024",
+      "isCurrent": false,
+      "bulletsCount": 2
+    }
+  ],
+  "internships": [],
+  "projects": [
+    {
+      "title": "Real-Time Stream Processing Engine",
+      "technologies": [
+        "Go",
+        "Kafka",
+        "Redis"
+      ],
+      "bulletsCount": 1
+    }
+  ],
+  "certifications": [],
+  "technicalSkills": [
+    "Go",
+    "Python",
+    "Kafka",
+    "PostgreSQL",
+    "Redis",
+    "Docker",
+    "AWS",
+    "Git"
+  ],
+  "softSkills": [],
+  "achievements": [],
+  "professionalLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/adityak-code"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/aditya-kulkarni-eng"
+    }
+  ],
+  "languages": []
+}
