@@ -118,7 +118,7 @@ export const CAREER_PATHS: CareerPath[] = [
     domainType: 'cloud_devops',
     tagline: 'Build and manage scalable, secure modern cloud infrastructure and automated services.',
     shortDescription: 'Build and manage scalable cloud infrastructure and services.',
-    typicalTrajectory: ['Beginner', 'Junior Cloud Specialist', 'Cloud Engineer', 'Senior Cloud Architect'],
+    typicalTrajectory: ['Cloud Support Associate', 'Cloud Engineer', 'Senior Cloud Engineer'],
     roleOverview: {
       whatYouDo: 'Cloud Engineers architect, provision, automate, monitor, and maintain cloud infrastructure on platforms like AWS, GCP, and Azure.',
       youWillWorkOn: ['Cloud Compute (EC2)', 'Identity & Access (IAM)', 'Virtual Networks (VPC)', 'Containers (Docker)', 'CI/CD Pipelines', 'Cloud Security'],
@@ -173,7 +173,7 @@ export const CAREER_PATHS: CareerPath[] = [
     domainType: 'cloud_devops',
     tagline: 'Bridge software development and operations through automation, CI/CD, and reliability.',
     shortDescription: 'Streamline continuous delivery pipelines, container orchestration, and platform automation.',
-    typicalTrajectory: ['Beginner', 'Junior DevOps Engineer', 'DevOps Specialist', 'Senior SRE / Platform Lead'],
+    typicalTrajectory: ['DevOps Trainee', 'DevOps Engineer', 'Senior DevOps Engineer'],
     roleOverview: {
       whatYouDo: 'DevOps Engineers build continuous delivery pipelines, orchestrate containerized applications, manage cloud automation, and enforce reliability engineering.',
       youWillWorkOn: ['CI/CD Pipelines', 'Kubernetes Clusters', 'Terraform IaC', 'Monitoring & Alerting', 'Security Automation'],
@@ -660,6 +660,427 @@ export const CAREER_PATHS: CareerPath[] = [
           'How do you identify and mitigate ringing or overshoot observed on a high-speed clock line using an oscilloscope?',
         ],
       },
+    ],
+  },
+
+  {
+    id: 'site-reliability-engineer',
+    slug: 'site-reliability-engineer',
+    title: 'Site Reliability Engineer',
+    category: 'Technology',
+    domainType: 'cloud_devops',
+    tagline: 'Bridge development and operations with software engineering to build ultra-reliable systems.',
+    shortDescription: 'Improve system reliability, availability and performance through automation, monitoring and incident management.',
+    typicalTrajectory: ['SRE Trainee', 'Site Reliability Engineer', 'Senior Site Reliability Engineer'],
+    roleOverview: {
+      whatYouDo: 'Site Reliability Engineers apply software engineering practices to system administration and infrastructure operations, ensuring high availability, scalable observability, and rapid incident response.',
+      youWillWorkOn: ['Prometheus & Grafana', 'Incident Management & Postmortems', 'Chaos Engineering', 'SLO & SLI Engineering', 'Linux Automation'],
+      whereCanYouWork: ['High-Scale SaaS', 'FinTech & Payments', 'Cloud Platform Providers', 'E-Commerce Giants'],
+    },
+    salaryRange: { min: 1200000, max: 2400000, currency: 'INR', period: 'LPA', formatted: '₹12–24 LPA', source: 'Industry Benchmark', updatedAt: '2026' },
+    responsibilities: [
+      'Instrument metrics and monitoring with Prometheus and Grafana.',
+      'Automate incident triage and mitigation using Python and Bash.',
+      'Define and enforce Service Level Objectives (SLOs) and Error Budgets.',
+    ],
+    commonIndustries: ['SaaS', 'FinTech', 'Cloud Platforms', 'E-commerce'],
+    skillGroups: {
+      mustKnow: [
+        { name: 'Linux', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Kernel tuning, systemd, process debugging, and networking.' },
+        { name: 'Prometheus', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Metrics collection, PromQL queries, and Alertmanager routing.' },
+        { name: 'Grafana', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Telemetry dashboards, synthetic monitoring, and alerting.' },
+        { name: 'Monitoring', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'APM, distributed tracing, log aggregation, and health checks.' },
+        { name: 'Python', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Incident automation scripts, custom exporters, and tooling.' },
+        { name: 'Incident Management', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'On-call escalation, incident command, and blameless postmortems.' },
+      ],
+      goodToKnow: [
+        { name: 'Kubernetes', level: 'INTERMEDIATE', importance: 'GOOD_TO_KNOW' },
+        { name: 'Terraform', level: 'INTERMEDIATE', importance: 'GOOD_TO_KNOW' },
+      ],
+      advanced: [
+        { name: 'Chaos Engineering', level: 'ADVANCED', importance: 'ADVANCED' },
+      ],
+    },
+    learningPhases: [
+      { phaseNumber: '01', title: 'OBSERVABILITY CORE', subtitle: 'Prometheus, Grafana & Metrics', description: 'Master telemetry pipelines, metric exporters, and dashboarding.', topics: ['Prometheus architecture', 'PromQL queries', 'Grafana alerting', 'Linux sysstat'], skills: ['Linux', 'Prometheus', 'Grafana'] },
+      { phaseNumber: '02', title: 'RELIABILITY & AUTOMATION', subtitle: 'Incident Triage & Scripting', description: 'Automate runbooks and configure incident alerts.', topics: ['Python automation', 'PagerDuty / Alertmanager', 'SLO / SLI definitions', 'Blameless postmortems'], skills: ['Monitoring', 'Python', 'Incident Management'] },
+    ],
+    projects: [
+      { id: 'p-sre-01', title: 'Production Observability & Alerting Stack', difficulty: 'Intermediate', skillsRequired: ['Prometheus', 'Grafana', 'Linux'], description: 'Deploy Prometheus and Grafana monitoring for microservices with custom PromQL alerts and automated notifications.', expectedOutcome: 'Full-stack production monitoring dashboard with automated alert rules.' },
+    ],
+    certifications: [{ id: 'cert-sre-01', name: 'Google Cloud Certified Professional Cloud DevOps Engineer', issuingOrganization: 'Google Cloud', level: 'Intermediate' }],
+    practiceAreas: [
+      { id: 'prac-sre-01', title: 'Scenario Questions', category: 'Scenario Questions', description: 'High latency triage, memory leak diagnostics, and cascading failure containment.', questionCount: 15 },
+    ],
+    interviewTopics: [
+      { id: 'int-sre-01', topic: 'Technical Fundamentals', category: 'Technical', questionCount: 10, keyQuestions: ['How do you differentiate between SLI, SLO, and SLA?', 'What is an error budget and how do you handle budget exhaustion?'] },
+    ],
+  },
+
+  {
+    id: 'virtualization-engineer',
+    slug: 'virtualization-engineer',
+    title: 'Virtualization Engineer',
+    category: 'Technology',
+    domainType: 'general',
+    tagline: 'Architect and maintain enterprise virtual machines, hypervisors, and private cloud clusters.',
+    shortDescription: 'Design and manage virtualized computing environments, virtual machines and enterprise infrastructure platforms.',
+    typicalTrajectory: ['Virtualization Support Associate', 'Virtualization Engineer', 'Senior Virtualization Engineer'],
+    roleOverview: {
+      whatYouDo: 'Virtualization Engineers deploy, configure, cluster, and optimize virtualized compute environments across VMware ESXi, vCenter, and Microsoft Hyper-V to maximize hardware utilization and high availability.',
+      youWillWorkOn: ['VMware vSphere & ESXi', 'Microsoft Hyper-V', 'Virtual Networking (vSwitch)', 'SAN/NAS Datastores', 'Virtual Machine Migration (vMotion)'],
+      whereCanYouWork: ['Enterprise Data Centers', 'Managed Service Providers', 'Financial Institutions', 'Government & Healthcare IT'],
+    },
+    salaryRange: { min: 700000, max: 1500000, currency: 'INR', period: 'LPA', formatted: '₹7–15 LPA', source: 'Industry Benchmark', updatedAt: '2026' },
+    responsibilities: [
+      'Deploy and cluster VMware ESXi and vCenter environments.',
+      'Configure vSwitch networks and shared datastores.',
+      'Manage VM snapshots, template cloning, and live migration.',
+    ],
+    commonIndustries: ['Enterprise IT', 'Data Centers', 'Banking', 'Healthcare'],
+    skillGroups: {
+      mustKnow: [
+        { name: 'VMware', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'vSphere, ESXi hosts, vCenter Server, and cluster configuration.' },
+        { name: 'Hyper-V', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Microsoft Hyper-V clustering, virtual hard disks, and failover.' },
+        { name: 'Virtual Machines', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Provisioning, resource allocation, snapshots, and vMotion migration.' },
+        { name: 'Networking', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Virtual switches, VLAN tagging, and uplink bonding.' },
+        { name: 'Virtualization Management', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'High availability (HA), DRS load balancing, and capacity planning.' },
+      ],
+      goodToKnow: [
+        { name: 'Storage Area Networks (SAN)', level: 'INTERMEDIATE', importance: 'GOOD_TO_KNOW' },
+      ],
+      advanced: [
+        { name: 'VMware NSX Software-Defined Networking', level: 'ADVANCED', importance: 'ADVANCED' },
+      ],
+    },
+    learningPhases: [
+      { phaseNumber: '01', title: 'HYPERVISOR FOUNDATIONS', subtitle: 'ESXi & Hyper-V Setup', description: 'Install bare-metal hypervisors and configure host networking.', topics: ['Bare-metal ESXi install', 'Virtual machine lifecycle', 'vSwitch configurations', 'Host resource allocation'], skills: ['VMware', 'Hyper-V', 'Virtual Machines'] },
+      { phaseNumber: '02', title: 'CLUSTER ARCHITECTURE', subtitle: 'vCenter HA & vMotion', description: 'Configure shared datastores, live VM migration, and fault tolerance.', topics: ['vCenter management', 'vMotion migrations', 'DRS and HA clustering', 'Virtualization security'], skills: ['Networking', 'Virtualization Management'] },
+    ],
+    projects: [
+      { id: 'p-virt-01', title: 'High-Availability VMware Cluster with Shared Storage', difficulty: 'Beginner', skillsRequired: ['VMware', 'Virtual Machines', 'Networking'], description: 'Build a multi-host vSphere cluster with vCenter, configuring redundant virtual switches and automated VM failover.', expectedOutcome: 'A functioning HA virtualization cluster demonstrating seamless vMotion migration.' },
+    ],
+    certifications: [{ id: 'cert-virt-01', name: 'VMware Certified Professional – Data Center Virtualization (VCP-DCV)', issuingOrganization: 'VMware by Broadcom', level: 'Intermediate' }],
+    practiceAreas: [
+      { id: 'prac-virt-01', title: 'Technical Challenges', category: 'Technical Challenges', description: 'vSwitch VLAN tagging, datastore latency bottlenecks, and CPU overcommitment.', questionCount: 15 },
+    ],
+    interviewTopics: [
+      { id: 'int-virt-01', topic: 'Technical Fundamentals', category: 'Technical', questionCount: 8, keyQuestions: ['What is the difference between Type-1 and Type-2 hypervisors?', 'Explain how VMware High Availability (HA) handles a physical host crash.'] },
+    ],
+  },
+
+  {
+    id: 'server-engineer',
+    slug: 'server-engineer',
+    title: 'Server Engineer',
+    category: 'Technology',
+    domainType: 'general',
+    tagline: 'Configure, secure, and maintain enterprise Windows and Linux server fleets.',
+    shortDescription: 'Install, configure, maintain and troubleshoot enterprise servers and operating systems to ensure reliable infrastructure operations.',
+    typicalTrajectory: ['Server Support Associate', 'Server Engineer', 'Senior Server Engineer'],
+    roleOverview: {
+      whatYouDo: 'Server Engineers deploy operating systems, administer Active Directory environments, automate administrative tasks with PowerShell, and manage enterprise server hardware and patch compliance.',
+      youWillWorkOn: ['Windows Server 2022/2025', 'RHEL / Ubuntu Server', 'Active Directory Domain Services (AD DS)', 'Group Policy Objects (GPOs)', 'PowerShell Scripting'],
+      whereCanYouWork: ['Corporations', 'Government Agencies', 'Higher Education', 'Financial Systems'],
+    },
+    salaryRange: { min: 600000, max: 1400000, currency: 'INR', period: 'LPA', formatted: '₹6–14 LPA', source: 'Industry Benchmark', updatedAt: '2026' },
+    responsibilities: [
+      'Install, patch, and manage Windows Server and Linux operating systems.',
+      'Configure Active Directory users, groups, and Group Policy Objects.',
+      'Automate recurring server management tasks using PowerShell scripts.',
+    ],
+    commonIndustries: ['Enterprise IT', 'Financial Services', 'Retail', 'Telecommunications'],
+    skillGroups: {
+      mustKnow: [
+        { name: 'Linux', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Package management, systemd services, SSH hardening, and cron jobs.' },
+        { name: 'Windows Server', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Roles & features, DNS, DHCP, IIS, and failover clustering.' },
+        { name: 'Server Administration', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Hardware management, IPMI/iDRAC, OS patching, and performance tuning.' },
+        { name: 'Active Directory', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Domain controllers, trust relationships, schema, and Group Policy.' },
+        { name: 'PowerShell', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Cmdlets, automated user provisioning, and remote server management.' },
+      ],
+      goodToKnow: [
+        { name: 'Bash Scripting', level: 'INTERMEDIATE', importance: 'GOOD_TO_KNOW' },
+      ],
+      advanced: [
+        { name: 'Ansible Server Automation', level: 'ADVANCED', importance: 'ADVANCED' },
+      ],
+    },
+    learningPhases: [
+      { phaseNumber: '01', title: 'SERVER CORE & OS DEPLOYMENT', subtitle: 'Windows Server & Linux Admin', description: 'Master operating system provisioning, user privileges, and core server roles.', topics: ['Windows Server installation', 'DNS and DHCP server roles', 'Linux daemon management', 'SSH and security baselines'], skills: ['Linux', 'Windows Server', 'Server Administration'] },
+      { phaseNumber: '02', title: 'DIRECTORY SERVICES & SCRIPTING', subtitle: 'Active Directory & PowerShell', description: 'Build enterprise domain architectures and automate operations.', topics: ['Active Directory Forests & Domains', 'Group Policy Objects (GPOs)', 'PowerShell cmdlets and loops', 'Patch management (WSUS)'], skills: ['Active Directory', 'PowerShell'] },
+    ],
+    projects: [
+      { id: 'p-srv-01', title: 'Enterprise Active Directory Domain & GPO Hardening', difficulty: 'Beginner', skillsRequired: ['Windows Server', 'Active Directory', 'PowerShell'], description: 'Deploy redundant domain controllers, configure DNS/DHCP, and script automated onboarding of 50 users via PowerShell.', expectedOutcome: 'A fully functional enterprise Active Directory environment with baseline security GPOs.' },
+    ],
+    certifications: [{ id: 'cert-srv-01', name: 'CompTIA Server+', issuingOrganization: 'CompTIA', level: 'Foundation' }],
+    practiceAreas: [
+      { id: 'prac-srv-01', title: 'Technical Challenges', category: 'Technical Challenges', description: 'DNS replication errors, corrupted user profiles, and disk volume expansion.', questionCount: 15 },
+    ],
+    interviewTopics: [
+      { id: 'int-srv-01', topic: 'Technical Fundamentals', category: 'Technical', questionCount: 10, keyQuestions: ['What are FSMO roles in Active Directory and why are they critical?', 'Explain the order of Group Policy processing (LSDOU).'] },
+    ],
+  },
+
+  {
+    id: 'network-security-engineer',
+    slug: 'network-security-engineer',
+    title: 'Network & Security Engineer',
+    category: 'Technology',
+    domainType: 'security',
+    tagline: 'Architect, route, secure, and defend mission-critical enterprise networks.',
+    shortDescription: 'Design, secure and maintain enterprise networks while protecting systems against network-based threats and vulnerabilities.',
+    typicalTrajectory: ['Network Support Associate', 'Network & Security Engineer', 'Senior Network & Security Engineer'],
+    roleOverview: {
+      whatYouDo: 'Network & Security Engineers configure routers, enterprise switches, next-generation firewalls, and encrypted VPN tunnels to ensure resilient, threat-free connectivity across distributed corporate and cloud sites.',
+      youWillWorkOn: ['Cisco / Juniper Routing & Switching', 'Palo Alto / Fortinet Firewalls', 'IPsec & SSL VPNs', 'VLANs, OSPF & BGP', 'IDS/IPS Threat Prevention'],
+      whereCanYouWork: ['Telecom Providers', 'FinTech & Banking', 'Cloud Infrastructure Platforms', 'Enterprise IT'],
+    },
+    salaryRange: { min: 800000, max: 1800000, currency: 'INR', period: 'LPA', formatted: '₹8–18 LPA', source: 'Industry Benchmark', updatedAt: '2026' },
+    responsibilities: [
+      'Configure enterprise routing protocols (OSPF, BGP) and switching topologies.',
+      'Deploy and maintain Next-Gen Firewalls with deep packet inspection.',
+      'Establish and monitor site-to-site IPsec and remote-access VPN tunnels.',
+    ],
+    commonIndustries: ['Banking', 'Telecom', 'Defense', 'Enterprise SaaS'],
+    skillGroups: {
+      mustKnow: [
+        { name: 'TCP/IP', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Subnetting, packet encapsulation, TCP handshakes, and Wireshark decoding.' },
+        { name: 'Routing', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'OSPF, BGP, static routes, and inter-VLAN routing.' },
+        { name: 'Switching', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Spanning Tree Protocol (STP), 802.1Q VLAN trunking, and LACP.' },
+        { name: 'Firewalls', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Stateful inspection, NAT/PAT rules, security zones, and application control.' },
+        { name: 'VPN', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'IPsec Phase 1/2 negotiation, IKEv2, and SSL VPN clients.' },
+        { name: 'Network Security', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Zero Trust network access, IDS/IPS, ACLs, and DDoS mitigation.' },
+      ],
+      goodToKnow: [
+        { name: 'Wireshark Packet Analysis', level: 'INTERMEDIATE', importance: 'GOOD_TO_KNOW' },
+      ],
+      advanced: [
+        { name: 'Software-Defined WAN (SD-WAN)', level: 'ADVANCED', importance: 'ADVANCED' },
+      ],
+    },
+    learningPhases: [
+      { phaseNumber: '01', title: 'ROUTING & SWITCHING ESSENTIALS', subtitle: 'TCP/IP & Network Topologies', description: 'Master IP subnetting, VLAN segmentation, and routing protocols.', topics: ['IPv4/IPv6 subnetting', 'VLAN trunking and STP', 'OSPF multi-area routing', 'Access Control Lists (ACLs)'], skills: ['TCP/IP', 'Routing', 'Switching'] },
+      { phaseNumber: '02', title: 'PERIMETER DEFENSE & ENCRYPTION', subtitle: 'Firewalls & VPN Architectures', description: 'Deploy firewall policies, threat inspection, and encrypted tunnels.', topics: ['Next-Gen Firewall policies', 'NAT and port forwarding', 'Site-to-Site IPsec VPNs', 'IDS/IPS signature tuning'], skills: ['Firewalls', 'VPN', 'Network Security'] },
+    ],
+    projects: [
+      { id: 'p-net-01', title: 'Secure Branch Office Network with Site-to-Site VPN', difficulty: 'Intermediate', skillsRequired: ['Routing', 'Firewalls', 'VPN'], description: 'Configure an enterprise router and firewall topology linking two simulated offices via an encrypted IPsec tunnel with strict zone policies.', expectedOutcome: 'A verified encrypted branch interconnect with comprehensive firewall inspection.' },
+    ],
+    certifications: [{ id: 'cert-net-01', name: 'Cisco Certified Network Associate (CCNA)', issuingOrganization: 'Cisco Systems', level: 'Intermediate' }],
+    practiceAreas: [
+      { id: 'prac-net-01', title: 'Technical Challenges', category: 'Technical Challenges', description: 'Subnet masking calculations, routing loops, and firewall drop packet triage.', questionCount: 20 },
+    ],
+    interviewTopics: [
+      { id: 'int-net-01', topic: 'Technical Fundamentals', category: 'Technical', questionCount: 12, keyQuestions: ['Explain the 3-way TCP handshake and TCP reset flags.', 'What is the difference between stateful firewall filtering and stateless ACLs?'] },
+    ],
+  },
+
+  {
+    id: 'backup-storage-engineer',
+    slug: 'backup-storage-engineer',
+    title: 'Backup & Storage Engineer',
+    category: 'Technology',
+    domainType: 'general',
+    tagline: 'Guarantee enterprise data durability, storage performance, and business continuity.',
+    shortDescription: 'Manage enterprise storage systems, backup infrastructure and disaster recovery solutions to protect critical business data.',
+    typicalTrajectory: ['Storage Support Associate', 'Backup & Storage Engineer', 'Senior Backup & Storage Engineer'],
+    roleOverview: {
+      whatYouDo: 'Backup & Storage Engineers provision high-speed storage arrays (SAN/NAS), schedule automated enterprise backups, test disaster recovery runbooks, and protect corporate data from ransomware and hardware failure.',
+      youWillWorkOn: ['Storage Area Networks (SAN - Fibre Channel/iSCSI)', 'Network Attached Storage (NAS - NFS/SMB)', 'Enterprise Backup Software (Veeam / Commvault)', 'Snapshot Management & Replication', 'Disaster Recovery RTO / RPO Compliance'],
+      whereCanYouWork: ['Financial Enterprises', 'Healthcare & Biotech', 'Cloud Service Providers', 'Telecoms'],
+    },
+    salaryRange: { min: 700000, max: 1600000, currency: 'INR', period: 'LPA', formatted: '₹7–16 LPA', source: 'Industry Benchmark', updatedAt: '2026' },
+    responsibilities: [
+      'Provision SAN LUNs and NAS storage pools for database and virtual workloads.',
+      'Design and schedule incremental, differential, and synthetic full backups.',
+      'Execute periodic disaster recovery simulations and maintain RTO/RPO metrics.',
+    ],
+    commonIndustries: ['Banking', 'Healthcare', 'Enterprise IT', 'Data Centers'],
+    skillGroups: {
+      mustKnow: [
+        { name: 'NAS', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'NFS exports, SMB/CIFS shares, quotas, and permissions.' },
+        { name: 'SAN', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Fibre Channel zoning, iSCSI initiators, LUN masking, and multipathing.' },
+        { name: 'Backup Solutions', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Veeam, Commvault, backup repositories, and deduplication appliances.' },
+        { name: 'Disaster Recovery', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'RTO / RPO definitions, replication, failover runbooks, and testing.' },
+        { name: 'Data Protection', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Immutable backups, air-gapped copies, encryption in flight and at rest.' },
+        { name: 'Storage Management', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'RAID configurations, storage tiering, thin provisioning, and monitoring.' },
+      ],
+      goodToKnow: [
+        { name: 'Cloud Object Storage (S3)', level: 'INTERMEDIATE', importance: 'GOOD_TO_KNOW' },
+      ],
+      advanced: [
+        { name: 'Automated DR Orchestration', level: 'ADVANCED', importance: 'ADVANCED' },
+      ],
+    },
+    learningPhases: [
+      { phaseNumber: '01', title: 'STORAGE ARCHITECTURE', subtitle: 'SAN, NAS & RAID', description: 'Configure enterprise storage arrays, protocols, and volume provisioning.', topics: ['SAN vs NAS architecture', 'RAID levels & resilience', 'iSCSI and Fibre Channel', 'LUN presentation to hosts'], skills: ['SAN', 'NAS', 'Storage Management'] },
+      { phaseNumber: '02', title: 'DATA PROTECTION & RECOVERY', subtitle: 'Backups & DR Orchestration', description: 'Implement 3-2-1 backup policies, immutability, and disaster recovery.', topics: ['3-2-1 backup rule', 'Veeam / Commvault backup jobs', 'Immutable storage against ransomware', 'Disaster recovery failover plans'], skills: ['Backup Solutions', 'Disaster Recovery', 'Data Protection'] },
+    ],
+    projects: [
+      { id: 'p-bck-01', title: 'Automated Enterprise Backup & DR Simulation Lab', difficulty: 'Beginner', skillsRequired: ['Backup Solutions', 'Disaster Recovery', 'Storage Management'], description: 'Deploy an automated backup pipeline using Veeam for virtualized workloads with immutable storage and perform a bare-metal recovery drill.', expectedOutcome: 'A complete backup configuration with documented RTO/RPO verification results.' },
+    ],
+    certifications: [{ id: 'cert-bck-01', name: 'Veeam Certified Engineer (VMCE)', issuingOrganization: 'Veeam Software', level: 'Intermediate' }],
+    practiceAreas: [
+      { id: 'prac-bck-01', title: 'Technical Challenges', category: 'Technical Challenges', description: 'Storage multipathing failover, backup repository exhaustion, and deduplication ratio tuning.', questionCount: 15 },
+    ],
+    interviewTopics: [
+      { id: 'int-bck-01', topic: 'Technical Fundamentals', category: 'Technical', questionCount: 8, keyQuestions: ['What is the difference between RTO and RPO?', 'Explain the 3-2-1-1-0 backup rule and how it protects against ransomware.'] },
+    ],
+  },
+
+  {
+    id: 'it-infrastructure-engineer',
+    slug: 'it-infrastructure-engineer',
+    title: 'IT Infrastructure Engineer',
+    category: 'Technology',
+    domainType: 'general',
+    tagline: 'Unify network connectivity, compute systems, and cloud infrastructure for the modern enterprise.',
+    shortDescription: 'Build, maintain and monitor IT infrastructure, ensuring reliable connectivity, computing resources and enterprise systems.',
+    typicalTrajectory: ['IT Infrastructure Support Associate', 'IT Infrastructure Engineer', 'Senior IT Infrastructure Engineer'],
+    roleOverview: {
+      whatYouDo: 'IT Infrastructure Engineers oversee end-to-end technology operations, integrating on-premise hardware, virtualized environments, network links, and hybrid cloud services with centralized monitoring.',
+      youWillWorkOn: ['Hybrid Cloud Compute', 'Core Enterprise Networking', 'Linux & Windows Fleet Management', 'Datacenter Racks & Power', 'Telemetry & Health Monitoring'],
+      whereCanYouWork: ['Large Enterprises', 'Tech Startups', 'Logistics & Supply Chain', 'Healthcare & Hospital Networks'],
+    },
+    salaryRange: { min: 700000, max: 1600000, currency: 'INR', period: 'LPA', formatted: '₹7–16 LPA', source: 'Industry Benchmark', updatedAt: '2026' },
+    responsibilities: [
+      'Oversee physical, virtual, and cloud infrastructure availability.',
+      'Implement proactive telemetry and automated alerting across all infrastructure layers.',
+      'Maintain cross-platform operating systems and network hardware configurations.',
+    ],
+    commonIndustries: ['Enterprise IT', 'Manufacturing', 'Supply Chain', 'Financial Services'],
+    skillGroups: {
+      mustKnow: [
+        { name: 'Networking', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'IP addressing, switching topologies, DNS, and remote site connectivity.' },
+        { name: 'Linux', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Server configuration, shell scripts, and daemon troubleshooting.' },
+        { name: 'Windows Server', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Enterprise identity, role administration, and group policy.' },
+        { name: 'Cloud Infrastructure', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Hybrid integration with AWS / Azure compute and storage.' },
+        { name: 'Monitoring', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Nagios, Zabbix, PRTG, and SNMP device telemetry.' },
+        { name: 'Infrastructure Management', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Hardware lifecycle, asset tracking, rack topology, and capacity planning.' },
+      ],
+      goodToKnow: [
+        { name: 'Infrastructure as Code', level: 'INTERMEDIATE', importance: 'GOOD_TO_KNOW' },
+      ],
+      advanced: [
+        { name: 'Hybrid Cloud Architecture', level: 'ADVANCED', importance: 'ADVANCED' },
+      ],
+    },
+    learningPhases: [
+      { phaseNumber: '01', title: 'INFRASTRUCTURE FOUNDATIONS', subtitle: 'Networks, Compute & Systems', description: 'Connect network layers, provision servers, and configure identity services.', topics: ['Network switches and VLANs', 'Windows & Linux dual environment setup', 'Storage connectivity', 'Hardware power and rack units'], skills: ['Networking', 'Linux', 'Windows Server'] },
+      { phaseNumber: '02', title: 'HYBRID OPERATIONS & TELEMETRY', subtitle: 'Cloud & Proactive Monitoring', description: 'Integrate hybrid cloud resources and deploy unified monitoring.', topics: ['AWS / Azure hybrid connectivity', 'SNMP and syslog aggregation', 'Automated health alerting', 'Disaster recovery coordination'], skills: ['Cloud Infrastructure', 'Monitoring', 'Infrastructure Management'] },
+    ],
+    projects: [
+      { id: 'p-inf-01', title: 'Hybrid Enterprise Infrastructure & Telemetry Hub', difficulty: 'Beginner', skillsRequired: ['Networking', 'Windows Server', 'Monitoring'], description: 'Deploy a multi-tier IT infrastructure environment connecting local server nodes to cloud storage with comprehensive SNMP monitoring and SMS alerts.', expectedOutcome: 'A fully monitored hybrid infrastructure testbed with real-time health dashboards.' },
+    ],
+    certifications: [{ id: 'cert-inf-01', name: 'CompTIA Network+ / Security+', issuingOrganization: 'CompTIA', level: 'Foundation' }],
+    practiceAreas: [
+      { id: 'prac-inf-01', title: 'Technical Challenges', category: 'Technical Challenges', description: 'Diagnose intermittent packet loss across gateways and correlate server memory spikes.', questionCount: 15 },
+    ],
+    interviewTopics: [
+      { id: 'int-inf-01', topic: 'Technical Fundamentals', category: 'Technical', questionCount: 10, keyQuestions: ['How do you architect high availability across dual ISP internet links?', 'Describe your approach to infrastructure capacity planning for annual business expansion.'] },
+    ],
+  },
+
+  {
+    id: 'microsoft-administrator',
+    slug: 'microsoft-administrator',
+    title: 'Microsoft Administrator',
+    category: 'Technology',
+    domainType: 'general',
+    tagline: 'Administer Microsoft 365, Entra ID, and Azure cloud services across the enterprise.',
+    shortDescription: 'Manage Microsoft enterprise environments, user identities, collaboration tools and cloud-based administration services.',
+    typicalTrajectory: ['Microsoft 365 Support Associate', 'Microsoft Administrator', 'Senior Microsoft Administrator'],
+    roleOverview: {
+      whatYouDo: 'Microsoft Administrators manage tenant identity lifecycle in Microsoft Entra ID (Azure AD), deploy Microsoft 365 services (Exchange, Teams, SharePoint), configure Intune endpoint policies, and automate tasks with PowerShell.',
+      youWillWorkOn: ['Microsoft 365 Admin Center', 'Microsoft Entra ID (User & App Identity)', 'Microsoft Intune (MDM / MAM)', 'Exchange Online & Teams Governance', 'PowerShell for Graph API'],
+      whereCanYouWork: ['Global Corporations', 'Consulting & MSPs', 'Financial Services', 'Public Sector & Non-Profits'],
+    },
+    salaryRange: { min: 600000, max: 1400000, currency: 'INR', period: 'LPA', formatted: '₹6–14 LPA', source: 'Industry Benchmark', updatedAt: '2026' },
+    responsibilities: [
+      'Administer Microsoft Entra ID users, conditional access policies, and MFA.',
+      'Configure and support Exchange Online mailboxes, SharePoint, and Teams.',
+      'Automate tenant governance and reporting with Microsoft Graph PowerShell.',
+    ],
+    commonIndustries: ['Corporate Enterprises', 'Consulting', 'Financial Institutions', 'Healthcare'],
+    skillGroups: {
+      mustKnow: [
+        { name: 'Microsoft 365', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Exchange Online, Teams, OneDrive, SharePoint, and licensing management.' },
+        { name: 'Azure', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Azure resource groups, virtual networks, and subscription administration.' },
+        { name: 'Active Directory', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'On-premises AD DS, hybrid Azure AD Connect, and directory sync.' },
+        { name: 'Microsoft Entra ID', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Identity protection, Single Sign-On (SSO), and Conditional Access.' },
+        { name: 'PowerShell', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Microsoft.Graph cmdlets, Exchange Online modules, and batch user scripts.' },
+      ],
+      goodToKnow: [
+        { name: 'Microsoft Intune', level: 'INTERMEDIATE', importance: 'GOOD_TO_KNOW' },
+      ],
+      advanced: [
+        { name: 'Zero Trust Security with Defender', level: 'ADVANCED', importance: 'ADVANCED' },
+      ],
+    },
+    learningPhases: [
+      { phaseNumber: '01', title: 'M365 & IDENTITY LIFECYCLE', subtitle: 'Entra ID & Collaboration Tools', description: 'Configure Microsoft 365 tenants, Entra ID users, and collaboration tools.', topics: ['M365 Tenant setup', 'Entra ID user/group administration', 'Exchange Online mail routing', 'Teams governance policies'], skills: ['Microsoft 365', 'Microsoft Entra ID', 'Active Directory'] },
+      { phaseNumber: '02', title: 'HYBRID AZURE & POWERSHELL', subtitle: 'Conditional Access & Scripting', description: 'Enforce Conditional Access, configure Azure VMs, and script administrative tasks.', topics: ['Azure subscription management', 'Conditional Access and MFA enforcement', 'Microsoft Graph PowerShell scripting', 'Intune device compliance'], skills: ['Azure', 'PowerShell'] },
+    ],
+    projects: [
+      { id: 'p-ms-01', title: 'M365 Zero-Trust Tenant Configuration & Conditional Access', difficulty: 'Beginner', skillsRequired: ['Microsoft 365', 'Microsoft Entra ID', 'PowerShell'], description: 'Set up an enterprise Microsoft 365 tenant, enforce risk-based Conditional Access with MFA, and write PowerShell scripts to audit external guest sharing.', expectedOutcome: 'A hardened Microsoft 365 cloud environment with automated compliance reporting.' },
+    ],
+    certifications: [{ id: 'cert-ms-01', name: 'Microsoft Certified: Enterprise Administrator Expert (MS-102)', issuingOrganization: 'Microsoft', level: 'Intermediate' }],
+    practiceAreas: [
+      { id: 'prac-ms-01', title: 'Technical Challenges', category: 'Technical Challenges', description: 'Azure AD Connect sync conflicts, locked user accounts, and mail flow transport rule errors.', questionCount: 15 },
+    ],
+    interviewTopics: [
+      { id: 'int-ms-01', topic: 'Technical Fundamentals', category: 'Technical', questionCount: 10, keyQuestions: ['Explain how Conditional Access policies work in Microsoft Entra ID.', 'What is the difference between Azure AD Joined and Hybrid Azure AD Joined devices?'] },
+    ],
+  },
+
+  {
+    id: 'it-service-management',
+    slug: 'it-service-management',
+    title: 'IT Service Management',
+    category: 'Technology',
+    domainType: 'general',
+    tagline: 'Orchestrate IT service delivery, incident triage, and change enablement with ITIL.',
+    shortDescription: 'Manage IT service operations, service requests, incidents, problems and changes to ensure efficient IT service delivery.',
+    typicalTrajectory: ['IT Service Desk Associate', 'ITSM Analyst', 'Senior ITSM Specialist'],
+    roleOverview: {
+      whatYouDo: 'IT Service Management specialists manage IT service operations, handle incident escalations in ServiceNow, coordinate change advisory boards (CAB), and lead root cause problem investigations following ITIL frameworks.',
+      youWillWorkOn: ['ServiceNow ITSM Platform', 'ITIL 4 Service Value System', 'Incident & Major Incident Management', 'Change Advisory Board (CAB) Governance', 'SLA Tracking & Reporting'],
+      whereCanYouWork: ['Global IT Services', 'Financial Institutions', 'Government Agencies', 'Enterprise Corporations'],
+    },
+    salaryRange: { min: 700000, max: 1500000, currency: 'INR', period: 'LPA', formatted: '₹7–15 LPA', source: 'Industry Benchmark', updatedAt: '2026' },
+    responsibilities: [
+      'Manage incident lifecycle to minimize service downtime and adhere to SLAs.',
+      'Facilitate Change Advisory Board (CAB) meetings and assess change risk.',
+      'Lead root cause analysis (RCA) on recurring problems to prevent future incidents.',
+    ],
+    commonIndustries: ['Consulting & Managed Services', 'Banking & Finance', 'Healthcare Systems', 'Retail Logistics'],
+    skillGroups: {
+      mustKnow: [
+        { name: 'ITIL', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'ITIL 4 practices, Service Desk, Service Level Management, and continuous improvement.' },
+        { name: 'ServiceNow', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Incident, Problem, Change, Service Catalog, and CMDB administration.' },
+        { name: 'Incident Management', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Ticket triage, major incident swarming, priority matrices, and communication.' },
+        { name: 'Problem Management', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Root cause analysis (RCA), known error database (KEDB), and preventative fixes.' },
+        { name: 'Change Management', level: 'INTERMEDIATE', importance: 'MUST_KNOW', description: 'Change enablement, risk scoring, rollback planning, and CAB scheduling.' },
+      ],
+      goodToKnow: [
+        { name: 'CMDB & Asset Management', level: 'INTERMEDIATE', importance: 'GOOD_TO_KNOW' },
+      ],
+      advanced: [
+        { name: 'ServiceNow Workflow Automation', level: 'ADVANCED', importance: 'ADVANCED' },
+      ],
+    },
+    learningPhases: [
+      { phaseNumber: '01', title: 'ITIL & SERVICENOW FUNDAMENTALS', subtitle: 'Service Desk & Incident Triage', description: 'Master ITIL service frameworks and ServiceNow ticket workflows.', topics: ['ITIL 4 guiding principles', 'ServiceNow navigation and tables', 'Incident categorization and prioritization', 'SLA breach calculation'], skills: ['ITIL', 'ServiceNow', 'Incident Management'] },
+      { phaseNumber: '02', title: 'PROBLEM & CHANGE GOVERNANCE', subtitle: 'Root Cause & CAB Enablement', description: 'Coordinate change management, CAB approvals, and root cause investigations.', topics: ['Change request lifecycle & risk matrices', 'CAB meeting governance', 'Problem investigation & 5 Whys', 'CMDB relationship mapping'], skills: ['Problem Management', 'Change Management'] },
+    ],
+    projects: [
+      { id: 'p-itsm-01', title: 'ServiceNow ITSM Lifecycle Implementation & SLA Dashboard', difficulty: 'Beginner', skillsRequired: ['ITIL', 'ServiceNow', 'Incident Management'], description: 'Configure an end-to-end incident, change, and problem management workflow in ServiceNow Developer Instance with automated SLA triggers.', expectedOutcome: 'A tested ServiceNow portal demonstrating automated ticket routing, CAB approval flows, and SLA reporting.' },
+    ],
+    certifications: [{ id: 'cert-itsm-01', name: 'ITIL 4 Foundation', issuingOrganization: 'PeopleCert / AXELOS', level: 'Foundation' }],
+    practiceAreas: [
+      { id: 'prac-itsm-01', title: 'Scenario Questions', category: 'Scenario Questions', description: 'Major outage emergency change authorization, SLA breach dispute, and vendor escalation.', questionCount: 15 },
+    ],
+    interviewTopics: [
+      { id: 'int-itsm-01', topic: 'Role-Specific Questions', category: 'Role Specific', questionCount: 10, keyQuestions: ['What is the difference between an Incident and a Problem in ITIL?', 'How do you handle an emergency change during an active P1 production outage?'] },
     ],
   },
 ];

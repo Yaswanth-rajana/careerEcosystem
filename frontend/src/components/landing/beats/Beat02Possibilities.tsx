@@ -1,47 +1,45 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { StoryBeatContainer } from './StoryBeatContainer';
 import { Card } from '@/components/design-system/Card';
 import { Badge } from '@/components/design-system/Badge';
-import { Cpu, Database, Palette, TrendingUp, Zap, Sparkles, ArrowRight } from 'lucide-react';
+import {
+  Cloud,
+  GitBranch,
+  Activity,
+  Layers,
+  Server,
+  ShieldCheck,
+  HardDrive,
+  Network,
+  LayoutGrid,
+  Workflow,
+  Sparkles,
+  ArrowRight,
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { CAREER_DIRECTIONS } from '@/lib/careers/career-directions';
+
+const ICON_MAP: Record<string, React.ElementType> = {
+  Cloud,
+  GitBranch,
+  Activity,
+  Layers,
+  Server,
+  ShieldCheck,
+  HardDrive,
+  Network,
+  LayoutGrid,
+  Workflow,
+};
 
 export const Beat02Possibilities = () => {
-  const [selectedId, setSelectedId] = useState<string>('tech');
+  const [selectedId, setSelectedId] = useState<string>(CAREER_DIRECTIONS[0].id);
 
-  const pathways = [
-    {
-      id: 'tech',
-      title: 'Technology',
-      icon: <Cpu className="w-4 h-4" />,
-      role: 'AI / Machine Learning Engineer',
-      skills: ['Python', 'Statistics', 'Machine Learning', 'Deep Learning'],
-    },
-    {
-      id: 'data',
-      title: 'Data & AI',
-      icon: <Database className="w-4 h-4" />,
-      role: 'Data Scientist',
-      skills: ['Python', 'SQL', 'Statistics', 'Machine Learning'],
-    },
-    {
-      id: 'design',
-      title: 'Product Design',
-      icon: <Palette className="w-4 h-4" />,
-      role: 'Product Designer',
-      skills: ['UX Research', 'Figma', 'Interaction Design', 'Design Systems'],
-    },
-    {
-      id: 'business',
-      title: 'Business & Growth',
-      icon: <TrendingUp className="w-4 h-4" />,
-      role: 'Growth / Product Strategist',
-      skills: ['Analytics', 'Market Research', 'Strategy', 'Communication'],
-    },
-  ];
-
-  const activePath = pathways.find((p) => p.id === selectedId) || pathways[0];
+  const activePath =
+    CAREER_DIRECTIONS.find((p) => p.id === selectedId) || CAREER_DIRECTIONS[0];
 
   return (
     <StoryBeatContainer
@@ -60,33 +58,39 @@ export const Beat02Possibilities = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {pathways.map((path) => {
+            {CAREER_DIRECTIONS.map((path) => {
               const isSelected = selectedId === path.id;
+              const IconComp = ICON_MAP[path.iconName] || Layers;
+
               return (
                 <button
                   key={path.id}
+                  type="button"
                   onClick={() => setSelectedId(path.id)}
                   onMouseEnter={() => setSelectedId(path.id)}
-                  className={`p-4 rounded-xl text-left border transition-all duration-200 flex items-center justify-between group ${
+                  className={`p-3.5 sm:p-4 rounded-xl text-left border transition-all duration-200 flex items-center justify-between group min-h-[64px] sm:min-h-[68px] ${
                     isSelected
                       ? 'bg-black text-white border-black shadow-md scale-[1.02]'
                       : 'bg-white border-slate-200 text-slate-700 hover:border-black hover:bg-black hover:text-white shadow-sm'
                   }`}
+                  aria-pressed={isSelected}
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 min-w-0 pr-2">
                     <div
-                      className={`p-2 rounded-lg transition-colors ${
+                      className={`p-2 rounded-lg transition-colors shrink-0 ${
                         isSelected
                           ? 'bg-white/20 text-white'
                           : 'bg-slate-100 text-slate-700 group-hover:bg-white/20 group-hover:text-white'
                       }`}
                     >
-                      {path.icon}
+                      <IconComp className="w-4 h-4" />
                     </div>
-                    <span className="text-sm font-semibold">{path.title}</span>
+                    <span className="text-sm font-semibold leading-snug line-clamp-2">
+                      {path.title}
+                    </span>
                   </div>
                   <ArrowRight
-                    className={`w-4 h-4 transition-transform ${
+                    className={`w-4 h-4 shrink-0 transition-transform ${
                       isSelected ? 'translate-x-1 opacity-100' : 'opacity-0 group-hover:opacity-100'
                     }`}
                   />
@@ -97,7 +101,7 @@ export const Beat02Possibilities = () => {
         </div>
 
         {/* Dynamic Trajectory Card Column */}
-        <div className="lg:col-span-6">
+        <div className="lg:col-span-6 lg:sticky lg:top-28">
           <Card variant="accent" className="relative p-5 sm:p-6 backdrop-blur-xl border-slate-200/80 bg-white shadow-sm">
             
             <div className="flex items-center justify-between mb-4">
@@ -146,8 +150,8 @@ export const Beat02Possibilities = () => {
                 </div>
 
                 {/* Visual Journey Progression */}
-                <div className="pt-3 border-t border-slate-200/60 flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-2 text-[11px] font-medium text-slate-500">
+                <div className="pt-3 border-t border-slate-200/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-2 text-[11px] font-medium text-slate-500 flex-wrap">
                     <div className="flex items-center gap-1.5 text-blue-600 font-semibold">
                       <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0" />
                       <span>Learn</span>
@@ -169,13 +173,13 @@ export const Beat02Possibilities = () => {
                     </div>
                   </div>
 
-                  <a
-                    href={`/explore?category=${encodeURIComponent(activePath.title)}`}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 text-white text-xs font-bold shadow-sm hover:bg-blue-700 transition-colors shrink-0"
+                  <Link
+                    href={activePath.href}
+                    className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 text-white text-xs font-bold shadow-sm hover:bg-blue-700 transition-colors shrink-0"
                   >
                     <span>Explore Path</span>
                     <ArrowRight className="w-3.5 h-3.5" />
-                  </a>
+                  </Link>
                 </div>
 
               </motion.div>

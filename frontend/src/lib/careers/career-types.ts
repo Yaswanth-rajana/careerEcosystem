@@ -78,7 +78,13 @@ export interface SalaryRange {
   updatedAt?: string;
 }
 
-export type CareerLevelId = 'entry' | 'junior' | 'mid' | 'senior';
+export type CareerLevelId =
+  | 'fresher'
+  | 'associate'
+  | 'senior'
+  | 'entry'
+  | 'junior'
+  | 'mid';
 
 export type CareerDomainType =
   | 'software'

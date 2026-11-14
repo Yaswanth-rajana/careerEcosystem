@@ -25,19 +25,26 @@
     "test:candidate-slots": "npx tsx src/__tests__/candidateMentorSlotDiscovery.test.ts",
     "test:candidate-bookings": "npx tsx src/__tests__/candidateBookingHistoryCancellation.test.ts",
     "test:candidate-reschedule": "npx tsx src/__tests__/candidateBookingReschedule.test.ts",
-    "test:mentor-email": "npx tsx src/__tests__/mentorshipBookingEmailNotifications.test.ts"
+    "test:mentor-email": "npx tsx src/__tests__/mentorshipBookingEmailNotifications.test.ts",
+    "start:tools": "node dist/tools-server.js"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.6",
+    "express": "^4.22.3",
     "jose": "^5.9.3",
     "mammoth": "^1.13.0",
+    "multer": "^1.4.5-lts.1",
     "pdf-lib": "^1.17.1",
     "pdf-parse": "^2.4.5",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^4.17.25",
+    "@types/multer": "^1.4.13",
     "@types/node": "^20.16.11",
     "@types/pdf-parse": "^1.1.5",
     "prisma": "5.22.0",

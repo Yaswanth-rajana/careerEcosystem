@@ -9,6 +9,7 @@ import {
   CareerPracticeArea,
   CareerInterviewTopic,
 } from './career-types';
+import { getCareerGrowthLevel } from './career-growth-trajectory';
 
 export const DEFAULT_CAREER_LEVELS: Array<{
   id: CareerLevelId;
@@ -25,7 +26,7 @@ export const DEFAULT_CAREER_LEVELS: Array<{
 /**
  * Domain-specific level data for all primary careers.
  */
-export const CAREER_LEVEL_CONFIGS: Record<string, Record<CareerLevelId, CareerLevelDefinition>> = {
+export const CAREER_LEVEL_CONFIGS: Record<string, Partial<Record<CareerLevelId, CareerLevelDefinition>>> = {
   // ==========================================
   // SOFTWARE ENGINEER
   // ==========================================
@@ -3388,7 +3389,7 @@ export const CAREER_LEVEL_CONFIGS: Record<string, Record<CareerLevelId, CareerLe
  * a bespoke configuration yet, ensuring that future careers and secondary careers (e.g. Data Analyst,
  * Data Scientist, DevOps, Cybersecurity, Product Manager, UI/UX, etc.) work cleanly out-of-the-box.
  */
-export function generateFallbackLevels(career: CareerPath): Record<CareerLevelId, CareerLevelDefinition> {
+export function generateFallbackLevels(career: CareerPath): Partial<Record<CareerLevelId, CareerLevelDefinition>> {
   const isDataRole = career.category === 'Data & AI' || career.title.toLowerCase().includes('data');
   const isSecurityRole = career.category === 'Cybersecurity' || career.title.toLowerCase().includes('security');
   const isDevOpsRole = career.slug.includes('devops') || career.slug.includes('cloud');
@@ -3597,18 +3598,41 @@ export function getCareerLevelData(
   career: CareerPath,
   levelId?: string | null
 ): CareerLevelDefinition {
+  const normalizedKey = (levelId || '').toLowerCase().trim();
   const safeLevelId: CareerLevelId =
-    levelId === 'junior' || levelId === 'mid' || levelId === 'senior' ? levelId : 'entry';
+    normalizedKey === 'senior'
+      ? 'senior'
+      : normalizedKey === 'associate' ||
+        normalizedKey === 'junior' ||
+        normalizedKey === 'mid' ||
+        normalizedKey === 'intermediate'
+      ? 'junior'
+      : 'entry';
 
   // 1. Check custom configured levels for this career
   const customLevels = CAREER_LEVEL_CONFIGS[career.slug] || career.levels;
+  let baseDef: CareerLevelDefinition;
+
   if (customLevels && customLevels[safeLevelId]) {
-    return customLevels[safeLevelId]!;
+    baseDef = { ...customLevels[safeLevelId]! };
+  } else {
+    // 2. Generate fallback levels from career baseline
+    const fallback = generateFallbackLevels(career);
+    baseDef = { ...(fallback[safeLevelId] || fallback.entry!) };
   }
 
-  // 2. Generate fallback levels from career baseline
-  const fallback = generateFallbackLevels(career);
-  return fallback[safeLevelId];
+  // 3. Enrich with 3-level progression specific data (Fresher, Associate, Senior)
+  const trajectoryLevel = getCareerGrowthLevel(career.slug, levelId);
+  if (trajectoryLevel) {
+    baseDef.roleTitle = trajectoryLevel.title;
+    baseDef.label = trajectoryLevel.level;
+    baseDef.experienceRange = trajectoryLevel.experienceRange;
+    baseDef.description = trajectoryLevel.description;
+    baseDef.focusSummary = trajectoryLevel.learningFocus;
+    baseDef.expectedCompetencies = trajectoryLevel.competencies;
+  }
+
+  return baseDef;
 }
 
 /**
@@ -3622,9 +3646,8 @@ export function resolveInitialCareerLevel(
   // 1. Supported URL parameter takes priority
   if (urlParam) {
     const normalized = urlParam.toLowerCase().trim();
-    if (normalized === 'entry' || normalized === 'beginner') return 'entry';
-    if (normalized === 'junior') return 'junior';
-    if (normalized === 'mid' || normalized === 'intermediate') return 'mid';
+    if (normalized === 'fresher' || normalized === 'entry' || normalized === 'beginner') return 'fresher';
+    if (normalized === 'associate' || normalized === 'junior' || normalized === 'mid' || normalized === 'intermediate') return 'associate';
     if (normalized === 'senior') return 'senior';
   }
 
@@ -3633,12 +3656,16 @@ export function resolveInitialCareerLevel(
     try {
       const persisted = localStorage.getItem(`pathway_career_level_${careerSlug}`);
       if (
+        persisted === 'fresher' ||
+        persisted === 'associate' ||
+        persisted === 'senior' ||
         persisted === 'entry' ||
         persisted === 'junior' ||
-        persisted === 'mid' ||
-        persisted === 'senior'
+        persisted === 'mid'
       ) {
-        return persisted;
+        if (persisted === 'entry') return 'fresher';
+        if (persisted === 'junior' || persisted === 'mid') return 'associate';
+        return persisted as CareerLevelId;
       }
     } catch {}
   }

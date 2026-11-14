@@ -562,3 +562,33 @@ export {
   type SavedRoleItem,
 } from './saved-roles';
 
+export {
+  CAREER_DIRECTIONS,
+  getCareerDirections,
+  getCareerDirectionById,
+  getCareerDirectionBySlug,
+  getExploreCareerDirections,
+  type CareerDirectionItem,
+} from './career-directions';
+
+export {
+  CAREER_GROWTH_TRAJECTORIES,
+  STANDARD_TRAJECTORY_KEYS,
+  getCareerGrowthTrajectory,
+  getCareerGrowthLevel,
+  type TrajectoryLevelKey,
+  type CareerGrowthLevel,
+} from './career-growth-trajectory';
+
+export {
+  SMVEN_COURSES,
+  SMVEN_BASE_URL,
+  SMVEN_IT_INFRASTRUCTURE_URL,
+  CAREER_TO_SMVEN_COURSES_MAP,
+  getSmvenCoursesForCareer,
+  getPrimarySmvenCourseForCareer,
+  getSmvenCourseById,
+  getAllSmvenCourses,
+  type SmvenCourse,
+} from './smven-courses';
+

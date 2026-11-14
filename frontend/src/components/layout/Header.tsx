@@ -25,9 +25,15 @@ export interface HeaderProps {
   user?: HeaderUser | null;
   targetRole?: string | null;
   onLogout?: () => void;
+  hideJobsNav?: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({ user: initialUser, targetRole, onLogout }) => {
+export const Header: React.FC<HeaderProps> = ({
+  user: initialUser,
+  targetRole,
+  onLogout,
+  hideJobsNav,
+}) => {
   const pathname = usePathname();
   const router = useRouter();
   const { user: contextUser, isLoading, logout: contextLogout } = useAuth();
@@ -126,6 +132,8 @@ export const Header: React.FC<HeaderProps> = ({ user: initialUser, targetRole, o
     category: r.category,
   }));
 
+  const shouldHideJobs = Boolean(hideJobsNav);
+
   const navItems: PillNavItem[] = [
     currentUser
       ? { label: 'Dashboard', href: '/dashboard' }
@@ -139,7 +147,7 @@ export const Header: React.FC<HeaderProps> = ({ user: initialUser, targetRole, o
     },
     { label: 'Learn', href: '/learn' },
     { label: 'Mentors', href: '/mentors' },
-    { label: 'Jobs', href: '/jobs' },
+    ...(!shouldHideJobs ? [{ label: 'Jobs', href: '/jobs' }] : []),
     { label: 'Tools', href: '/tools' },
   ];
 

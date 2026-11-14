@@ -9,6 +9,7 @@ import {
 import {
   getRecommendedNextStep,
   calculateCareerProgress,
+  getPrimarySmvenCourseForCareer,
 } from '@/lib/careers/career-repository';
 
 import { CareerDetailHero } from '@/components/career/CareerDetailHero';
@@ -49,7 +50,7 @@ export const CareerDetailClientView: React.FC<CareerDetailClientViewProps> = ({
     if (!initialLevelParam) {
       try {
         const saved = localStorage.getItem(`pathway_career_level_${career.slug}`);
-        if (saved && ['entry', 'junior', 'mid', 'senior'].includes(saved)) {
+        if (saved && ['fresher', 'associate', 'senior', 'entry', 'junior', 'mid'].includes(saved)) {
           setSelectedLevel(saved as CareerLevelId);
         }
       } catch (e) {
@@ -91,6 +92,10 @@ export const CareerDetailClientView: React.FC<CareerDetailClientViewProps> = ({
     return calculateCareerProgress(candidate, career.slug, selectedLevel);
   }, [candidate, career.slug, selectedLevel]);
 
+  const primarySmvenCourse = useMemo(() => {
+    return getPrimarySmvenCourseForCareer(career.slug);
+  }, [career.slug]);
+
   return (
     <>
       {/* Section 01 — Career Hero with Interactive Growth Trajectory */}
@@ -116,6 +121,15 @@ export const CareerDetailClientView: React.FC<CareerDetailClientViewProps> = ({
           actionLabel={nextStep.actionLabel}
           rationale={nextStep.rationale}
           actionUrl={nextStep.actionUrl}
+          recommendedCourse={
+            primarySmvenCourse
+              ? {
+                  title: primarySmvenCourse.title,
+                  provider: primarySmvenCourse.provider,
+                  url: primarySmvenCourse.url,
+                }
+              : undefined
+          }
         />
 
         {/* Section 04 — What do you need to learn? ⭐ (Skill Gap) */}

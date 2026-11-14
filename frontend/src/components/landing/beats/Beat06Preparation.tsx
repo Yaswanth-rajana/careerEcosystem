@@ -42,7 +42,7 @@ export const Beat06Preparation = () => {
       id="beat-06-preparation"
       beatNumber="06"
       eyebrow="THE PREPARATION"
-      title="Become ready."
+      title="Become job ready."
       subtext="Build the practical skills, projects, and confidence you need to be ready for what's next."
     >
       <div className="w-full max-w-5xl text-left space-y-8">

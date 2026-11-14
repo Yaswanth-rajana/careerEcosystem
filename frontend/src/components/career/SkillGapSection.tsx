@@ -2,8 +2,12 @@
 
 import React from 'react';
 import { CareerPath, CandidateCareerContext, CareerLevelId, CareerLevelDefinition } from '@/lib/careers/career-types';
-import { analyzeSkillGap } from '@/lib/careers/career-repository';
-import { CheckCircle2, AlertCircle, ArrowRight, UserCheck, ShieldCheck, BookOpen, Target } from 'lucide-react';
+import {
+  analyzeSkillGap,
+  getSmvenCoursesForCareer,
+  SMVEN_IT_INFRASTRUCTURE_URL,
+} from '@/lib/careers/career-repository';
+import { CheckCircle2, AlertCircle, ArrowRight, UserCheck, ShieldCheck, BookOpen, Target, ExternalLink, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
 export interface SkillGapSectionProps {
@@ -20,6 +24,7 @@ export const SkillGapSection: React.FC<SkillGapSectionProps> = ({
   levelData,
 }) => {
   const gap = analyzeSkillGap(candidate, career.slug, selectedLevel);
+  const smvenCourses = getSmvenCoursesForCareer(career.slug);
 
   const scrollToLearning = () => {
     const el = document.getElementById('learning-roadmap');
@@ -177,6 +182,40 @@ export const SkillGapSection: React.FC<SkillGapSectionProps> = ({
             <p className="text-xs text-emerald-600 font-semibold">
               🎉 Outstanding! You have met all key skill requirements for {career.title}.
             </p>
+          )}
+
+          {smvenCourses.length > 0 && (
+            <div className="pt-3 border-t border-slate-100 space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-semibold text-slate-700 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                  Recommended SMVEN Training:
+                </span>
+                <a
+                  href={SMVEN_IT_INFRASTRUCTURE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[10.5px] font-mono text-slate-400 hover:text-blue-600 inline-flex items-center gap-1 transition-colors"
+                >
+                  <span>SMVEN Institute</span>
+                  <ExternalLink className="w-2.5 h-2.5" />
+                </a>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {smvenCourses.map((c) => (
+                  <a
+                    key={c.id}
+                    href={c.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100/80 border border-blue-200/80 text-blue-900 text-xs font-semibold transition-colors group"
+                  >
+                    <span>{c.title}</span>
+                    <ExternalLink className="w-3 h-3 text-blue-600 group-hover:translate-x-0.5 transition-transform" />
+                  </a>
+                ))}
+              </div>
+            </div>
           )}
 
           <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">

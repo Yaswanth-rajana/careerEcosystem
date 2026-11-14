@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ArrowRight, Target } from 'lucide-react';
+import { ArrowRight, Target, ExternalLink, Sparkles } from 'lucide-react';
 import { Button } from '@/components/design-system/Button';
 
 export interface YourNextStepCardProps {
@@ -12,6 +12,11 @@ export interface YourNextStepCardProps {
   actionLabel: string;
   rationale: string;
   actionUrl: string;
+  recommendedCourse?: {
+    title: string;
+    provider: string;
+    url: string;
+  };
 }
 
 export const YourNextStepCard: React.FC<YourNextStepCardProps> = ({
@@ -22,11 +27,14 @@ export const YourNextStepCard: React.FC<YourNextStepCardProps> = ({
   actionLabel = 'Start Learning',
   rationale,
   actionUrl,
+  recommendedCourse,
 }) => {
   const handleClickAction = () => {
     if (actionUrl.startsWith('#')) {
       const el = document.getElementById(actionUrl.replace('#', ''));
       if (el) el.scrollIntoView({ behavior: 'smooth' });
+    } else if (actionUrl.startsWith('http://') || actionUrl.startsWith('https://')) {
+      window.open(actionUrl, '_blank', 'noopener,noreferrer');
     } else {
       window.location.href = actionUrl;
     }
@@ -68,10 +76,30 @@ export const YourNextStepCard: React.FC<YourNextStepCardProps> = ({
             rightIcon={<ArrowRight className="w-4 h-4" />}
             className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-md"
           >
-            {actionLabel.includes('→') ? actionLabel : `${actionLabel} →`}
+            {actionLabel.replace(/[→\s]+$/, '')}
           </Button>
         </div>
       </div>
+
+      {recommendedCourse && (
+        <div className="mt-4 pt-3.5 border-t border-blue-200/70 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-2 text-slate-700 font-medium">
+            <Sparkles className="w-4 h-4 text-blue-600 shrink-0" />
+            <span>
+              Recommended Training: <strong>{recommendedCourse.title}</strong> ({recommendedCourse.provider})
+            </span>
+          </div>
+          <a
+            href={recommendedCourse.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 font-bold text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+          >
+            <span>Course Information on SMVEN</span>
+            <ExternalLink className="w-3.5 h-3.5" />
+          </a>
+        </div>
+      )}
     </div>
   );
 };
