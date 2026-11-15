@@ -33,5 +33,11 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "../backend/src/**/*.ts"],
-  "exclude": ["node_modules", "../backend/src/testRunner.ts", "../backend/src/**/__tests__/**"]
+  "exclude": [
+    "node_modules",
+    "../backend/src/testRunner.ts",
+    "../backend/src/tools-server.ts",
+    "../backend/src/scripts/**",
+    "../backend/src/**/__tests__/**"
+  ]
 }

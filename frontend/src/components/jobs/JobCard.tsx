@@ -106,6 +106,7 @@ export const JobCard: React.FC<JobCardProps> = ({
             {/* Company Avatar / Logo Placeholder */}
             <div className="w-11 h-11 rounded-xl bg-slate-100 border border-slate-200/80 flex items-center justify-center shrink-0 text-slate-600 group-hover:border-blue-200 group-hover:bg-blue-50/50 transition-colors">
               {job.companyLogo ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={job.companyLogo}
                   alt={job.company}
